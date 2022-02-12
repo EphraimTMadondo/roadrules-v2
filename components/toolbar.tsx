@@ -62,7 +62,7 @@ export function ToolbarComponent ( props: ToolbarComponentProps ) {
           </i>
         </IconButton>
 
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography variant="h6" component="div" sx={{ color: "#fff", flexGrow: 1 }}>
           {title}
         </Typography>
       </Toolbar>
