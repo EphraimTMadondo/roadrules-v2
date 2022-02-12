@@ -99,8 +99,6 @@ export default function Layout ( props: LayoutProps ) {
           {
             noScaffolding &&
             <div
-              // style={{ marginLeft: `${ drawerWidth / 2 }px`, }}
-              // className="column start-stretch margin-left-drawer">
               className="column start-stretch" style={{ width: "100%" }}>
               {children}
             </div>

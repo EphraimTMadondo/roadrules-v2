@@ -28,7 +28,34 @@ export default function ResponsiveDrawer ( props: Props ) {
 
   const theme = useTheme();
 
-  const [ drawerItems ] = React.useState<K<DrawerItem>[]>( addKeys( [
+  const [ primaryDrawerItems ] = React.useState<K<DrawerItem>[]>( addKeys( [
+    {
+      icon: "description",
+      text: "Notes",
+      onClick: () => {
+      }
+    },
+    {
+      icon: "school",
+      text: "Practice",
+      onClick: () => {
+      }
+    },
+    {
+      icon: "quiz",
+      text: "Mock Test",
+      onClick: () => {
+      }
+    }, 
+    {
+      icon: "timeline",
+      text: "Progress",
+      onClick: () => {
+      }
+    }
+  ] ) );
+
+  const [ secondaryDrawerItems ] = React.useState<K<DrawerItem>[]>( addKeys( [
     {
       icon: "account_circle",
       text: "Update Profile",
@@ -54,7 +81,7 @@ export default function ResponsiveDrawer ( props: Props ) {
       }
     },
     {
-      icon: "help",
+      icon: "star",
       text: "Request Assistance",
       onClick: () => {
       }
@@ -97,7 +124,23 @@ export default function ResponsiveDrawer ( props: Props ) {
       <Divider />
       <List>
         {
-          drawerItems
+          primaryDrawerItems
+            .map( drawerItem => (
+              <ListItem button key={drawerItem.key}>
+                <ListItemIcon>
+                  <i className="material-icons">
+                    {drawerItem.icon}
+                  </i>
+                </ListItemIcon>
+                <ListItemText primary={drawerItem.text} />
+              </ListItem>
+            ) )
+        }
+      </List>
+      <Divider />
+      <List>
+        {
+          secondaryDrawerItems
             .map( drawerItem => (
               <ListItem button key={drawerItem.key}>
                 <ListItemIcon>

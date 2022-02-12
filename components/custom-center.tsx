@@ -5,7 +5,7 @@ interface CustomCenterProps {
 export function CustomCenter ( { children }: CustomCenterProps ) {
 
   return (
-    <div className="column start-stretch xs-100 sm-60 gt-sm-40">
+    <div className="column start-stretch xs-100 sm-80 gt-sm-60">
       {children}
     </div>
   )

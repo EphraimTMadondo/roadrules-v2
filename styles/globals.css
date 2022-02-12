@@ -1,5 +1,27 @@
+.link:hover {
+  transform: scale(1.05);
+  text-decoration: none;
+  /* text-decoration: underline; */
+}
+
+.pointed:hover {
+  cursor: pointer;
+}
+
 .no-wrap {
   white-space:nowrap;
+}
+
+.card {
+  box-shadow: 0 2px 1px -1px rgba(170, 136, 136, 0.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+  transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
+  /* border: 1px solid rgba(0, 0, 0, .14); */
+  border-radius: 5px;
+  display: block;
+  background: #fff;
+  backdrop-filter: blur( 20px );
+  color: rgba(0, 0, 0, .87);
+  font-family: 'Montserrat', sans-serif;
 }
 
 .shadow {  

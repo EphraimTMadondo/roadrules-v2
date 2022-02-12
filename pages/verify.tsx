@@ -9,20 +9,20 @@ import { TextField } from '@mui/material';
 import { useState } from 'react';
 
 interface State {
-  phoneNumber: string;
+  verificationCode: string;
 }
 
-export default function Home () {
+export default function Verify () {
 
   const [ state, setState ] = useState<State>( {
-    phoneNumber: ""
+    verificationCode: ""
   } );
 
-  function handlePhoneNumberChange ( e: any ) {
+  function handleVerificationCodeChange ( e: any ) {
 
     setState( prevState => ( {
       ...prevState,
-      phoneNumber: String( e.target.value )
+      verificationCode: String( e.target.value )
     } ) );
 
   }
@@ -31,7 +31,7 @@ export default function Home () {
     <Layout noScaffolding>
 
       <Head>
-        <title>Welcome to RoadRules</title>
+        <title>Road Rules - Verification</title>
       </Head>
 
       <div className="row center-center">
@@ -59,22 +59,36 @@ export default function Home () {
             <CustomCenter>
               <div className="column center-stretch">
                 <p style={{ textAlign: "center" }}>
-                  Please enter your current phone number below and click Send Verification Code, a verification code will be sent to your phone.
+                  Please enter the verification code you received via SMS below and click Verify.
                 </p>
                 <div className="column center-stretch" style={{ padding: UNIT }}>
                   <TextField
                     variant="outlined"
-                    placeholder="+263718384668"
-                    value={state.phoneNumber}
-                    onChange={handlePhoneNumberChange}
+                    placeholder="Verification Code"
+                    value={state.verificationCode}
+                    onChange={handleVerificationCodeChange}
                     size="small"
-                    id="phoneNumber"
+                    id="verificationCode"
                   />
                 </div>
                 <div className="column center-stretch" style={{ padding: UNIT }}>
-                  <Link href="/verify">
+                  <Link href="/notes">
                     <Button type="submit" variant="contained" color="primary">
-                      Send Verification Code
+                      Verify
+                    </Button>
+                  </Link>
+                </div>
+                <div className="column center-stretch" style={{ padding: UNIT }}>
+                  <Link href="/notes">
+                    <Button type="button" variant="contained" color="primary">
+                      Resend Code
+                    </Button>
+                  </Link>
+                </div>
+                <div className="column center-stretch" style={{ padding: UNIT }}>
+                  <Link href="/notes">
+                    <Button type="button" variant="contained" color="primary">
+                      Request Assistance
                     </Button>
                   </Link>
                 </div>
