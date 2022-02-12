@@ -1,59 +1,78 @@
-import styles from '../styles/Home.module.css'
+import Button from '@mui/material/Button';
+import Image from 'next/image';
+import Layout from '../components/layout';
+import Head from 'next/head';
+import { CustomCenter } from '../components/custom-center';
+import { UNIT } from '../lib/units';
+import { TextField } from '@mui/material';
+import { useState } from 'react';
 
-export default function Home() {
+interface State {
+  phoneNumber: string;
+}
+
+export default function Home () {
+
+  const [ state, setState ] = useState<State>( {
+    phoneNumber: ""
+  } );
+
+  function handlePhoneNumberChange ( e: any ) {
+
+    setState( prevState => ( {
+      ...prevState,
+      phoneNumber: String( e.target.value )
+    } ) );
+
+  }
+
   return (
-    <div className={styles.container}>
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+    <Layout noScaffolding>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+      <Head>
+        <title>Welcome to RoadRules</title>
+      </Head>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+      <div className="row center-center">
+        <CustomCenter>
+          <div className="row center-center">
+            <div style={{ position: "relative", height: 400, width: "100%", overflow: "hidden" }}>
+              <Image
+                src="/images/road_rules_logo.png"
+                alt="Road Rules Logo"
+                layout="fill"
+                objectFit="scale-down"
+              />
+            </div>
+          </div>
+        </CustomCenter>
+      </div>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
+      <div className="row center-center">
+        <CustomCenter>
+          <div className="column center-stretch">
+            <p style={{ textAlign: "center" }}>
+              Please enter your current phone number below and click Send Verification Code, a verification code will be sent to your phone.
             </p>
-          </a>
-        </div>
-      </main>
+            <div className="column center-stretch" style={{ padding: UNIT }}>
+              <TextField
+                variant="outlined"
+                placeholder="+263718384668"
+                value={state.phoneNumber}
+                onChange={handlePhoneNumberChange}
+                size="small"
+                id="phoneNumber"
+              />
+            </div>
+            <div className="column center-stretch" style={{ padding: UNIT }}>
+              <Button type="submit" variant="contained" color="primary">
+                Send Verification Code
+              </Button>
+            </div>
+          </div>
+        </CustomCenter>
+      </div>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+    </Layout>
   )
 }

@@ -1,6 +1,6 @@
 .imageContainer {
   position: relative;
   height: 200;
-  /* width: 100%; */
-  /* overflow: hidden; */
+  width: 100%;
+  overflow: hidden;
 }
