@@ -1,14 +1,11 @@
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { styled, useTheme } from '@mui/material/styles';
 import * as React from 'react';
 import { addKeys, K } from '../lib/keys';
-import { DrawerHeader } from "./drawer-header";
 
 interface Props {
   drawerOpen: boolean;
@@ -24,9 +21,7 @@ interface DrawerItem {
 
 export default function ResponsiveDrawer ( props: Props ) {
 
-  const { drawerOpen, handleDrawerClose, drawerWidth } = props;
-
-  const theme = useTheme();
+  const { drawerOpen, handleDrawerClose } = props;
 
   const [ primaryDrawerItems ] = React.useState<K<DrawerItem>[]>( addKeys( [
     {
@@ -46,7 +41,7 @@ export default function ResponsiveDrawer ( props: Props ) {
       text: "Mock Test",
       onClick: () => {
       }
-    }, 
+    },
     {
       icon: "timeline",
       text: "Progress",
@@ -73,7 +68,7 @@ export default function ResponsiveDrawer ( props: Props ) {
       text: "Invite Friends via Facebook",
       onClick: () => {
       }
-    }, 
+    },
     {
       icon: "help",
       text: "Rate Us",
@@ -96,32 +91,10 @@ export default function ResponsiveDrawer ( props: Props ) {
 
   return (
     <Drawer
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: drawerWidth,
-          boxSizing: 'border-box',
-        },
-      }}
-      variant="persistent"
       anchor="left"
       open={drawerOpen}
+      onClose={handleDrawerClose}
     >
-      <DrawerHeader>
-        <IconButton onClick={handleDrawerClose}>
-          {
-            theme.direction === 'ltr' ?
-              <i className="material-icons">
-                chevron_left
-              </i> :
-              <i className="material-icons">
-                chevron_right
-              </i>
-          }
-        </IconButton>
-      </DrawerHeader>
-      <Divider />
       <List>
         {
           primaryDrawerItems

@@ -64,8 +64,11 @@ export default function Layout ( props: LayoutProps ) {
           <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
 
-        <Box sx={{ display: 'flex' }}>
-          <CssBaseline />
+        <Box
+          // sx={{ display: 'flex' }}
+          sx={{ flexGrow: 1 }}
+        >
+          {/* <CssBaseline /> */}
 
           {
             !noScaffolding &&
@@ -86,23 +89,9 @@ export default function Layout ( props: LayoutProps ) {
             />
           }
 
-          {
-            !noScaffolding &&
-            <Main open={open}>
-
-              <DrawerHeader />
-              <div className="column start-stretch">
-                {children}
-              </div>
-            </Main>
-          }
-          {
-            noScaffolding &&
-            <div
-              className="column start-stretch" style={{ width: "100%" }}>
-              {children}
-            </div>
-          }
+          <div className="column start-stretch" style={{ width: "100%" }}>
+            {children}
+          </div>
 
         </Box>
 
