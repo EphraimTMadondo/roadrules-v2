@@ -1,48 +1,56 @@
-import Icon from '@mui/material/Icon';
-
-import AppBar from '@mui/material/AppBar';
-import IconButton from '@mui/material/IconButton';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import { ActionIcon, Text } from '@mantine/core';
 import * as React from 'react';
 
-interface ToolbarComponentProps {
-  drawerOpen: boolean;
-  setDrawerOpen: ( newDrawerState: boolean ) => void;
+interface ToolbarProps {
+  leftIcon?: string;
+  leftIconAction?: () => any;
   title: string;
-  drawerWidth: number;
+  rightIcon?: string;
+  rightIconAction?: () => any;
 }
 
-export function ToolbarComponent ( props: ToolbarComponentProps ) {
+export function Toolbar ( props: ToolbarProps ) {
 
-  const { drawerOpen, setDrawerOpen, title, drawerWidth } = props;
-
-  function handleDrawerOpen () {
-    setDrawerOpen( true );
-  }
+  const { leftIcon, leftIconAction, title, rightIcon, rightIconAction } = props;
 
   return (
-    <AppBar
-      position="static"
-      // style={{ backgroundColor: "#333" }}
-    >
-      <Toolbar>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          sx={{ mr: 2 }}
-          onClick={handleDrawerOpen}
-        >
-          <Icon>menu</Icon>
-        </IconButton>
-
-        <Typography variant="h6" component="div" sx={{ color: "#fff", flexGrow: 1 }}>
-          {title}
-        </Typography>
-      </Toolbar>
-    </AppBar>
+    <div className="flex flex-row justify-start items-center px-1 py-4">
+      {
+        !leftIcon &&
+        <ActionIcon size="xl" style={{ visibility: "hidden" }}>
+          <i className="material-icons font-semibold">
+            menu
+          </i>
+        </ActionIcon>
+      }
+      {
+        leftIcon &&
+        <ActionIcon onClick={leftIconAction} size="xl">
+          <i className="material-icons font-semibold">
+            {leftIcon}
+          </i>
+        </ActionIcon>
+      }
+      <div className="grow"></div>      
+      <span className="text-lg font-semibold">{title}</span>      
+      <div className="grow"></div>
+      {
+        !rightIcon &&
+        <ActionIcon size="xl" style={{ visibility: "hidden" }}>
+          <i className="material-icons font-semibold">
+            menu
+          </i>
+        </ActionIcon>
+      }
+      {
+        rightIcon &&
+        <ActionIcon onClick={rightIconAction} size="xl">
+          <i className="material-icons font-semibold">
+            {rightIcon}
+          </i>
+        </ActionIcon>
+      }
+    </div>
   )
 
 }
