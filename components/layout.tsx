@@ -17,7 +17,7 @@ export default function Layout ( props: LayoutProps ) {
     <div className="flex flex-col justify-start items-stretch">
 
       <Head>
-        <title>{title}</title>
+        <title>Road Rules - {title}</title>
       </Head>
 
       <div className="flex flex-col justify-start items-stretch bg-slate-100">
@@ -25,7 +25,7 @@ export default function Layout ( props: LayoutProps ) {
           <CustomCenter>
             <div className="flex flex-row justify-center items-stretch">
               <Card shadow="xl" padding="xl" className="w-full flex flex-col justify-start items-stretch">
-                <Card.Section className="flex flex-col justify-start items-stretch">
+                <Card.Section className="flex flex-col justify-start items-stretch p-6">
                   {children}
                 </Card.Section>
               </Card>

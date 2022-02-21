@@ -5,11 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Layout from '../components/layout';
 import { Toolbar } from '../components/toolbar';
-import { useColors } from '../hooks/useColors';
 
 export default function MainMenu () {
-
-  const { primary } = useColors();
 
   const router = useRouter();
 
@@ -54,45 +51,33 @@ export default function MainMenu () {
 
       <div className="grow py-2"></div>
 
-      <div className="flex flex-col justify-center items-stretch p-4">
+      <div className="flex flex-col justify-center items-stretch py-4">
         <Link href="/driving-lessons-menu">
-          <Button
-            rightIcon={<i className="material-icons">arrow_forward</i>}
-            style={{ backgroundColor: primary }}
-          >
+          <Button size="md">
             DRIVING LESSONS
           </Button>
         </Link>
       </div>
 
-      <div className="flex flex-col justify-center items-stretch p-4">
+      <div className="flex flex-col justify-center items-stretch py-4">
         <Link href="/driving-schools-menu">
-          <Button
-            rightIcon={<i className="material-icons">arrow_forward</i>}
-            style={{ backgroundColor: primary }}
-          >
+          <Button size="md">
             DRIVING SCHOOLS
           </Button>
         </Link>
       </div>
 
-      <div className="flex flex-col justify-center items-stretch p-4">
+      <div className="flex flex-col justify-center items-stretch py-4">
         <Link href="/book-vid-test">
-          <Button
-            rightIcon={<i className="material-icons">arrow_forward</i>}
-            style={{ backgroundColor: primary }}
-          >
+          <Button size="md">
             BOOK VID TEST
           </Button>
         </Link>
       </div>
 
-      <div className="flex flex-col justify-center items-stretch p-4">
+      <div className="flex flex-col justify-center items-stretch pt-4">
         <Link href="/traffic-safety-council">
-          <Button
-            rightIcon={<i className="material-icons">arrow_forward</i>}
-            style={{ backgroundColor: primary }}
-          >
+          <Button size="md">
             TRAFFIC SAFETY COUNCIL
           </Button>
         </Link>

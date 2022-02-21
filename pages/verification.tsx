@@ -55,18 +55,10 @@ export default function Verification () {
   // };
 
   return (
-    <Layout>
+    <Layout title="Welcome to Road Rules">
 
-      <Head>
-        <title>Welcome to RoadRules</title>
-      </Head>
-
-      {/* <Toolbar
-        title="Registration"
-      /> */}
-
-      <div className="flex flex-col justify-start items-stretch p-4">
-        <Stepper active={active} onStepClick={setActive} breakpoint="md" iconSize={32}>
+      <div className="flex flex-col justify-start items-stretch">
+        <Stepper active={active} onStepClick={setActive} breakpoint="md" size="md">
           <Stepper.Step label="Enter Details" className="h-min-full">
             <VerificationOne toNextStep={nextStep} />
           </Stepper.Step>
@@ -76,9 +68,6 @@ export default function Verification () {
           <Stepper.Step label="Verify Phone Number">
             <VerificationThree toNextStep={conclude} />
           </Stepper.Step>
-          {/* <Stepper.Completed>
-          Completed, click back button to get to previous step
-        </Stepper.Completed> */}
         </Stepper>
       </div>
 

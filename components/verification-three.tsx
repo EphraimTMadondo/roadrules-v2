@@ -1,5 +1,4 @@
 import { Button, NumberInput } from "@mantine/core";
-import { useColors } from "../hooks/useColors";
 
 interface VerificationThreeProps {
   toNextStep: () => void;
@@ -9,8 +8,6 @@ export function VerificationThree ( props: VerificationThreeProps ) {
 
   const { toNextStep } = props;
   
-  const { primary } = useColors();
-
   return (
     <div className="flex flex-col justify-center items-stretch pt-8">
 
@@ -32,19 +29,15 @@ export function VerificationThree ( props: VerificationThreeProps ) {
         />
       </div>
 
-      <div className="flex flex-col justify-center items-stretch py-4">
-        <Button
-          onClick={toNextStep}
-          // type="submit"
-          style={{ backgroundColor: primary }}
-        >
+      <div className="flex flex-col justify-center items-stretch pt-4 pb-8">
+        <Button onClick={toNextStep} size="md">
           VERIFY
         </Button>
       </div>
 
       <div className="flex flex-col justify-center items-stretch py-4">
         <Button variant="light" leftIcon={<i className="material-icons">mail</i>}>
-          Re-send SMS
+          Resend Code
         </Button>
       </div>
 

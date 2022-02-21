@@ -49,21 +49,21 @@ export default function MyApp ( props: AppProps ) {
         theme={{
           /** Put your mantine theme override here */
           colorScheme: 'light',
-          colors: {
-            green: [
-              "#EBFBEE",
-              "#D3F9D8",
-              "#B2F2BB",
-              "#8CE99A",
-              "#69DB7C",
-              "#51CF66",
-              "#40C057",
-              "#37B24D",
-              "#2F9E44",
-              "#2B8A3E"
-            ]
-          },
-          primaryColor: "green"
+          // colors: {
+          //   green: [
+          //     "#EBFBEE",
+          //     "#D3F9D8",
+          //     "#B2F2BB",
+          //     "#8CE99A",
+          //     "#69DB7C",
+          //     "#51CF66",
+          //     "#40C057",
+          //     "#37B24D",
+          //     "#2F9E44",
+          //     "#2B8A3E"
+          //   ]
+          // },
+          primaryColor: "teal"
         }}
       >
         <Component {...pageProps} />

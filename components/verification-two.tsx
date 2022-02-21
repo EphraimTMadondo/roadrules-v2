@@ -1,5 +1,4 @@
 import { Autocomplete, Button, TextInput } from "@mantine/core";
-import { useColors } from "../hooks/useColors";
 
 interface VerificationTwoProps {
   toNextStep: () => void;
@@ -8,8 +7,6 @@ interface VerificationTwoProps {
 export function VerificationTwo ( props: VerificationTwoProps ) {
 
   const { toNextStep } = props;
-
-  const { primary } = useColors();
 
   const countries = [
     "Zimbabwe",
@@ -47,10 +44,7 @@ export function VerificationTwo ( props: VerificationTwoProps ) {
       </div>
 
       <div className="flex flex-col justify-center items-stretch pt-8">
-        <Button
-          onClick={toNextStep}
-          style={{ backgroundColor: primary }}
-        >
+        <Button onClick={toNextStep} size="md">
           PROCEED
         </Button>
       </div>

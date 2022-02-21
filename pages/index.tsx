@@ -1,21 +1,12 @@
 import { Button } from '@mantine/core';
-import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import Layout from '../components/layout';
-import { Toolbar } from '../components/toolbar';
-import { useColors } from '../hooks/useColors';
 
 export default function Home () {
 
-  const { primary } = useColors();
-
   return (
-    <Layout>
-
-      <Head>
-        <title>Welcome to RoadRules</title>
-      </Head>
+    <Layout title="Welcome to Road Rules">
 
       <div className="grow"></div>
 
@@ -50,9 +41,11 @@ export default function Home () {
         </div>
       </div>
 
-      <div className="flex flex-col justify-center items-stretch p-4">
+      <div className="grow"></div>
+
+      <div className="flex flex-col justify-center items-stretch pt-4">
         <Link href="/terms-and-conditions">
-          <Button style={{ backgroundColor: primary }} type="submit">
+          <Button type="submit" size="md">
             NEXT
           </Button>
         </Link>

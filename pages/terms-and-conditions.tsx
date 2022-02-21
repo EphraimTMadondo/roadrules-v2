@@ -1,15 +1,11 @@
-import { ActionIcon, Button, Card } from '@mantine/core';
-import Head from 'next/head';
-import Image from 'next/image';
+import { Button } from '@mantine/core';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Layout from '../components/layout';
 import { Toolbar } from '../components/toolbar';
-import { useColors } from '../hooks/useColors';
-import { useRouter } from 'next/router'
 
 export default function TermsAndConditions () {
 
-  const { primary } = useColors();
   const router = useRouter();
 
   const title = "Terms and Conditions";
@@ -19,11 +15,7 @@ export default function TermsAndConditions () {
   }
 
   return (
-    <Layout>
-
-      <Head>
-        <title>{title}</title>
-      </Head>
+    <Layout title={title}>
 
       <Toolbar
         title={title}
@@ -31,7 +23,7 @@ export default function TermsAndConditions () {
         leftIconAction={back}
       />
 
-      <div className="flex flex-col justify-center items-stretch px-4">
+      <div className="flex flex-col justify-center items-stretch py-4">
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
         </p>
@@ -46,16 +38,16 @@ export default function TermsAndConditions () {
       <div className="grow"></div>
 
       <div className="flex flex-col md:flex-row justify-start items-stretch">
-        <div className="flex flex-col justify-center items-stretch grow p-4 md:pr-2">
+        <div className="flex flex-col justify-center items-stretch grow pt-4 md:pr-2">
           <Link href="/">
-            <Button variant="outline">
+            <Button variant="outline" size="md">
               Reject
             </Button>
           </Link>
         </div>
-        <div className="flex flex-col justify-center items-stretch grow p-4 md:pl-2">
+        <div className="flex flex-col justify-center items-stretch grow pt-4 md:pl-2">
           <Link href="/verification">
-            <Button style={{ backgroundColor: primary }} type="submit">
+            <Button type="submit" size="md">
               Accept
             </Button>
           </Link>

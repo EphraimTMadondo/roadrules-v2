@@ -14,10 +14,10 @@ export function Toolbar ( props: ToolbarProps ) {
   const { leftIcon, leftIconAction, title, rightIcon, rightIconAction } = props;
 
   return (
-    <div className="flex flex-row justify-start items-center px-1 py-4">
+    <div className="flex flex-row justify-start items-center bg-slate-50/50 border rounded border-slate-50">
       {
         !leftIcon &&
-        <ActionIcon size="xl" style={{ visibility: "hidden" }}>
+        <ActionIcon variant="light" color="teal" size="xl" style={{ visibility: "hidden" }}>
           <i className="material-icons font-semibold">
             menu
           </i>
@@ -25,7 +25,7 @@ export function Toolbar ( props: ToolbarProps ) {
       }
       {
         leftIcon &&
-        <ActionIcon onClick={leftIconAction} size="xl">
+        <ActionIcon variant="light" color="teal" onClick={leftIconAction} size="xl">
           <i className="material-icons font-semibold">
             {leftIcon}
           </i>
@@ -36,7 +36,7 @@ export function Toolbar ( props: ToolbarProps ) {
       <div className="grow"></div>
       {
         !rightIcon &&
-        <ActionIcon size="xl" style={{ visibility: "hidden" }}>
+        <ActionIcon variant="light" color="teal" size="xl" style={{ visibility: "hidden" }}>
           <i className="material-icons font-semibold">
             menu
           </i>
@@ -44,7 +44,7 @@ export function Toolbar ( props: ToolbarProps ) {
       }
       {
         rightIcon &&
-        <ActionIcon onClick={rightIconAction} size="xl">
+        <ActionIcon variant="light" color="teal" onClick={rightIconAction} size="xl">
           <i className="material-icons font-semibold">
             {rightIcon}
           </i>

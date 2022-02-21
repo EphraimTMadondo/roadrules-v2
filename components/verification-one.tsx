@@ -1,5 +1,4 @@
 import { Button, TextInput } from "@mantine/core";
-import { useColors } from "../hooks/useColors";
 
 interface VerificationOneProps {
   toNextStep: () => void;
@@ -8,8 +7,6 @@ interface VerificationOneProps {
 export function VerificationOne ( props: VerificationOneProps ) {
 
   const { toNextStep } = props;
-
-  const { primary } = useColors();
 
   return (
     <div className="flex flex-col justify-center items-stretch pt-8">
@@ -58,10 +55,7 @@ export function VerificationOne ( props: VerificationOneProps ) {
       <div className="grow"></div>
 
       <div className="flex flex-col justify-center items-stretch pt-12">
-        <Button
-          onClick={toNextStep}
-          style={{ backgroundColor: primary }}
-        >
+        <Button onClick={toNextStep} size="md">
           PROCEED
         </Button>
       </div>

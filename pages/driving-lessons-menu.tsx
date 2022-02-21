@@ -1,30 +1,23 @@
 import { Button } from '@mantine/core';
-import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Layout from '../components/layout';
 import { Toolbar } from '../components/toolbar';
-import { useColors } from '../hooks/useColors';
 
 export default function DrivingLessonsMenu () {
-
-  const { primary } = useColors();
 
   const router = useRouter();
 
   function back () {
-    router.back();
+    // router.back();
+    router.push( "/main-menu" );
   }
 
   const title = "Driving Lessons";
 
   return (
-    <Layout>
-
-      <Head>
-        <title>{title}</title>
-      </Head>
+    <Layout title={title}>
 
       <Toolbar
         title={title}
@@ -54,38 +47,30 @@ export default function DrivingLessonsMenu () {
 
       <div className="grow py-2"></div>
 
-      <div className="flex flex-col justify-center items-stretch p-4">
-        <Button
-          rightIcon={<i className="material-icons">arrow_forward</i>}
-          style={{ backgroundColor: primary }}
-        >
-          NOTES
-        </Button>
+      <div className="flex flex-col justify-center items-stretch py-4">
+        <Link href="/notes">
+          <Button size="md">
+            NOTES
+          </Button>
+        </Link>
       </div>
 
-      <div className="flex flex-col justify-center items-stretch p-4">
-        <Button
-          rightIcon={<i className="material-icons">arrow_forward</i>}
-          style={{ backgroundColor: primary }}
-        >
-          PRACTICE
-        </Button>
+      <div className="flex flex-col justify-center items-stretch py-4">
+        <Link href="/questions/1">
+          <Button size="md">
+            PRACTICE
+          </Button>
+        </Link>
       </div>
 
-      <div className="flex flex-col justify-center items-stretch p-4">
-        <Button
-          rightIcon={<i className="material-icons">arrow_forward</i>}
-          style={{ backgroundColor: primary }}
-        >
+      <div className="flex flex-col justify-center items-stretch py-4">
+        <Button size="md">
           MOCK TEST
         </Button>
       </div>
 
-      <div className="flex flex-col justify-center items-stretch p-4">
-        <Button
-          rightIcon={<i className="material-icons">arrow_forward</i>}
-          style={{ backgroundColor: primary }}
-        >
+      <div className="flex flex-col justify-center items-stretch pt-4">
+        <Button size="md">
           PROGRESS
         </Button>
       </div>
