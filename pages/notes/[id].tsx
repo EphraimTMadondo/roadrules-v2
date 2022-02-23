@@ -60,7 +60,7 @@ export default function NotePage ( props: NotePageProps ) {
           </div>
 
           {
-            nextNoteId &&
+            Boolean( nextNoteId ) &&
             <div className="flex flex-col justify-center items-stretch pt-4">
               <Link href={`/notes/${ nextNoteId }`}>
                 <Button size="md">
@@ -70,12 +70,12 @@ export default function NotePage ( props: NotePageProps ) {
             </div>
           }
           <div className="flex flex-col justify-center items-stretch pt-4">
-              <Link href="/notes">
-                <Button variant="light" size="md">
-                  BACK TO LIST
-                </Button>
-              </Link>
-            </div>
+            <Link href="/notes">
+              <Button variant="light" size="md">
+                BACK TO LIST
+              </Button>
+            </Link>
+          </div>
         </>
       }
 
