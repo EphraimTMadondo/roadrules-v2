@@ -1,13 +1,13 @@
 import { Checkbox } from "@mantine/core";
 
-interface OptionProps {
+interface SelectOptionProps {
   id: string;
   content: string;
   selected: boolean;
   onClick: () => void;
 }
 
-export function Option ( props: OptionProps ) {
+export function SelectOption ( props: SelectOptionProps ) {
 
   const { id, content, selected, onClick } = props;
 

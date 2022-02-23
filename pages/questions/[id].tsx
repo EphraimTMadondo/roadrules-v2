@@ -1,25 +1,35 @@
 import { Alert, Button } from '@mantine/core';
+import { Question } from '@prisma/client';
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Layout from '../../components/layout';
-import { Option } from '../../components/option';
+import { OptionContent } from '../../components/option-content';
+import { ABC } from '../../components/abc';
+import { SelectOption } from '../../components/select-option';
 import { Toolbar } from '../../components/toolbar';
-import { getOptionContent, getQuestions, OptionId, Question } from '../../lib/questions';
+import { getQuestions } from '../../lib/questions';
+import { getOptionContent, getOptionDisplayValue, OptionId } from '../../lib/questions-client-logic';
 import { BORDER } from '../../lib/tailwind-utils';
 
-interface QuestionPageProps {
-  key: string;
+interface Data {
   question: Question | null;
   numQuestions: number;
   lastQuestion?: boolean;
 }
 
+interface QuestionPageProps {
+  key: string;
+  data: string;
+}
+
 export default function QuestionPage ( props: QuestionPageProps ) {
 
-  const { question, numQuestions, lastQuestion } = props;
+  const data: Data = JSON.parse( props.data );
+
+  const { question, numQuestions, lastQuestion } = data;
 
   const [ selectedOption, setSelectedOption ] = useState<OptionId | undefined>( undefined );
   const [ submitted, setSubmitted ] = useState<boolean>( false );
@@ -30,7 +40,7 @@ export default function QuestionPage ( props: QuestionPageProps ) {
   const title = "Question";
 
   function back () {
-    router.back();
+    router.push( "/driving-lessons-menu" );
   }
 
   function optionOnClick ( option: OptionId ) {
@@ -63,44 +73,47 @@ export default function QuestionPage ( props: QuestionPageProps ) {
             </span>
           </div>
 
-          <div className="flex flex-row justify-center items-center">
-            <div className="relative h-48 w-full overflow-hidden">
-              <Image
-                src="/images/tsc_logo.png"
-                alt="Traffic Safety Council Logo"
-                layout="fill"
-                objectFit="scale-down"
-              />
+          {
+            question.image &&
+            <div className="flex flex-row justify-center items-center">
+              <div className="relative h-48 w-full overflow-hidden">
+                <Image
+                  src={question.image}
+                  alt="Question illustration"
+                  layout="fill"
+                  objectFit="scale-down"
+                />
+              </div>
             </div>
-          </div>
+          }
 
           {
             !submitted &&
             <>
               <div className="flex flex-col justify-center items-stretch py-2">
-                <Option
+                <SelectOption
                   id="A"
                   content={question.option1}
-                  selected={selectedOption === "A"}
-                  onClick={() => optionOnClick( "A" )}
+                  selected={selectedOption === "option1"}
+                  onClick={() => optionOnClick( "option1" )}
                 />
               </div>
 
               <div className="flex flex-col justify-center items-stretch py-2">
-                <Option
+                <SelectOption
                   id="B"
                   content={question.option2}
-                  selected={selectedOption === "B"}
-                  onClick={() => optionOnClick( "B" )}
+                  selected={selectedOption === "option2"}
+                  onClick={() => optionOnClick( "option2" )}
                 />
               </div>
 
               <div className="flex flex-col justify-center items-stretch py-2">
-                <Option
+                <SelectOption
                   id="C"
                   content={question.option3}
-                  selected={selectedOption === "C"}
-                  onClick={() => optionOnClick( "C" )}
+                  selected={selectedOption === "option3"}
+                  onClick={() => optionOnClick( "option3" )}
                 />
               </div>
             </>
@@ -129,7 +142,14 @@ export default function QuestionPage ( props: QuestionPageProps ) {
               </span>
               <div className={`flex flex-col justify-center items-center p-4 ${ BORDER }`}>
                 <span className="text-md font-semibold py-2">
-                  {question.correctOption}. {getOptionContent( question.correctOption as OptionId, question )}
+                  <ABC
+                    optionId={question.correctOption as OptionId}
+                  />
+                  .&nbsp;
+                  <OptionContent
+                    optionId={question.correctOption as OptionId}
+                    question={question}
+                  />
                 </span>
                 <span className="text-md py-2 text-center">
                   {question.explanation}
@@ -188,7 +208,7 @@ export const getStaticProps: GetStaticProps = async ( { params } ) => {
 
   const id = Number( params?.id || 0 );
 
-  const questions = getQuestions();
+  const questions = await getQuestions();
 
   const question = questions
     .find( question => question.refNumber === id );
@@ -197,11 +217,18 @@ export const getStaticProps: GetStaticProps = async ( { params } ) => {
     questions.indexOf( question ) === questions.length - 1 :
     true;
 
-  const props: QuestionPageProps = {
-    key: question?.refNumber.toString() || "",
+  if ( question )
+    console.log( question );
+
+  const data: Data = {
     question: question || null,
     lastQuestion,
     numQuestions: questions.length
+  }
+
+  const props: QuestionPageProps = {
+    key: question?.refNumber.toString() || "",
+    data: JSON.stringify( data )
   };
 
   return {
@@ -213,7 +240,7 @@ export const getStaticProps: GetStaticProps = async ( { params } ) => {
 
 export async function getStaticPaths () {
 
-  const questions = getQuestions();
+  const questions = await getQuestions();
 
   const paths = questions
     .map( question => {

@@ -1,27 +1,43 @@
 import { Alert, Button } from '@mantine/core';
+import { Note } from '@prisma/client';
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Layout from '../../components/layout';
 import { Toolbar } from '../../components/toolbar';
-import { getNotes, Note } from '../../lib/notes';
+import { getNotes } from '../../lib/notes';
+
+interface Data {
+  note: Note | null;
+  previousNoteId: number;
+  nextNoteId: number;
+}
 
 interface NotePageProps {
-  note: Note | null;
-  lastNote?: boolean;
+  data: string;
 }
 
 export default function NotePage ( props: NotePageProps ) {
 
-  const { note, lastNote } = props;
+  const data: Data = JSON.parse( props.data );
+
+  const { note, previousNoteId, nextNoteId } = data;
 
   const router = useRouter();
 
   const title = "Note";
 
   function back () {
-    // router.back();
-    router.push( "/notes" );
+
+    if ( previousNoteId )
+      return router.push( "/notes/" + previousNoteId );
+
+    return router.push( "/notes" );
+
+  }
+
+  function forward () {
+    return router.push( "/notes/" + nextNoteId );
   }
 
   return (
@@ -31,27 +47,35 @@ export default function NotePage ( props: NotePageProps ) {
         title={note?.title || "Note"}
         leftIcon="arrow_back"
         leftIconAction={back}
+        rightIcon={nextNoteId ? "arrow_forward" : undefined}
+        rightIconAction={nextNoteId ? forward : undefined}
       />
 
       {
         note &&
         <>
           <div className="flex flex-col justify-center items-stretch py-4">
-            <p>
-              {note.content}
+            <p dangerouslySetInnerHTML={{ __html: note.html }}>
             </p>
           </div>
 
           {
-            !lastNote &&
+            nextNoteId &&
             <div className="flex flex-col justify-center items-stretch pt-4">
-              <Link href={`/notes/${ note.id + 1 }`}>
-                <Button type="submit" size="md">
+              <Link href={`/notes/${ nextNoteId }`}>
+                <Button size="md">
                   NEXT
                 </Button>
               </Link>
             </div>
           }
+          <div className="flex flex-col justify-center items-stretch pt-4">
+              <Link href="/notes">
+                <Button variant="light" size="md">
+                  BACK TO LIST
+                </Button>
+              </Link>
+            </div>
         </>
       }
 
@@ -72,18 +96,38 @@ export const getStaticProps: GetStaticProps = async ( { params } ) => {
 
   const id = Number( params?.id || 0 );
 
-  const notes = getNotes();
+  const notes = await getNotes();
 
   const note = notes
     .find( note => note.id === id );
 
-  const lastNote = note ?
-    notes.indexOf( note ) === notes.length - 1 :
-    true;
+  const [ previousNoteId, nextNoteId ] = ( () => {
+
+    if ( !note )
+      return [ 0, 0 ];
+
+    const currentIndex = notes.indexOf( note );
+
+    const previousNoteId = currentIndex === 0 ?
+      0 :
+      notes[ currentIndex - 1 ].id;
+
+    const nextNoteId = currentIndex === notes.length - 1 ?
+      0 :
+      notes[ currentIndex + 1 ].id;
+
+    return [ previousNoteId, nextNoteId ];
+
+  } )();
+
+  const data: Data = {
+    note: note || null,
+    previousNoteId,
+    nextNoteId
+  };
 
   const props: NotePageProps = {
-    note: note || null,
-    lastNote
+    data: JSON.stringify( data )
   };
 
   return {
@@ -95,7 +139,7 @@ export const getStaticProps: GetStaticProps = async ( { params } ) => {
 
 export async function getStaticPaths () {
 
-  const notes = getNotes();
+  const notes = await getNotes();
 
   const paths = notes
     .map( note => {

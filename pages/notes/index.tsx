@@ -1,22 +1,28 @@
 import { Button } from '@mantine/core';
+import { Note } from '@prisma/client';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Layout from '../../components/layout';
 import { Toolbar } from '../../components/toolbar';
-import { getNotes, Note } from '../../lib/notes';
+import { getNotes } from '../../lib/notes';
+
+interface Data {
+  notes: Note[];
+}
 
 interface NotesProps {
-  notes: Note[];
+  data: string;
 }
 
 export default function Notes ( props: NotesProps ) {
 
-  const { notes } = props;
+  const data: Data = JSON.parse( props.data );
+
+  const { notes } = data;
 
   const router = useRouter();
 
   function back () {
-    // router.back();
     router.push( "/driving-lessons-menu" );
   }
 
@@ -55,9 +61,13 @@ export default function Notes ( props: NotesProps ) {
 
 export async function getStaticProps () {
 
-  const notes = getNotes();
+  const notes = await getNotes();
 
-  const props: NotesProps = { notes };
+  const data: Data = { notes };
+
+  const props: NotesProps = { 
+    data: JSON.stringify( data )
+   };
 
   return {
     props,
