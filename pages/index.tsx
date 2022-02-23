@@ -10,7 +10,7 @@ export default function Home () {
 
       <div className="grow"></div>
 
-      <div className="flex flex-row justify-center items-center py-16">
+      <div className="flex flex-row justify-center items-center py-8">
         <div className="relative h-56 w-full overflow-hidden">
           <Image
             src="/images/road_rules_logo.png"
@@ -30,7 +30,7 @@ export default function Home () {
         </p>
       </div>
 
-      <div className="flex flex-row justify-center items-center">
+      <div className="flex flex-row justify-center items-center pb-8">
         <div className="relative h-48 w-full overflow-hidden">
           <Image
             src="/images/tsc_logo.png"
