@@ -56,7 +56,7 @@ export default function DrivingLessonsMenu () {
       </div>
 
       <div className="flex flex-col justify-center items-stretch py-4">
-        <Link href="/questions/1">
+        <Link href="/questions">
           <Button size="md">
             PRACTICE
           </Button>

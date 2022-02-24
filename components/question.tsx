@@ -1,47 +1,33 @@
-import { Alert, Button } from '@mantine/core';
+import { Button } from '@mantine/core';
 import { Question } from '@prisma/client';
-import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
-import Layout from '../../components/layout';
-import { OptionContent } from '../../components/option-content';
-import { ABC } from '../../components/abc';
-import { SelectOption } from '../../components/select-option';
-import { Toolbar } from '../../components/toolbar';
-import { getQuestions } from '../../lib/questions';
-import { getOptionContent, getOptionDisplayValue, OptionId } from '../../lib/questions-client-logic';
-import { BORDER } from '../../lib/tailwind-utils';
+import { ABC } from '../components/abc';
+import Layout from '../components/layout';
+import { OptionContent } from '../components/option-content';
+import { SelectOption } from '../components/select-option';
+import { Toolbar } from '../components/toolbar';
+import { OptionId } from '../lib/questions-client-logic';
+import { BORDER } from '../lib/tailwind-utils';
 
-interface Data {
-  question: Question | null;
-  numQuestions: number;
-  lastQuestion?: boolean;
-}
-
-interface QuestionPageProps {
+interface QuestionComponentProps {
   key: string;
-  data: string;
+  question: Question;
+  questionNumber: number;
+  numQuestions: number;
+  processResponse?: ( question: Question, selectedOption: OptionId ) => any;
 }
 
-export default function QuestionPage ( props: QuestionPageProps ) {
+export default function QuestionComponent ( props: QuestionComponentProps ) {
 
-  const data: Data = JSON.parse( props.data );
-
-  const { question, numQuestions, lastQuestion } = data;
+  const { question, questionNumber, numQuestions, processResponse } = props;
 
   const [ selectedOption, setSelectedOption ] = useState<OptionId | undefined>( undefined );
   const [ submitted, setSubmitted ] = useState<boolean>( false );
   const [ correct, setCorrect ] = useState<boolean>( false );
 
-  const router = useRouter();
-
   const title = "Question";
-
-  function back () {
-    router.push( "/driving-lessons-menu" );
-  }
 
   function optionOnClick ( option: OptionId ) {
     setSelectedOption( option );
@@ -49,7 +35,7 @@ export default function QuestionPage ( props: QuestionPageProps ) {
 
   function submitAnswer () {
     setSubmitted( true );
-    setCorrect( selectedOption === question?.correctOption );
+    setCorrect( selectedOption === question.correctOption );
   }
 
   return (
@@ -57,8 +43,6 @@ export default function QuestionPage ( props: QuestionPageProps ) {
 
       <Toolbar
         title={"Practice"}
-        leftIcon="arrow_back"
-        leftIconAction={back}
       />
 
       {
@@ -66,7 +50,7 @@ export default function QuestionPage ( props: QuestionPageProps ) {
         <>
           <div className="flex flex-col justify-center items-center py-4">
             <span className="text-md font-semibold py-2">
-              Question {question.refNumber} of {numQuestions}
+              Question {questionNumber} of {numQuestions}
             </span>
             <span className="text-md py-2 text-center">
               {question.text}
@@ -159,18 +143,19 @@ export default function QuestionPage ( props: QuestionPageProps ) {
           }
 
           {
-            submitted &&
+            submitted && selectedOption &&
             <div className="flex flex-col justify-center items-stretch pt-4">
               {
-                !lastQuestion &&
-                <Link href={`/questions/${ question.refNumber + 1 }`}>
-                  <Button size="md">
-                    NEXT
-                  </Button>
-                </Link>
+                processResponse &&
+                <Button
+                  size="md"
+                  onClick={( e: any ) => processResponse( question, selectedOption )}
+                >
+                  NEXT
+                </Button>
               }
               {
-                lastQuestion &&
+                !processResponse &&
                 <Link href="/progress">
                   <Button size="md">
                     VIEW PROGRESS
@@ -188,74 +173,17 @@ export default function QuestionPage ( props: QuestionPageProps ) {
               </Button>
             </div>
           }
+          <div className="flex flex-col justify-center items-stretch pt-4">
+            <Link href="/driving-lessons-menu">
+              <Button size="md" variant="light">
+                QUIT
+              </Button>
+            </Link>
+          </div>
         </>
-      }
-
-      {
-        !question &&
-        <div className="flex flex-col justify-start items-stretch pt-4">
-          <Alert icon={<i className="material-icons">error</i>} title="Sorry" color="red">
-            We couldn't find that particular question.
-          </Alert>
-        </div>
       }
 
     </Layout>
   )
-}
-
-export const getStaticProps: GetStaticProps = async ( { params } ) => {
-
-  const id = Number( params?.id || 0 );
-
-  const questions = await getQuestions();
-
-  const question = questions
-    .find( question => question.refNumber === id );
-
-  const lastQuestion = question ?
-    questions.indexOf( question ) === questions.length - 1 :
-    true;
-
-  if ( question )
-    console.log( question );
-
-  const data: Data = {
-    question: question || null,
-    lastQuestion,
-    numQuestions: questions.length
-  }
-
-  const props: QuestionPageProps = {
-    key: question?.refNumber.toString() || "",
-    data: JSON.stringify( data )
-  };
-
-  return {
-    props,
-    revalidate: 10
-  }
-
-}
-
-export async function getStaticPaths () {
-
-  const questions = await getQuestions();
-
-  const paths = questions
-    .map( question => {
-
-      return {
-        params: {
-          id: question.refNumber.toString()
-        },
-      }
-
-    } );
-
-  return {
-    paths,
-    fallback: 'blocking'
-  }
 
 }
