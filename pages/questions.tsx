@@ -65,7 +65,7 @@ export default function QuestionPage ( props: QuestionPageProps ) {
 
 }
 
-const LIMIT = 3;
+const LIMIT = 25;
 
 export const getServerSideProps: GetServerSideProps = async ( { params } ) => {
 
