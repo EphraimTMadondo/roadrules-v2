@@ -1,4 +1,12 @@
-export type OptionId = "option1" | "option2" | "option3";
+import { z } from 'zod';
+
+export const optionIdSchema = z.union( [
+  z.literal( "option1" ),
+  z.literal( "option2" ),
+  z.literal( "option3" ),
+] );
+
+export type OptionId = z.infer<typeof optionIdSchema>;
 
 interface ThreeOptioned {
   option1: string;

@@ -7,14 +7,15 @@ import { CustomCenter } from '../components/custom-center';
 interface LayoutProps {
   title?: string;
   children: any;
+  className?: string;
 }
 
 export default function Layout ( props: LayoutProps ) {
 
-  const { title, children } = props;
+  const { title, children, className } = props;
 
   return (
-    <div className="flex flex-col justify-start items-stretch">
+    <div className={"flex flex-col justify-start items-stretch" + className ? ` ${ className }` : ""}>
 
       <Head>
         <title>Road Rules - {title}</title>

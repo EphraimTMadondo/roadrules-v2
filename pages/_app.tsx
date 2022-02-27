@@ -1,9 +1,26 @@
+import { NotificationsProvider } from '@mantine/notifications';
+
+import { MantineProvider } from '@mantine/core';
+import { withTRPC } from '@trpc/next';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import '../styles/globals.css';
-import { MantineProvider } from '@mantine/core';
+import { AppRouter } from './api/trpc/[trpc]';
 
-export default function MyApp ( props: AppProps ) {
+export default withTRPC<AppRouter>( {
+  config ( { ctx } ) {
+
+    return {
+      url: process.env.NODE_ENV === "production"
+        ? `https://${ process.env.NEXT_PUBLIC_SERVER_URL }/api/trpc`
+        : `http://${ process.env.NEXT_PUBLIC_SERVER_URL }/api/trpc`
+    }
+
+  },
+  ssr: true,
+} )( MyApp );
+
+function MyApp ( props: AppProps ) {
 
   const { Component, pageProps } = props;
 
@@ -47,26 +64,13 @@ export default function MyApp ( props: AppProps ) {
         withGlobalStyles
         withNormalizeCSS
         theme={{
-          /** Put your mantine theme override here */
           colorScheme: 'light',
-          // colors: {
-          //   green: [
-          //     "#EBFBEE",
-          //     "#D3F9D8",
-          //     "#B2F2BB",
-          //     "#8CE99A",
-          //     "#69DB7C",
-          //     "#51CF66",
-          //     "#40C057",
-          //     "#37B24D",
-          //     "#2F9E44",
-          //     "#2B8A3E"
-          //   ]
-          // },
           primaryColor: "teal"
         }}
       >
-        <Component {...pageProps} />
+        <NotificationsProvider>
+          <Component {...pageProps} />
+        </NotificationsProvider>
       </MantineProvider>
 
     </>
