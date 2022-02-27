@@ -5,6 +5,7 @@ export async function getLastWeekResponses ( currentDate: Date, includeQuestions
 
   const responses = await prisma.response.findMany( {
     where: {
+      // add user id
       createdAt: {
         gt: minusWeeksFromDate( currentDate, 1 ).getTime()
       }

@@ -1,5 +1,6 @@
 import { Alert } from '@mantine/core';
 import { Question, Response } from '@prisma/client';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import Layout from '../components/layout';
 import { ResponseComponent } from '../components/response';
@@ -81,7 +82,7 @@ export default function QuickRevision ( props: PageProps ) {
   )
 }
 
-export async function getStaticProps () {
+export const getServerSideProps: GetServerSideProps = async ( _ ) => {
 
   try {
 
@@ -109,8 +110,7 @@ function createPageProps ( data: Data ) {
   };
 
   return {
-    props,
-    revalidate: 10,
+    props
   }
 
 }

@@ -1,5 +1,6 @@
 import { Alert, Button } from '@mantine/core';
 import { Question, Response } from '@prisma/client';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -27,7 +28,7 @@ interface NumberedResponse extends CustomResponse {
   responseNumber: number;
 }
 
-export default function QuickRevision ( props: PageProps ) {
+export default function DetailedRevision ( props: PageProps ) {
 
   const data: Data = props?.data ?
     JSON.parse( props.data ) :
@@ -121,7 +122,7 @@ export default function QuickRevision ( props: PageProps ) {
   )
 }
 
-export async function getStaticProps () {
+export const getServerSideProps: GetServerSideProps = async ( _ ) => {
 
   try {
 
@@ -149,8 +150,7 @@ function createPageProps ( data: Data ) {
   };
 
   return {
-    props,
-    revalidate: 10,
+    props
   }
 
 }
