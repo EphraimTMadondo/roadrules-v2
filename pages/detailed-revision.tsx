@@ -94,7 +94,7 @@ export default function DetailedRevision ( props: PageProps ) {
             key={response.responseNumber.toString()}
             question={response.question}
             questionNumber={response.responseNumber}
-            numQuestions={responses.length}
+            numQuestions={initialResponses.length}
 
             selectedOption={response.choice as OptionId}
             correct={response.correct}
