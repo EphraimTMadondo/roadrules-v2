@@ -7,6 +7,8 @@ import Head from 'next/head';
 import '../styles/globals.css';
 import { AppRouter } from './api/trpc/[trpc]';
 
+console.log( "NEXT_PUBLIC_SERVER_URL", process.env.NEXT_PUBLIC_SERVER_URL );
+
 export default withTRPC<AppRouter>( {
   config ( { ctx } ) {
 
