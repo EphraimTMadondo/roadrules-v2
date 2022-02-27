@@ -5,12 +5,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Layout from '../../components/layout';
 import { Toolbar } from '../../components/toolbar';
+import { FALLBACK_ERROR_MESSAGE } from '../../lib/errors';
 import { getNotes } from '../../lib/notes';
 
 interface Data {
   note: Note | null;
   previousNoteId: number;
   nextNoteId: number;
+  loadingError?: string;
 }
 
 interface NotePageProps {
@@ -19,7 +21,14 @@ interface NotePageProps {
 
 export default function NotePage ( props: NotePageProps ) {
 
-  const data: Data = JSON.parse( props.data );
+  const data: Data = props?.data ?
+    JSON.parse( props.data ) :
+    {
+      note: null,
+      previousNoteId: 0,
+      nextNotId: 0,
+      loadingError: FALLBACK_ERROR_MESSAGE
+    };
 
   const { note, previousNoteId, nextNoteId } = data;
 
@@ -94,37 +103,54 @@ export default function NotePage ( props: NotePageProps ) {
 
 export const getStaticProps: GetStaticProps = async ( { params } ) => {
 
-  const id = Number( params?.id || 0 );
+  try {
 
-  const notes = await getNotes();
+    const id = Number( params?.id || 0 );
 
-  const note = notes
-    .find( note => note.id === id );
+    const notes = await getNotes();
 
-  const [ previousNoteId, nextNoteId ] = ( () => {
+    const note = notes
+      .find( note => note.id === id );
 
-    if ( !note )
-      return [ 0, 0 ];
+    const [ previousNoteId, nextNoteId ] = ( () => {
 
-    const currentIndex = notes.indexOf( note );
+      if ( !note )
+        return [ 0, 0 ];
 
-    const previousNoteId = currentIndex === 0 ?
-      0 :
-      notes[ currentIndex - 1 ].id;
+      const currentIndex = notes.indexOf( note );
 
-    const nextNoteId = currentIndex === notes.length - 1 ?
-      0 :
-      notes[ currentIndex + 1 ].id;
+      const previousNoteId = currentIndex === 0 ?
+        0 :
+        notes[ currentIndex - 1 ].id;
 
-    return [ previousNoteId, nextNoteId ];
+      const nextNoteId = currentIndex === notes.length - 1 ?
+        0 :
+        notes[ currentIndex + 1 ].id;
 
-  } )();
+      return [ previousNoteId, nextNoteId ];
 
-  const data: Data = {
-    note: note || null,
-    previousNoteId,
-    nextNoteId
-  };
+    } )();
+
+    return createPageProps( {
+      note: note || null,
+      previousNoteId,
+      nextNoteId
+    } );
+
+  } catch ( error: any ) {
+
+    return createPageProps( {
+      note: null,
+      previousNoteId: 0,
+      nextNoteId: 0,
+      loadingError: error?.message || FALLBACK_ERROR_MESSAGE
+    } );
+    
+  }
+
+}
+
+function createPageProps ( data: Data ) {
 
   const props: NotePageProps = {
     data: JSON.stringify( data )

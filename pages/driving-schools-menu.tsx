@@ -10,7 +10,6 @@ export default function DrivingSchoolsMenu () {
   const router = useRouter();
 
   function back () {
-    // router.back();
     router.push( "/main-menu" );
   }
 

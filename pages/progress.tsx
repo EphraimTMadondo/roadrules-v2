@@ -142,30 +142,29 @@ export const getServerSideProps: GetServerSideProps = async ( { params } ) => {
 
     const { numCorrect, numWrong } = await getLastWeekResponseNumbers( new Date() );
 
-    const data: Data = { numCorrect, numWrong };
-
-    const props: PageProps = {
-      data: JSON.stringify( data )
-    };
-
-    return { props }
+    return createPageProps( {
+      numCorrect,
+      numWrong
+    } );
 
   } catch ( error: any ) {
 
-    console.error( "error >>>", error );
-
-    const data: Data = {
+    return createPageProps( {
       numCorrect: 0,
       numWrong: 0,
       loadingError: error?.message || FALLBACK_ERROR_MESSAGE
-    };
-
-    const props: PageProps = {
-      data: JSON.stringify( data )
-    };
-
-    return { props }
+    } );
 
   }
+
+}
+
+function createPageProps ( data: Data ) {
+
+  const props: PageProps = {
+    data: JSON.stringify( data )
+  };
+
+  return { props }
 
 }

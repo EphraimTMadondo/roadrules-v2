@@ -83,9 +83,26 @@ export default function QuickRevision ( props: PageProps ) {
 
 export async function getStaticProps () {
 
-  const responses = await getLastWeekResponses( new Date(), "includeQuestions" );
+  try {
 
-  const data: Data = { responses };
+    const responses = await getLastWeekResponses( new Date(), "includeQuestions" );
+
+    return createPageProps( {
+      responses
+    } );
+
+  } catch ( reason: any ) {
+
+    return createPageProps( {
+      responses: [],
+      loadingError: reason?.message || FALLBACK_ERROR_MESSAGE
+    } );
+
+  }
+
+}
+
+function createPageProps ( data: Data ) {
 
   const props: PageProps = {
     data: JSON.stringify( data )

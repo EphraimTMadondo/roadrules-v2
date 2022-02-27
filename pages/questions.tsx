@@ -18,7 +18,7 @@ interface Data {
   loadingError?: string;
 }
 
-interface QuestionPageProps {
+interface PageProps {
   data: string;
 }
 
@@ -26,7 +26,7 @@ interface CustomQuestion extends Question {
   questionNumber: number;
 }
 
-export default function Questions ( props: QuestionPageProps ) {
+export default function Questions ( props: PageProps ) {
 
   const data: Data = props?.data ?
     JSON.parse( props.data ) :
@@ -136,39 +136,35 @@ export default function Questions ( props: QuestionPageProps ) {
 
 }
 
-// const LIMIT = 25;
-const LIMIT = 3;
+const LIMIT = 25;
 
-export const getServerSideProps: GetServerSideProps = async ( { params } ) => {
+export const getServerSideProps: GetServerSideProps = async ( _ ) => {
 
   try {
 
     const questions = await getQuestions( LIMIT );
 
-    const data: Data = {
+    return createPageProps( {
       initialQuestions: questions
-      // initialQuestions: []
-    }
-
-    const props: QuestionPageProps = {
-      data: JSON.stringify( data )
-    };
-
-    return { props }
+    } );
 
   } catch ( error: any ) {
 
-    console.error( "error >>>", error );
-
-    const props: QuestionPageProps = {
-      data: JSON.stringify( {
-        initialQuestions: [],
-        loadingError: error?.message || FALLBACK_ERROR_MESSAGE
-      } )
-    };
-
-    return { props }
+    return createPageProps( {
+      initialQuestions: [],
+      loadingError: error?.message || FALLBACK_ERROR_MESSAGE
+    } );
 
   }
+
+}
+
+function createPageProps ( data: Data ) {
+
+  const props: PageProps = {
+    data: JSON.stringify( data )
+  };
+
+  return { props }
 
 }
