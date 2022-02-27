@@ -1,11 +1,7 @@
-import * as trpc from '@trpc/server';
 import { z } from 'zod';
 import { prisma } from "../../lib/db";
 import { optionIdSchema } from "../../lib/questions-client-logic";
-
-const createRouter = () => {
-  return trpc.router();
-}
+import { createRouter } from '../create-router';
 
 export const responseRoutes = createRouter()
   .mutation( 'create', {
