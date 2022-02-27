@@ -1,16 +1,26 @@
 import { minusWeeksFromDate } from "./dates";
 import { prisma } from "./db";
 
-
-export async function getLastWeekResponseNumbers ( currentDate: Date ) {
+export async function getLastWeekResponses ( currentDate: Date, includeQuestions?: "includeQuestions" ) {
 
   const responses = await prisma.response.findMany( {
     where: {
       createdAt: {
         gt: minusWeeksFromDate( currentDate, 1 ).getTime()
       }
+    },
+    include: {
+      question: Boolean( includeQuestions )
     }
   } );
+
+  return responses;
+
+}
+
+export async function getLastWeekResponseNumbers ( currentDate: Date ) {
+
+  const responses = await getLastWeekResponses( currentDate );
 
   const numCorrect = responses
     .filter( response => response.correct )

@@ -27,6 +27,8 @@ export default function Progress ( props: PageProps ) {
   const data: Data = props?.data ?
     JSON.parse( props.data ) :
     {
+      numCorrect: 0,
+      numWrong: 0,
       loadingError: FALLBACK_ERROR_MESSAGE
     };
 

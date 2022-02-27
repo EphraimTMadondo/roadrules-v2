@@ -70,9 +70,11 @@ export default function DrivingLessonsMenu () {
       </div>
 
       <div className="flex flex-col justify-center items-stretch pt-4">
+      <Link href="/progress">
         <Button size="md">
           PROGRESS
         </Button>
+        </Link>
       </div>
 
     </Layout>

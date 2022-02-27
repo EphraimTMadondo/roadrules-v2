@@ -4,6 +4,7 @@ import { Question } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { ErrorAlert } from '../components/error-alert';
 import Layout from '../components/layout';
 import QuestionComponent from '../components/question';
 import { Toolbar } from '../components/toolbar';
@@ -112,9 +113,7 @@ export default function Questions ( props: QuestionPageProps ) {
           />
 
           <div className="flex flex-col justify-start items-stretch pt-4">
-            <Alert icon={<i className="material-icons">error</i>} title="Error" color="red">
-              {loadingError}
-            </Alert>
+            <ErrorAlert error={loadingError} />
           </div>
 
         </Layout>
