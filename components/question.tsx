@@ -10,10 +10,12 @@ import { CorrectAnswerAlert } from './correct-answer-alert';
 import { ErrorAlert } from './error-alert';
 import { QuestionTitle } from './question-title';
 import { StandardImage } from './standard-image';
+import { Timer } from './timer';
 import { WrongAnswerAlert } from './wrong-answer-alert';
 
 interface QuestionComponentProps {
   key: string;
+  title: string;
   question: Question;
   questionNumber: number;
   numQuestions: number;
@@ -21,18 +23,20 @@ interface QuestionComponentProps {
   nextQuestion: ( question: Question ) => any;
   isLoading?: boolean;
   error?: string;
+  timed?: boolean;
+  secondsLeft?: number;
+  crunchTime?: boolean;
 }
 
 export default function QuestionComponent ( props: QuestionComponentProps ) {
 
-  const { question, questionNumber, numQuestions } = props;
-  const { processResponse, nextQuestion, isLoading, error } = props;
+  const { title, question, questionNumber, numQuestions } = props;
+  const { processResponse, nextQuestion, isLoading } = props;
+  const { error, timed, secondsLeft, crunchTime } = props;
 
   const [ selectedOption, setSelectedOption ] = useState<OptionId | undefined>( undefined );
   const [ submitted, setSubmitted ] = useState<boolean>( false );
   const [ correct, setCorrect ] = useState<boolean>( false );
-
-  const title = "Question";
 
   function optionOnClick ( option: OptionId ) {
     setSelectedOption( option );
@@ -52,7 +56,17 @@ export default function QuestionComponent ( props: QuestionComponentProps ) {
     <Layout className="relative" title={title}>
 
       <Toolbar
-        title={"Practice"}
+        title={title}
+        RightElement={
+          timed ?
+            () => (
+              <Timer
+                secondsLeft={secondsLeft || 0}
+                crunchTime={crunchTime || false}
+              />
+            ) :
+            undefined
+        }
       />
 
       <LoadingOverlay

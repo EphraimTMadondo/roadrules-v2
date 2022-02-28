@@ -60,27 +60,21 @@ export default function MainMenu () {
       </div>
 
       <div className="flex flex-col justify-center items-stretch py-4">
-        <Link href="/driving-schools-menu">
-          <Button size="md">
-            DRIVING SCHOOLS
-          </Button>
-        </Link>
+        <Button size="md" disabled>
+          DRIVING SCHOOLS
+        </Button>
       </div>
 
       <div className="flex flex-col justify-center items-stretch py-4">
-        <Link href="/book-vid-test">
-          <Button size="md">
-            BOOK VID TEST
-          </Button>
-        </Link>
+        <Button size="md" disabled>
+          BOOK VID TEST
+        </Button>
       </div>
 
       <div className="flex flex-col justify-center items-stretch pt-4">
-        <Link href="/traffic-safety-council">
-          <Button size="md">
-            TRAFFIC SAFETY COUNCIL
-          </Button>
-        </Link>
+        <Button size="md" disabled>
+          TRAFFIC SAFETY COUNCIL
+        </Button>
       </div>
 
     </Layout>

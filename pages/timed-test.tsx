@@ -1,9 +1,8 @@
-import { Alert } from '@mantine/core';
 import { useNotifications } from '@mantine/notifications';
 import { Question } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ErrorAlert } from '../components/error-alert';
 import Layout from '../components/layout';
 import QuestionComponent from '../components/question';
@@ -26,7 +25,7 @@ interface CustomQuestion extends Question {
   questionNumber: number;
 }
 
-export default function Questions ( props: PageProps ) {
+export default function TimedTest ( props: PageProps ) {
 
   const data: Data = props?.data ?
     JSON.parse( props.data ) :
@@ -36,6 +35,8 @@ export default function Questions ( props: PageProps ) {
     };
 
   const { initialQuestions, loadingError } = data;
+
+  const title = "Test";
 
   const router = useRouter();
   const notifications = useNotifications();
@@ -50,6 +51,23 @@ export default function Questions ( props: PageProps ) {
 
   const [ isLoading, setisLoading ] = useState<boolean>( false );
   const [ error, setError ] = useState<string>( "" );
+  const [ secondsLeft, setSecondsLeft ] = useState<number>( 480 );
+
+  useEffect( () => {
+
+    let timer: NodeJS.Timeout;
+
+    if ( secondsLeft === 0 ) {
+      router.push( "/progress" );
+    } else {
+      timer = setTimeout( () => {
+        setSecondsLeft( secondsLeft => secondsLeft - 1 );
+      }, 1000 );
+    }
+
+    return () => clearTimeout( timer );
+
+  }, [ secondsLeft ] );
 
   const mutation = trpc.useMutation( "response.create", {
     onMutate: async () => {
@@ -107,7 +125,7 @@ export default function Questions ( props: PageProps ) {
         <Layout className="relative" title="Practice">
 
           <Toolbar
-            title={"Practice"}
+            title={title}
             leftIcon="arrow_back"
             leftIconAction={back}
           />
@@ -122,7 +140,7 @@ export default function Questions ( props: PageProps ) {
         question &&
         <QuestionComponent
           key={question.questionNumber.toString()}
-          title="Practice"
+          title={title}
           question={question}
           questionNumber={question.questionNumber}
           numQuestions={initialQuestions.length}
@@ -130,6 +148,9 @@ export default function Questions ( props: PageProps ) {
           nextQuestion={nextQuestion}
           isLoading={isLoading}
           error={error}
+          timed={true}
+          secondsLeft={secondsLeft}
+          crunchTime={secondsLeft < 60}
         />
       }
     </>

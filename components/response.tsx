@@ -33,7 +33,7 @@ export function ResponseComponent ( props: Props ) {
             }
           </div>
         }
-        <div className="flex flex-col justify-start items-start">
+        <div className="flex grow flex-col justify-start items-start">
           <span className="text-md font-semibold py-2">
             <ABC
               optionId={question.correctOption as OptionId}
@@ -85,7 +85,7 @@ function ConditionalContainer ( props: ConditionalContainerProps ) {
 function NormalContainer ( { children }: { children: any } ) {
 
   return (
-    <div className="flex flex-col justify-center items-center p-4 border border-solid rounded border-teal-600">
+    <div className="flex flex-col justify-center items-stretch p-4 border border-solid rounded border-teal-600">
       {children}
     </div>
   )
@@ -95,7 +95,7 @@ function NormalContainer ( { children }: { children: any } ) {
 function RedContainer ( { children }: { children: any } ) {
 
   return (
-    <div className={"flex flex-col justify-center items-center p-4 border border-solid rounded border-red-600"}>
+    <div className={"flex flex-col justify-center items-stretch p-4 border border-solid rounded border-red-600"}>
       {children}
     </div>
   )
