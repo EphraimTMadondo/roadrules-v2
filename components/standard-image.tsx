@@ -1,8 +1,5 @@
 import Image, { ImageProps } from "next/image";
 
-interface Props extends ImageProps {
-}
-
 export function StandardImage ( props: ImageProps ) {
 
   return (

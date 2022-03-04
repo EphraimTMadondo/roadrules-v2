@@ -1,12 +1,15 @@
-import { Button, TextInput } from "@mantine/core";
+import { Button, Select, TextInput } from "@mantine/core";
+import { UseForm } from "@mantine/hooks/lib/use-form/use-form";
+import { Inputs } from "../pages/verification";
 
 interface VerificationOneProps {
   toNextStep: () => void;
+  form: UseForm<Inputs>;
 }
 
 export function VerificationOne ( props: VerificationOneProps ) {
 
-  const { toNextStep } = props;
+  const { toNextStep, form } = props;
 
   return (
     <div className="flex flex-col justify-center items-stretch pt-8">
@@ -21,6 +24,8 @@ export function VerificationOne ( props: VerificationOneProps ) {
         <TextInput
           placeholder="First Name"
           label="First Name"
+          {...form.getInputProps( "firstName" )}
+          required
         />
       </div>
 
@@ -28,13 +33,18 @@ export function VerificationOne ( props: VerificationOneProps ) {
         <TextInput
           placeholder="Last Name"
           label="Last Name"
+          {...form.getInputProps( "lastName" )}
+          required
         />
       </div>
 
       <div className="flex flex-col justify-center items-stretch py-2">
-        <TextInput
+        <Select
           placeholder="Gender"
           label="Gender"
+          data={[ "Male", "Femail" ]}
+          {...form.getInputProps( "gender" )}
+          required
         />
       </div>
 
@@ -42,13 +52,8 @@ export function VerificationOne ( props: VerificationOneProps ) {
         <TextInput
           placeholder="Province"
           label="Province"
-        />
-      </div>
-
-      <div className="flex flex-col justify-center items-stretch py-2">
-        <TextInput
-          placeholder="Phone Number"
-          label="Phone Number"
+          {...form.getInputProps( "province" )}
+          required
         />
       </div>
 

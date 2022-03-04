@@ -1,23 +1,44 @@
 import { Stepper } from '@mantine/core';
-import Head from 'next/head';
+import { Auth, ConfirmationResult, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useForm } from '@mantine/hooks';
 import Layout from '../components/layout';
-import { Toolbar } from '../components/toolbar';
 import { VerificationOne } from '../components/verification-one';
 import { VerificationThree } from '../components/verification-three';
 import { VerificationTwo } from '../components/verification-two';
 
-import { useRouter } from 'next/router'
-
-// interface Inputs {
-//   phoneNumber: string;
-// }
+export interface Inputs {
+  firstName: string;
+  lastName: string;
+  gender: "Male" | "Female";
+  province: string;
+  country: string;
+  phoneNumber: string;
+  code: string;
+}
 
 export default function Verification () {
 
   const router = useRouter();
 
   const [ active, setActive ] = useState( 0 );
+  const [ confirmationResult, setConfirmationResult ] = useState<ConfirmationResult | undefined>( undefined );
+  const [ sendingCode, setSendingCode ] = useState<boolean>( false );
+  const [ verifying, setVerifying ] = useState<boolean>( false );
+  const [ error, setError ] = useState<string>( "" );
+
+  const form = useForm<Inputs>( {
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      gender: "Male",
+      province: "",
+      country: "",
+      phoneNumber: "",
+      code: ""
+    }
+  } );
 
   function nextStep () {
 
@@ -43,33 +64,97 @@ export default function Verification () {
 
   }
 
-  function conclude () {
-    router.push( "/main-menu" );
+  async function sendVerificationCode ( phoneNumber: string, auth: Auth, appVerifier: RecaptchaVerifier ) {
+
+    try {
+
+      setSendingCode( true );
+
+      const confirmationResult = await signInWithPhoneNumber( auth, phoneNumber, appVerifier );
+      setConfirmationResult( confirmationResult );
+
+    } catch ( error ) {
+
+      resetRecaptcha();
+
+    } finally {
+
+      setSendingCode( false );
+
+    }
+
   }
 
-  // const { register, handleSubmit } = useForm<Inputs>();
+  async function handleSubmit ( data: Inputs ) {
 
-  // function onSubmit ( data: Inputs ) {
-  //   console.log( data );
-  //   // router.push( "/verify" );
-  // };
+    try {
+
+      setVerifying( true );
+
+      console.log( data );
+
+      if ( confirmationResult ) {
+        const result = await confirmationResult.confirm( data.code );
+        console.log( result );
+        // register and push to main menu.
+        // router.push( "/main-menu" );
+      }
+
+    } catch ( error ) {
+
+      setError( "Verification code, please try again." );
+
+    } finally {
+
+      setVerifying( false );
+
+    }
+
+  }
+
+  async function resetRecaptcha () {
+
+    const widgetId = await ( ( window as any ).recaptchaVerifier as RecaptchaVerifier ).render();
+
+    ( window as any ).grecaptcha.ready( function () {
+      ( window as any ).grecaptcha.reset( widgetId );
+    } );
+
+  }
 
   return (
     <Layout title="Welcome to Road Rules">
 
-      <div className="flex flex-col justify-start items-stretch">
+      <form
+        onSubmit={form.onSubmit( handleSubmit )}
+        className="flex flex-col justify-start items-stretch"
+      >
         <Stepper active={active} onStepClick={setActive} breakpoint="md" size="md">
           <Stepper.Step label="Enter Details" className="h-min-full">
-            <VerificationOne toNextStep={nextStep} />
+            <VerificationOne
+              toNextStep={nextStep}
+              form={form}
+            />
           </Stepper.Step>
           <Stepper.Step label="Send Code">
-            <VerificationTwo toNextStep={nextStep} />
+            <VerificationTwo
+              toNextStep={nextStep}
+              form={form}
+              sendVerificationCode={sendVerificationCode}
+              error={error}
+              setError={setError}
+            />
           </Stepper.Step>
           <Stepper.Step label="Verify Phone Number">
-            <VerificationThree toNextStep={conclude} />
+            <VerificationThree
+              form={form}
+              sendingCode={sendingCode}
+              verifying={verifying}
+              error={error}
+            />
           </Stepper.Step>
         </Stepper>
-      </div>
+      </form>
 
     </Layout>
   )

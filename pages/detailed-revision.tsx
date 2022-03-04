@@ -8,16 +8,13 @@ import DetailedResponse from '../components/detailed-response';
 import Layout from '../components/layout';
 import { Toolbar } from '../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../lib/errors';
+import { createSSRPageProps, getDataFromPageProps, PageProps } from '../lib/props';
 import { OptionId } from '../lib/questions-client-logic';
 import { getLastWeekResponses } from '../lib/responses';
 
 interface Data {
   responses: CustomResponse[];
   loadingError?: string;
-}
-
-interface PageProps {
-  data: string;
 }
 
 interface CustomResponse extends Response {
@@ -30,12 +27,10 @@ interface NumberedResponse extends CustomResponse {
 
 export default function DetailedRevision ( props: PageProps ) {
 
-  const data: Data = props?.data ?
-    JSON.parse( props.data ) :
-    {
-      responses: [],
-      loadingError: FALLBACK_ERROR_MESSAGE
-    };
+  const data = getDataFromPageProps<Data>( props, {
+    responses: [],
+    loadingError: FALLBACK_ERROR_MESSAGE
+  } );
 
   const { responses: initialResponses, loadingError } = data;
 
@@ -68,7 +63,7 @@ export default function DetailedRevision ( props: PageProps ) {
     router.back();
   }
 
-  const title = "Quick Revision";
+  const title = "Detailed Revision";
 
   return (
     <Layout title={title}>
@@ -128,29 +123,17 @@ export const getServerSideProps: GetServerSideProps = async ( _ ) => {
 
     const responses = await getLastWeekResponses( new Date(), "includeQuestions" );
 
-    return createPageProps( {
+    return createSSRPageProps<Data>( {
       responses
     } );
 
   } catch ( error: any ) {
 
-    return createPageProps( {
+    return createSSRPageProps<Data>( {
       responses: [],
       loadingError: error?.message || FALLBACK_ERROR_MESSAGE
     } );
 
-  }
-
-}
-
-function createPageProps ( data: Data ) {
-
-  const props: PageProps = {
-    data: JSON.stringify( data )
-  };
-
-  return {
-    props
   }
 
 }

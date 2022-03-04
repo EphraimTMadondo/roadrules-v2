@@ -16,7 +16,7 @@ export default function ProgressPieChart ( props: ProgressPieChartProps ) {
 
   const { elements, effectiveValue } = props;
 
-  const CenteredMetric = ( { dataWithArc, centerX, centerY }: any ) => {
+  const CenteredMetric = ( { centerX, centerY }: any ) => {
 
     return (
       <text
@@ -24,10 +24,7 @@ export default function ProgressPieChart ( props: ProgressPieChartProps ) {
         y={centerY}
         textAnchor="middle"
         dominantBaseline="central"
-        style={{
-          color: "#FFFFFF",
-          fontSize: '24px',
-        }}
+        style={{ color: "#FFFFFF", fontSize: '24px', }}
       >
         {effectiveValue}%
       </text>

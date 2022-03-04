@@ -1,15 +1,23 @@
-import { Button, NumberInput } from "@mantine/core";
+import { Button, LoadingOverlay, NumberInput } from "@mantine/core";
+import { UseForm } from "@mantine/hooks/lib/use-form/use-form";
+import { Inputs } from "../pages/verification";
+import { ErrorAlert } from "./error-alert";
 
 interface VerificationThreeProps {
-  toNextStep: () => void;
+  form: UseForm<Inputs>;
+  sendingCode: boolean;
+  verifying: boolean;
+  error?: string;
 }
 
 export function VerificationThree ( props: VerificationThreeProps ) {
 
-  const { toNextStep } = props;
-  
+  const { form, sendingCode, verifying, error } = props;
+
   return (
-    <div className="flex flex-col justify-center items-stretch pt-8">
+    <div className="flex flex-col justify-center items-stretch pt-8 relative">
+
+      <LoadingOverlay visible={sendingCode || verifying} />
 
       <div className="flex flex-col justify-center items-center">
         <span className="font-bold text-lg text-center py-2">
@@ -22,15 +30,22 @@ export function VerificationThree ( props: VerificationThreeProps ) {
         Enter the code you received to verify your credentials.
       </span>
 
+      {
+        error &&
+        <ErrorAlert error={error} />
+      }
+
       <div className="flex flex-col justify-center items-stretch py-4">
         <NumberInput
           hideControls
           label="Code"
+          {...form.getInputProps( "code" )}
+          required
         />
       </div>
 
       <div className="flex flex-col justify-center items-stretch pt-4 pb-8">
-        <Button onClick={toNextStep} size="md">
+        <Button type="submit" size="md">
           VERIFY
         </Button>
       </div>

@@ -6,24 +6,19 @@ import { useRouter } from 'next/router';
 import Layout from '../../components/layout';
 import { Toolbar } from '../../components/toolbar';
 import { getNotes } from '../../lib/notes';
+import { createISRPageProps, getDataFromPageProps, PageProps } from '../../lib/props';
 
 interface Data {
   notes: Note[];
   loadingError?: string;
 }
 
-interface NotesProps {
-  data: string;
-}
+export default function Notes ( props: PageProps ) {
 
-export default function Notes ( props: NotesProps ) {
-
-  const data: Data = props?.data ?
-    JSON.parse( props.data ) :
-    {
-      notes: [],
-      loadingError: FALLBACK_ERROR_MESSAGE
-    };
+  const data = getDataFromPageProps<Data>( props, {
+    notes: [],
+    loadingError: FALLBACK_ERROR_MESSAGE
+  } );
 
   const { notes } = data;
 
@@ -72,30 +67,17 @@ export async function getStaticProps () {
 
     const notes = await getNotes();
 
-    return createPageProps( {
+    return createISRPageProps<Data>( {
       notes
     } );
 
   } catch ( error: any ) {
 
-    return createPageProps( {
+    return createISRPageProps<Data>( {
       notes: [],
       loadingError: error?.message || FALLBACK_ERROR_MESSAGE
     } );
 
-  }
-
-}
-
-function createPageProps ( data: Data ) {
-
-  const props: NotesProps = {
-    data: JSON.stringify( data )
-  };
-
-  return {
-    props,
-    revalidate: 10,
   }
 
 }

@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import Layout from '../components/layout';
 import { Toolbar } from '../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../lib/errors';
+import { createSSRPageProps, getDataFromPageProps, PageProps } from '../lib/props';
 import { getLastWeekResponseNumbers } from '../lib/responses';
 
 const ProgressPieChart = dynamic( () => import( "../components/progress-pie-chart" ), {
@@ -18,19 +19,13 @@ interface Data {
   loadingError?: string;
 }
 
-interface PageProps {
-  data: string;
-}
-
 export default function Progress ( props: PageProps ) {
 
-  const data: Data = props?.data ?
-    JSON.parse( props.data ) :
-    {
-      numCorrect: 0,
-      numWrong: 0,
-      loadingError: FALLBACK_ERROR_MESSAGE
-    };
+  const data = getDataFromPageProps<Data>( props, {
+    numCorrect: 0,
+    numWrong: 0,
+    loadingError: FALLBACK_ERROR_MESSAGE
+  } );
 
   const { numCorrect, numWrong, loadingError } = data;
 
@@ -142,29 +137,19 @@ export const getServerSideProps: GetServerSideProps = async ( { params } ) => {
 
     const { numCorrect, numWrong } = await getLastWeekResponseNumbers( new Date() );
 
-    return createPageProps( {
+    return createSSRPageProps<Data>( {
       numCorrect,
       numWrong
     } );
 
   } catch ( error: any ) {
 
-    return createPageProps( {
+    return createSSRPageProps<Data>( {
       numCorrect: 0,
       numWrong: 0,
       loadingError: error?.message || FALLBACK_ERROR_MESSAGE
     } );
 
   }
-
-}
-
-function createPageProps ( data: Data ) {
-
-  const props: PageProps = {
-    data: JSON.stringify( data )
-  };
-
-  return { props }
 
 }

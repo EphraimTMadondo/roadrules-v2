@@ -7,6 +7,7 @@ import Layout from '../../components/layout';
 import { Toolbar } from '../../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../../lib/errors';
 import { getNotes } from '../../lib/notes';
+import { createISRPageProps, getDataFromPageProps, PageProps } from '../../lib/props';
 
 interface Data {
   note: Note | null;
@@ -15,20 +16,14 @@ interface Data {
   loadingError?: string;
 }
 
-interface NotePageProps {
-  data: string;
-}
+export default function NotePage ( props: PageProps ) {
 
-export default function NotePage ( props: NotePageProps ) {
-
-  const data: Data = props?.data ?
-    JSON.parse( props.data ) :
-    {
-      note: null,
-      previousNoteId: 0,
-      nextNotId: 0,
-      loadingError: FALLBACK_ERROR_MESSAGE
-    };
+  const data = getDataFromPageProps<Data>( props, {
+    note: null,
+    previousNoteId: 0,
+    nextNoteId: 0,
+    loadingError: FALLBACK_ERROR_MESSAGE
+  } );
 
   const { note, previousNoteId, nextNoteId } = data;
 
@@ -131,7 +126,7 @@ export const getStaticProps: GetStaticProps = async ( { params } ) => {
 
     } )();
 
-    return createPageProps( {
+    return createISRPageProps<Data>( {
       note: note || null,
       previousNoteId,
       nextNoteId
@@ -139,26 +134,13 @@ export const getStaticProps: GetStaticProps = async ( { params } ) => {
 
   } catch ( error: any ) {
 
-    return createPageProps( {
+    return createISRPageProps<Data>( {
       note: null,
       previousNoteId: 0,
       nextNoteId: 0,
       loadingError: error?.message || FALLBACK_ERROR_MESSAGE
     } );
-    
-  }
 
-}
-
-function createPageProps ( data: Data ) {
-
-  const props: NotePageProps = {
-    data: JSON.stringify( data )
-  };
-
-  return {
-    props,
-    revalidate: 10
   }
 
 }

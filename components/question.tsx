@@ -9,6 +9,7 @@ import { OptionId } from '../lib/questions-client-logic';
 import { CorrectAnswerAlert } from './correct-answer-alert';
 import { ErrorAlert } from './error-alert';
 import { QuestionTitle } from './question-title';
+import { SelectOptionContainer } from './select-option-container';
 import { StandardImage } from './standard-image';
 import { Timer } from './timer';
 import { WrongAnswerAlert } from './wrong-answer-alert';
@@ -52,21 +53,16 @@ export default function QuestionComponent ( props: QuestionComponentProps ) {
 
   }
 
+  const RightElement = timed ?
+    () => <Timer secondsLeft={secondsLeft || 0} crunchTime={crunchTime || false} /> :
+    undefined;
+
   return (
     <Layout className="relative" title={title}>
 
       <Toolbar
         title={title}
-        RightElement={
-          timed ?
-            () => (
-              <Timer
-                secondsLeft={secondsLeft || 0}
-                crunchTime={crunchTime || false}
-              />
-            ) :
-            undefined
-        }
+        RightElement={RightElement}
       />
 
       <LoadingOverlay
@@ -93,7 +89,7 @@ export default function QuestionComponent ( props: QuestionComponentProps ) {
       {
         !submitted &&
         <>
-          <div className="flex flex-col justify-center items-stretch py-2">
+          <SelectOptionContainer>
             <SelectOption
               id="A"
               content={question.option1}
@@ -101,9 +97,9 @@ export default function QuestionComponent ( props: QuestionComponentProps ) {
               onClick={() => optionOnClick( "option1" )}
               wrong={submitted && !correct && selectedOption === "option1"}
             />
-          </div>
+          </SelectOptionContainer>
 
-          <div className="flex flex-col justify-center items-stretch py-2">
+          <SelectOptionContainer>
             <SelectOption
               id="B"
               content={question.option2}
@@ -111,9 +107,9 @@ export default function QuestionComponent ( props: QuestionComponentProps ) {
               onClick={() => optionOnClick( "option2" )}
               wrong={submitted && !correct && selectedOption === "option2"}
             />
-          </div>
+          </SelectOptionContainer>
 
-          <div className="flex flex-col justify-center items-stretch py-2">
+          <SelectOptionContainer>
             <SelectOption
               id="C"
               content={question.option3}
@@ -121,7 +117,7 @@ export default function QuestionComponent ( props: QuestionComponentProps ) {
               onClick={() => optionOnClick( "option3" )}
               wrong={submitted && !correct && selectedOption === "option3"}
             />
-          </div>
+          </SelectOptionContainer>
         </>
       }
 

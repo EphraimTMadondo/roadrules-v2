@@ -1,4 +1,5 @@
 import { pad } from "../lib/strings";
+import { red_border, teal_border } from "../lib/tailwind-utils";
 
 interface Props {
   secondsLeft: number;
@@ -14,79 +15,18 @@ export function Timer ( props: Props ) {
   const minutes = pad( minutesValue.toString(), 2, "0" );
   const seconds = pad( ( secondsLeft % 60 ).toString(), 2, "0" );
 
-  return (
-    <>
-      <Wrapper>
-        {
-          !crunchTime &&
-          <GreenContainer>
-            <Text>
-              {minutes}:{seconds}
-            </Text>
-          </GreenContainer>
-        }
-        {
-          crunchTime &&
-          <RedContainer>
-            <Text>
-              {minutes}:{seconds}
-            </Text>
-          </RedContainer>
-        }
-      </Wrapper>
-    </>
-  )
-
-}
-
-interface ChildrenProps {
-  children: any;
-}
-
-function Wrapper ( props: ChildrenProps ) {
-
-  const { children } = props;
+  const [ border, bgColor ] = crunchTime ?
+    [ red_border, "bg-teal-600" ] :
+    [ teal_border, "bg-red-600" ];
 
   return (
     <div className="flex flex-col p-2">
-      {children}
+      <div className={`flex flex-col px-2 ${ bgColor } ${ border }`}>
+        <span className="text-white font-semibold">
+          {minutes}:{seconds}
+        </span>
+      </div>
     </div>
-  )
-
-}
-
-function GreenContainer ( props: ChildrenProps ) {
-
-  const { children } = props;
-
-  return (
-    <div className="flex flex-col px-2 bg-teal-600 border rounded border-solid border-teal-600">
-      {children}
-    </div>
-  )
-
-}
-
-function RedContainer ( props: ChildrenProps ) {
-
-  const { children } = props;
-
-  return (
-    <div className="flex flex-col px-2 bg-red-600 border rounded border-solid border-red-600">
-      {children}
-    </div>
-  )
-
-}
-
-function Text ( props: ChildrenProps ) {
-
-  const { children } = props;
-
-  return (
-    <span className="text-white font-semibold">
-      {children}
-    </span>
   )
 
 }

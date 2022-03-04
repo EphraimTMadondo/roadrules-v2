@@ -3,6 +3,7 @@ import { SelectOption } from '../components/select-option';
 import { OptionId } from '../lib/questions-client-logic';
 import { CorrectAnswerAlert } from './correct-answer-alert';
 import { QuestionTitle } from './question-title';
+import { SelectOptionContainer } from './select-option-container';
 import { StandardImage } from './standard-image';
 import { WrongAnswerAlert } from './wrong-answer-alert';
 
@@ -39,7 +40,7 @@ export default function DetailedResponse ( props: DetailedResponseProps ) {
         />
       }
 
-      <div className="flex flex-col justify-center items-stretch py-2">
+      <SelectOptionContainer>
         <SelectOption
           id="A"
           content={question.option1}
@@ -47,9 +48,9 @@ export default function DetailedResponse ( props: DetailedResponseProps ) {
           disabled={true}
           wrong={!correct && selectedOption === "option1"}
         />
-      </div>
+      </SelectOptionContainer>
 
-      <div className="flex flex-col justify-center items-stretch py-2">
+      <SelectOptionContainer>
         <SelectOption
           id="B"
           content={question.option2}
@@ -57,9 +58,9 @@ export default function DetailedResponse ( props: DetailedResponseProps ) {
           disabled={true}
           wrong={!correct && selectedOption === "option2"}
         />
-      </div>
+      </SelectOptionContainer>
 
-      <div className="flex flex-col justify-center items-stretch py-2">
+      <SelectOptionContainer>
         <SelectOption
           id="C"
           content={question.option3}
@@ -67,7 +68,7 @@ export default function DetailedResponse ( props: DetailedResponseProps ) {
           disabled={true}
           wrong={!correct && selectedOption === "option3"}
         />
-      </div>
+      </SelectOptionContainer>
 
       {
         correct &&

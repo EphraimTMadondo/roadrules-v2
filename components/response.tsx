@@ -1,5 +1,6 @@
 import { Question } from "@prisma/client";
 import { OptionId } from "../lib/questions-client-logic";
+import { red_border, teal_border } from "../lib/tailwind-utils";
 import { ABC } from "./abc";
 import { OptionContent } from "./option-content";
 
@@ -13,8 +14,12 @@ export function ResponseComponent ( props: Props ) {
 
   const { question, correct, showIcon } = props;
 
+  const border = correct ?
+    teal_border :
+    red_border;
+
   return (
-    <ConditionalContainer correct={correct}>
+    <div className={`flex flex-col justify-center items-stretch p-4 ${ border }`}>
       <div className="flex flex-row justify-start items-center">
         {
           showIcon &&
@@ -49,54 +54,6 @@ export function ResponseComponent ( props: Props ) {
           </span>
         </div>
       </div>
-    </ConditionalContainer>
-  )
-
-}
-
-interface ConditionalContainerProps {
-  children: any;
-  correct: boolean;
-}
-
-function ConditionalContainer ( props: ConditionalContainerProps ) {
-
-  const { children, correct } = props;
-
-  return (
-    <>
-      {
-        correct &&
-        <NormalContainer>
-          {children}
-        </NormalContainer>
-      }
-      {
-        !correct &&
-        <RedContainer>
-          {children}
-        </RedContainer>
-      }
-    </>
-  )
-
-}
-
-function NormalContainer ( { children }: { children: any } ) {
-
-  return (
-    <div className="flex flex-col justify-center items-stretch p-4 border border-solid rounded border-teal-600">
-      {children}
-    </div>
-  )
-
-}
-
-function RedContainer ( { children }: { children: any } ) {
-
-  return (
-    <div className={"flex flex-col justify-center items-stretch p-4 border border-solid rounded border-red-600"}>
-      {children}
     </div>
   )
 

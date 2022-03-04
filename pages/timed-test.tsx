@@ -8,6 +8,7 @@ import Layout from '../components/layout';
 import QuestionComponent from '../components/question';
 import { Toolbar } from '../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../lib/errors';
+import { createSSRPageProps, getDataFromPageProps, PageProps } from '../lib/props';
 import { getQuestions } from '../lib/questions';
 import { OptionId } from '../lib/questions-client-logic';
 import { trpc } from '../utils/trpc';
@@ -17,22 +18,16 @@ interface Data {
   loadingError?: string;
 }
 
-interface PageProps {
-  data: string;
-}
-
 interface CustomQuestion extends Question {
   questionNumber: number;
 }
 
 export default function TimedTest ( props: PageProps ) {
 
-  const data: Data = props?.data ?
-    JSON.parse( props.data ) :
-    {
-      initialQuestions: [],
-      loadingError: FALLBACK_ERROR_MESSAGE
-    };
+  const data = getDataFromPageProps<Data>( props, {
+    initialQuestions: [],
+    loadingError: FALLBACK_ERROR_MESSAGE
+  } );
 
   const { initialQuestions, loadingError } = data;
 
@@ -166,27 +161,17 @@ export const getServerSideProps: GetServerSideProps = async ( _ ) => {
 
     const questions = await getQuestions( LIMIT );
 
-    return createPageProps( {
+    return createSSRPageProps<Data>( {
       initialQuestions: questions
     } );
 
   } catch ( error: any ) {
 
-    return createPageProps( {
+    return createSSRPageProps<Data>( {
       initialQuestions: [],
       loadingError: error?.message || FALLBACK_ERROR_MESSAGE
     } );
 
   }
-
-}
-
-function createPageProps ( data: Data ) {
-
-  const props: PageProps = {
-    data: JSON.stringify( data )
-  };
-
-  return { props }
 
 }
