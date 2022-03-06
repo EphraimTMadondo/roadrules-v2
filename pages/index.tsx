@@ -15,7 +15,7 @@ export default function Home () {
         <div className="relative h-56 w-full overflow-hidden">
           <Image
             src="/images/road_rules_logo.png"
-            alt="Road Rules Logo"
+            alt="Road Rules"
             layout="fill"
             objectFit="scale-down"
           />
