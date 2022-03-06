@@ -24,12 +24,12 @@ jobs:
         cache: 'npm'
     - run: npm ci
     # - run: npm ci --include=dev
-    env:
+    - run: npm run build
+      env:
         NODE_ENV: ${{ secrets.NODE_ENV }}
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
         SERVER_URL: ${{ secrets.SERVER_URL }}
         NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
         RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
         RECAPTCHA_SECRET_KEY: ${{ secrets.RECAPTCHA_SECRET_KEY }}
-    - run: npm run build
     - run: npm test
