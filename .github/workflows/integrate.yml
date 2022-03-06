@@ -24,10 +24,8 @@ jobs:
         # node-version: ${{ matrix.node-version }}
         node-version: 12
         cache: 'npm'
-    # - run: npm ci
-    - run: npm ci --include=dev
-    - run: npm run build --if-present
-    - run: npm test
+    - run: npm ci
+    # - run: npm ci --include=dev
       env:
         NODE_ENV: ${{ secrets.NODE_ENV }}
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -35,3 +33,5 @@ jobs:
         NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
         RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
         RECAPTCHA_SECRET_KEY: ${{ secrets.RECAPTCHA_SECRET_KEY }}
+    - run: npm run build --if-present
+    - run: npm test
