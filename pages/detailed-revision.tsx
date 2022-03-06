@@ -97,7 +97,7 @@ export default function DetailedRevision ( props: PageProps ) {
           <div className="flex flex-col justify-center items-stretch pt-4">
             {
               response.responseNumber === responses.length &&
-              <Link href="/progress">
+              <Link passHref href="/progress">
                 <Button variant="light" size="md">
                   BACK
                 </Button>

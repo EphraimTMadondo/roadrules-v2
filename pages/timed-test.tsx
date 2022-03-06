@@ -62,7 +62,7 @@ export default function TimedTest ( props: PageProps ) {
 
     return () => clearTimeout( timer );
 
-  }, [ secondsLeft ] );
+  }, [ router, secondsLeft ] );
 
   const mutation = trpc.useMutation( "response.create", {
     onMutate: async () => {

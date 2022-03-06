@@ -47,7 +47,7 @@ export default function DrivingLessonsMenu () {
       <div className="grow py-2"></div>
 
       <div className="flex flex-col justify-center items-stretch py-4">
-        <Link href="/notes">
+        <Link passHref href="/notes">
           <Button size="md">
             NOTES
           </Button>
@@ -55,7 +55,7 @@ export default function DrivingLessonsMenu () {
       </div>
 
       <div className="flex flex-col justify-center items-stretch py-4">
-        <Link href="/questions">
+        <Link passHref href="/questions">
           <Button size="md">
             PRACTICE
           </Button>
@@ -63,7 +63,7 @@ export default function DrivingLessonsMenu () {
       </div>
 
       <div className="flex flex-col justify-center items-stretch py-4">
-        <Link href="/timed-test">
+        <Link passHref href="/timed-test">
           <Button size="md">
             MOCK TEST
           </Button>
@@ -71,7 +71,7 @@ export default function DrivingLessonsMenu () {
       </div>
 
       <div className="flex flex-col justify-center items-stretch pt-4">
-        <Link href="/progress">
+        <Link passHref href="/progress">
           <Button size="md">
             PROGRESS
           </Button>

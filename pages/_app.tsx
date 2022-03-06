@@ -41,10 +41,10 @@ function MyApp ( props: AppProps ) {
 
         <title>Road Rules</title>
 
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" />
+        {/* <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" /> */}
 
-        <script src={`https://www.google.com/recaptcha/api.js?render=${ process.env.RECAPTCHA_SITE_KEY }`}></script>
+        <script async src={`https://www.google.com/recaptcha/api.js?render=${ process.env.RECAPTCHA_SITE_KEY }`}></script>
 
         <link rel="manifest" href="/manifest.json" />
         {/* <link rel="icon" href="/favicon.ico" /> */}

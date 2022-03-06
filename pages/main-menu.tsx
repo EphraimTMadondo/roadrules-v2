@@ -52,7 +52,7 @@ export default function MainMenu () {
       <div className="grow py-2"></div>
 
       <div className="flex flex-col justify-center items-stretch py-4">
-        <Link href="/driving-lessons-menu">
+        <Link passHref href="/driving-lessons-menu">
           <Button size="md">
             DRIVING LESSONS
           </Button>

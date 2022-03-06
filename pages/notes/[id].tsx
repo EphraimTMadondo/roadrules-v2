@@ -66,7 +66,7 @@ export default function NotePage ( props: PageProps ) {
           {
             Boolean( nextNoteId ) &&
             <div className="flex flex-col justify-center items-stretch pt-4">
-              <Link href={`/notes/${ nextNoteId }`}>
+              <Link passHref href={`/notes/${ nextNoteId }`}>
                 <Button size="md">
                   NEXT
                 </Button>
@@ -74,7 +74,7 @@ export default function NotePage ( props: PageProps ) {
             </div>
           }
           <div className="flex flex-col justify-center items-stretch pt-4">
-            <Link href="/notes">
+            <Link passHref href="/notes">
               <Button variant="light" size="md">
                 BACK TO LIST
               </Button>
@@ -87,7 +87,7 @@ export default function NotePage ( props: PageProps ) {
         !note &&
         <div className="flex flex-col justify-start items-stretch pt-4">
           <Alert icon={<i className="material-icons">error</i>} title="Sorry" color="red">
-            We couldn't find that particular note.
+            {"We couldn't find that particular note."}
           </Alert>
         </div>
       }

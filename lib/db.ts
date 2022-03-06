@@ -1,20 +1,23 @@
-import { PrismaClient } from '@prisma/client'
+/* eslint-disable no-shadow */
+/* eslint-disable no-var */
+/* eslint-disable vars-on-top */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+import { PrismaClient } from '@prisma/client';
 
 declare global {
   // allow global `var` declarations
-  // eslint-disable-next-line no-var
-  var prisma: PrismaClient | undefined
+  var prisma: PrismaClient | undefined;
 }
 
-( BigInt.prototype as any ).toJSON = function () {
-  return this.toString()
-}
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+(BigInt.prototype as any).toJSON = function () {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  return this.toString();
+};
 
-export const prisma =
-  global.prisma ||
-  new PrismaClient( {
-    log: [ 'query' ],
-  } );
+export const prisma = global.prisma || new PrismaClient({ log: ['query'] });
 
-if ( process.env.NODE_ENV !== 'production' )
+if (process.env.NODE_ENV !== 'production') {
   global.prisma = prisma;
+}

@@ -156,7 +156,7 @@ export default function QuestionComponent ( props: QuestionComponentProps ) {
         </div>
       }
       <div className="flex flex-col justify-center items-stretch pt-4">
-        <Link href="/driving-lessons-menu">
+        <Link passHref href="/driving-lessons-menu">
           <Button size="md" variant="light">
             QUIT
           </Button>

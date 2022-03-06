@@ -47,7 +47,7 @@ export default function Notes ( props: PageProps ) {
                 key={note.id}
                 className="flex flex-col justify-start items-stretch py-3"
               >
-                <Link href={"/notes/" + note.id}>
+                <Link passHref href={"/notes/" + note.id}>
                   <Button size="md" variant="light">
                     {note.title}
                   </Button>

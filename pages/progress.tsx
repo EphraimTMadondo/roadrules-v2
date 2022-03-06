@@ -109,7 +109,7 @@ export default function Progress ( props: PageProps ) {
           <div className="grow py-2"></div>
 
           <div className="flex flex-col justify-center items-stretch py-4">
-            <Link href="/quick-revision">
+            <Link passHref href="/quick-revision">
               <Button size="md">
                 QUICK REVISION
               </Button>
@@ -117,7 +117,7 @@ export default function Progress ( props: PageProps ) {
           </div>
 
           <div className="flex flex-col justify-center items-stretch py-4">
-            <Link href="/detailed-revision">
+            <Link passHref href="/detailed-revision">
               <Button size="md">
                 DETAILED REVISION
               </Button>

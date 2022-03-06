@@ -39,14 +39,14 @@ export default function TermsAndConditions () {
 
       <div className="flex flex-col md:flex-row justify-start items-stretch">
         <div className="flex flex-col justify-center items-stretch grow pt-4 md:pr-2">
-          <Link href="/">
+          <Link passHref href="/">
             <Button variant="outline" size="md">
               Reject
             </Button>
           </Link>
         </div>
         <div className="flex flex-col justify-center items-stretch grow pt-4 md:pl-2">
-          <Link href="/verification">
+          <Link passHref href="/verification">
             <Button type="submit" size="md">
               Accept
             </Button>
