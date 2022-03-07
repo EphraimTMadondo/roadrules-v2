@@ -7,20 +7,8 @@ import Head from 'next/head';
 import '../styles/globals.css';
 import { AppRouter } from './api/trpc/[trpc]';
 
-const envVars = [
-  process.env.NEXT_PUBLIC_SERVER_URL,
-  process.env.RECAPTCHA_SITE_KEY,
-  process.env.NODE_ENV,
-];
-
-const missingEnvVars = envVars.filter((el) => !el);
-
-if (missingEnvVars.length) {
-  throw new Error('Env variables missing.');
-}
-
 const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || '';
-const recaptchaSiteKey = process.env.RECAPTCHA_SITE_KEY || '';
+// const recaptchaSiteKey = process.env.RECAPTCHA_SITE_KEY || '';
 const nodeEnv = process.env.NODE_ENV || '';
 
 function MyApp(props: AppProps) {
@@ -44,10 +32,10 @@ function MyApp(props: AppProps) {
 
         <title>Road Rules</title>
 
-        <script
+        {/* <script
           async
           src={`https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`}
-        />
+        /> */}
 
         <link rel="manifest" href="/manifest.json" />
         <link

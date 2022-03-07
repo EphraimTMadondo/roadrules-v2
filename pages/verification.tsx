@@ -2,9 +2,9 @@ import { Stepper } from '@mantine/core';
 import { useForm } from '@mantine/hooks';
 import {
   Auth,
-  ConfirmationResult,
+  // ConfirmationResult,
   RecaptchaVerifier,
-  signInWithPhoneNumber,
+  // signInWithPhoneNumber,
 } from 'firebase/auth';
 import { useCallback, useState } from 'react';
 import Layout from '../components/layout';
@@ -13,29 +13,30 @@ import { VerificationThree } from '../components/verification-three';
 import { VerificationTwo } from '../components/verification-two';
 import { Inputs } from '../lib/verification';
 
-async function resetRecaptcha() {
-  const widgetId =
-    await // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    ((window as any).recaptchaVerifier as RecaptchaVerifier).render();
+// async function resetRecaptcha() {
+//   const widgetId =
+//     await // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+//     ((window as any).recaptchaVerifier as RecaptchaVerifier).render();
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { grecaptcha }: { grecaptcha: { ready: any; reset: any } } =
-    window as any;
+//   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+//   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+//   const { grecaptcha }: { grecaptcha: { ready: any; reset: any } } =
+//     window as any;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  grecaptcha.ready(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    grecaptcha.reset(widgetId);
-  });
-}
+//   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+//   grecaptcha.ready(() => {
+//     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+//     grecaptcha.reset(widgetId);
+//   });
+// }
 
 export default function Verification() {
   const [active, setActive] = useState(0);
-  const [confirmationResult, setConfirmationResult] = useState<
-    ConfirmationResult | undefined
-  >(undefined);
-  const [sendingCode, setSendingCode] = useState<boolean>(false);
+  // const [confirmationResult, setConfirmationResult] = useState<
+  //   ConfirmationResult | undefined
+  // >(undefined);
+  const [sendingCode] = useState<boolean>(false);
+  // const [sendingCode, setSendingCode] = useState<boolean>(false);
   const [verifying, setVerifying] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
@@ -61,38 +62,43 @@ export default function Verification() {
   // }
 
   const sendVerificationCode = useCallback(
-    async (phoneNumber: string, auth: Auth, appVerifier: RecaptchaVerifier) => {
-      try {
-        setSendingCode(true);
+    (phoneNumber: string, auth: Auth, appVerifier: RecaptchaVerifier) => {
+      window.alert(
+        `${phoneNumber} ${JSON.stringify(auth)} ${JSON.stringify(appVerifier)}`
+      );
+      // try {
+      //   setSendingCode(true);
 
-        const newResult = await signInWithPhoneNumber(
-          auth,
-          phoneNumber,
-          appVerifier
-        );
-        setConfirmationResult(newResult);
-      } catch (reason: any) {
-        resetRecaptcha();
-      } finally {
-        setSendingCode(false);
-      }
+      //   const newResult = await signInWithPhoneNumber(
+      //     auth,
+      //     phoneNumber,
+      //     appVerifier
+      //   );
+      //   setConfirmationResult(newResult);
+      // } catch (reason: any) {
+      //   resetRecaptcha();
+      // } finally {
+      //   setSendingCode(false);
+      // }
     },
-    [setConfirmationResult, setSendingCode]
+    []
+    // [setConfirmationResult, setSendingCode]
   );
 
-  async function handleSubmit(data: Inputs) {
+  function handleSubmit(data: Inputs) {
     try {
       setVerifying(true);
+      window.alert(JSON.stringify(data));
 
       // console.log(data);
 
-      if (confirmationResult) {
-        const result = await confirmationResult.confirm(data.code);
-        window.alert(JSON.stringify(result));
-        // console.log(result);
-        // register and push to main menu.
-        // router.push( "/main-menu" );
-      }
+      // if (confirmationResult) {
+      //   const result = await confirmationResult.confirm(data.code);
+      //   window.alert(JSON.stringify(result));
+      //   // console.log(result);
+      //   // register and push to main menu.
+      //   // router.push( "/main-menu" );
+      // }
     } catch (err: any) {
       setError('Verification code, please try again.');
     } finally {
