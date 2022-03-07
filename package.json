@@ -4,6 +4,7 @@
     "dev": "next dev",
     "build": "next build",
     "test": "jest --watch",
+    "prod-test": "jest",
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
