@@ -1,4 +1,4 @@
-name: Node.js Continuous Integration
+name: Test Development
 
 on:
   push:

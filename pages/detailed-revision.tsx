@@ -48,10 +48,6 @@ export default function DetailedRevision(props: PageProps) {
 
   const response = responses.length ? responses[0] : undefined;
 
-  // function nextResponse(inputResponse: CustomResponse) {
-
-  // }
-
   const back = useCallback(() => {
     router.back();
   }, [router]);
