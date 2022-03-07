@@ -3,11 +3,16 @@ import { Note } from '@prisma/client';
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useCallback } from 'react';
 import Layout from '../../components/layout';
 import { Toolbar } from '../../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../../lib/errors';
 import { getNotes } from '../../lib/notes';
-import { createISRPageProps, getDataFromPageProps, PageProps } from '../../lib/props';
+import {
+  createISRPageProps,
+  getDataFromPageProps,
+  PageProps,
+} from '../../lib/props';
 
 interface Data {
   note: Note | null;
@@ -16,63 +21,58 @@ interface Data {
   loadingError?: string;
 }
 
-export default function NotePage ( props: PageProps ) {
-
-  const data = getDataFromPageProps<Data>( props, {
+export default function NotePage(props: PageProps) {
+  const data = getDataFromPageProps<Data>(props, {
     note: null,
     previousNoteId: 0,
     nextNoteId: 0,
-    loadingError: FALLBACK_ERROR_MESSAGE
-  } );
+    loadingError: FALLBACK_ERROR_MESSAGE,
+  });
 
   const { note, previousNoteId, nextNoteId } = data;
 
   const router = useRouter();
 
-  const title = "Note";
+  const title = 'Note';
 
-  function back () {
+  const back = useCallback(() => {
+    if (previousNoteId) {
+      return router.push(`/notes/${previousNoteId}`);
+    }
+    return router.push('/notes');
+  }, [previousNoteId, router]);
 
-    if ( previousNoteId )
-      return router.push( "/notes/" + previousNoteId );
-
-    return router.push( "/notes" );
-
-  }
-
-  function forward () {
-    return router.push( "/notes/" + nextNoteId );
-  }
+  const forward = useCallback(
+    () => router.push(`/notes/${nextNoteId}`),
+    [router, nextNoteId]
+  );
 
   return (
     <Layout title={title}>
-
       <Toolbar
-        title={note?.title || "Note"}
+        title={note?.title || 'Note'}
         leftIcon="arrow_back"
         leftIconAction={back}
-        rightIcon={nextNoteId ? "arrow_forward" : undefined}
+        rightIcon={nextNoteId ? 'arrow_forward' : undefined}
         rightIconAction={nextNoteId ? forward : undefined}
       />
 
-      {
-        note &&
+      {note && (
         <>
           <div className="flex flex-col justify-center items-stretch py-4">
-            <p dangerouslySetInnerHTML={{ __html: note.html }}>
-            </p>
+            <p
+              // eslint-disable-next-line react/no-danger
+              dangerouslySetInnerHTML={{ __html: note.html }}
+            />
           </div>
 
-          {
-            Boolean( nextNoteId ) &&
+          {Boolean(nextNoteId) && (
             <div className="flex flex-col justify-center items-stretch pt-4">
-              <Link passHref href={`/notes/${ nextNoteId }`}>
-                <Button size="md">
-                  NEXT
-                </Button>
+              <Link passHref href={`/notes/${nextNoteId}`}>
+                <Button size="md">NEXT</Button>
               </Link>
             </div>
-          }
+          )}
           <div className="flex flex-col justify-center items-stretch pt-4">
             <Link passHref href="/notes">
               <Button variant="light" size="md">
@@ -81,88 +81,74 @@ export default function NotePage ( props: PageProps ) {
             </Link>
           </div>
         </>
-      }
+      )}
 
-      {
-        !note &&
+      {!note && (
         <div className="flex flex-col justify-start items-stretch pt-4">
-          <Alert icon={<i className="material-icons">error</i>} title="Sorry" color="red">
-            {"We couldn't find that particular note."}
+          <Alert
+            icon={<i className="material-icons">error</i>}
+            title="Sorry"
+            color="red"
+          >
+            We couldn't find that particular note.
           </Alert>
         </div>
-      }
-
+      )}
     </Layout>
-  )
+  );
 }
 
-export const getStaticProps: GetStaticProps = async ( { params } ) => {
-
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
-
-    const id = Number( params?.id || 0 );
+    const id = Number(params?.id || 0);
 
     const notes = await getNotes();
 
-    const note = notes
-      .find( note => note.id === id );
+    const note = notes.find((el) => el.id === id);
 
-    const [ previousNoteId, nextNoteId ] = ( () => {
+    const [previousNoteId, nextNoteId] = (() => {
+      if (!note) {
+        return [0, 0];
+      }
 
-      if ( !note )
-        return [ 0, 0 ];
+      const currentIndex = notes.indexOf(note);
 
-      const currentIndex = notes.indexOf( note );
+      const previous = currentIndex === 0 ? 0 : notes[currentIndex - 1].id;
 
-      const previousNoteId = currentIndex === 0 ?
-        0 :
-        notes[ currentIndex - 1 ].id;
+      const next =
+        currentIndex === notes.length - 1 ? 0 : notes[currentIndex + 1].id;
 
-      const nextNoteId = currentIndex === notes.length - 1 ?
-        0 :
-        notes[ currentIndex + 1 ].id;
+      return [previous, next];
+    })();
 
-      return [ previousNoteId, nextNoteId ];
-
-    } )();
-
-    return createISRPageProps<Data>( {
+    return createISRPageProps<Data>({
       note: note || null,
       previousNoteId,
-      nextNoteId
-    } );
-
-  } catch ( error: any ) {
-
-    return createISRPageProps<Data>( {
+      nextNoteId,
+    });
+  } catch (error: unknown) {
+    const { message } = error as { message: string };
+    return createISRPageProps<Data>({
       note: null,
       previousNoteId: 0,
       nextNoteId: 0,
-      loadingError: error?.message || FALLBACK_ERROR_MESSAGE
-    } );
-
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      loadingError: message || FALLBACK_ERROR_MESSAGE,
+    });
   }
+};
 
-}
-
-export async function getStaticPaths () {
-
+export async function getStaticPaths() {
   const notes = await getNotes();
 
-  const paths = notes
-    .map( note => {
-
-      return {
-        params: {
-          id: note.id.toString()
-        },
-      }
-
-    } );
+  const paths = notes.map((note) => ({
+    params: {
+      id: note.id.toString(),
+    },
+  }));
 
   return {
     paths,
-    fallback: 'blocking'
-  }
-
+    fallback: 'blocking',
+  };
 }

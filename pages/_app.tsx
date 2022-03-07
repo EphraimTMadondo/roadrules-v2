@@ -7,28 +7,28 @@ import Head from 'next/head';
 import '../styles/globals.css';
 import { AppRouter } from './api/trpc/[trpc]';
 
-console.log( "NEXT_PUBLIC_SERVER_URL", process.env.NEXT_PUBLIC_SERVER_URL );
+const envVars = [
+  process.env.NEXT_PUBLIC_SERVER_URL,
+  process.env.RECAPTCHA_SITE_KEY,
+  process.env.NODE_ENV,
+];
 
-export default withTRPC<AppRouter>( {
-  config ( { ctx } ) {
+const missingEnvVars = envVars.filter((el) => !el);
 
-    return {
-      url: process.env.NODE_ENV === "production"
-        ? `https://${ process.env.NEXT_PUBLIC_SERVER_URL }/api/trpc`
-        : `http://${ process.env.NEXT_PUBLIC_SERVER_URL }/api/trpc`
-    }
+if (missingEnvVars.length) {
+  throw new Error('Env variables missing.');
+}
 
-  },
-  ssr: true,
-} )( MyApp );
+const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || '';
+const recaptchaSiteKey = process.env.RECAPTCHA_SITE_KEY || '';
+const nodeEnv = process.env.NODE_ENV || '';
 
-function MyApp ( props: AppProps ) {
-
+function MyApp(props: AppProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { Component, pageProps } = props;
 
   return (
     <>
-
       <Head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -36,18 +36,20 @@ function MyApp ( props: AppProps ) {
           name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
         />
-        <meta name="description" content="Zimbabwe provisional driving license test question papers, learners licence & road traffic rules app!" />
+        <meta
+          name="description"
+          content="Zimbabwe provisional driving license test question papers, learners licence &amp; road traffic rules app!"
+        />
         <meta name="keywords" content="Keywords" />
 
         <title>Road Rules</title>
 
-        {/* <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" /> */}
-
-        <script async src={`https://www.google.com/recaptcha/api.js?render=${ process.env.RECAPTCHA_SITE_KEY }`}></script>
+        <script
+          async
+          src={`https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`}
+        />
 
         <link rel="manifest" href="/manifest.json" />
-        {/* <link rel="icon" href="/favicon.ico" /> */}
         <link
           href="/icons/road_rules_logo-16_x_16.png"
           rel="icon"
@@ -60,7 +62,7 @@ function MyApp ( props: AppProps ) {
           type="image/png"
           sizes="32x32"
         />
-        <link rel="apple-touch-icon" href="/apple-icon.png"></link>
+        <link rel="apple-touch-icon" href="/apple-icon.png" />
         <meta name="theme-color" content="#317EFB" />
       </Head>
 
@@ -69,15 +71,25 @@ function MyApp ( props: AppProps ) {
         withNormalizeCSS
         theme={{
           colorScheme: 'light',
-          primaryColor: "teal"
+          primaryColor: 'teal',
         }}
       >
         <NotificationsProvider>
           <Component {...pageProps} />
         </NotificationsProvider>
       </MantineProvider>
-
     </>
-  )
-
+  );
 }
+
+export default withTRPC<AppRouter>({
+  config() {
+    return {
+      url:
+        nodeEnv === 'production'
+          ? `https://${serverUrl}/api/trpc`
+          : `http://${serverUrl}/api/trpc`,
+    };
+  },
+  ssr: true,
+})(MyApp);

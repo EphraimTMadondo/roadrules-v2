@@ -1,3 +1,3 @@
-export const grey_border = "border border-solid rounded border-slate-300";
-export const red_border = "border border-solid rounded border-red-600";
-export const teal_border = "border border-solid rounded border-teal-600";
+export const greyBorder = 'border border-solid rounded border-slate-300';
+export const redBorder = 'border border-solid rounded border-red-600';
+export const tealBorder = 'border border-solid rounded border-teal-600';

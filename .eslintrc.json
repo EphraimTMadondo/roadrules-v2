@@ -1,8 +1,65 @@
 {
   // "extends": "next/core-web-vitals"
-  "extends": [
-    "next/core-web-vitals",
-    "wesbos/typescript"
+  // "extends": [
+  //   "next/core-web-vitals",
+  //   "wesbos/typescript"
+  // ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "ignorePatterns": "**/*.js",
+  "overrides": [
+    {
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "next/core-web-vitals",
+        "wesbos/typescript"
+      ],
+      "parserOptions": {
+        "project": [
+          "./tsconfig.json"
+        ] // Specify it only for TypeScript files
+      }
+    }
+    // {
+    //   "files": [
+    //     "*.js",
+    //     "*.jsx"
+    //   ],
+    //   "extends": [
+    //     "wesbos"
+    //   ],
+    //   "parserOptions": {
+    //     "ecmaVersion": 2017
+    //   },
+    //   "env": {
+    //     "es6": true
+    //   }
+    // }
+    // {
+    //   "files": [
+    //     "*.ts",
+    //     "*.tsx"
+    //   ], // Your TypeScript files extension
+    //   // As mentioned in the comments, you should extend TypeScript plugins here,
+    //   // instead of extending them outside the `overrides`.
+    //   // If you don"t want to extend any rules, you don"t need an `extends` attribute.
+    //   "extends": [
+    //     "plugin:@typescript-eslint/recommended",
+    //     "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    //   ],
+    //   "parserOptions": {
+    //     "project": [
+    //       "./tsconfig.json"
+    //     ] // Specify it only for TypeScript files
+    //   }
+    // }
   ],
   "rules": {
     "no-console": 2,

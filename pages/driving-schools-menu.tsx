@@ -2,36 +2,31 @@ import { Button } from '@mantine/core';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useCallback } from 'react';
 import Layout from '../components/layout';
 import { Toolbar } from '../components/toolbar';
 
-export default function DrivingSchoolsMenu () {
-
+export default function DrivingSchoolsMenu() {
   const router = useRouter();
 
-  function back () {
-    router.push( "/main-menu" );
-  }
+  const back = useCallback(() => {
+    router.push('/main-menu');
+  }, [router]);
 
-  const title = "Driving Schools";
+  const title = 'Driving Schools';
 
   return (
     <Layout>
-
       <Head>
         <title>{title}</title>
       </Head>
 
-      <Toolbar
-        title={title}
-        leftIcon="arrow_back"
-        leftIconAction={back}
-      />
+      <Toolbar title={title} leftIcon="arrow_back" leftIconAction={back} />
 
-      <div className="grow py-2"></div>
+      <div className="grow py-2" />
 
       <div className="flex flex-col justify-center items-stretch">
-        <p style={{ textAlign: "center" }}>
+        <p style={{ textAlign: 'center' }}>
           Powered by the <br />
           Traffic Safety Council of Zimbabwe
         </p>
@@ -48,32 +43,23 @@ export default function DrivingSchoolsMenu () {
         </div>
       </div>
 
-      <div className="grow py-2"></div>
+      <div className="grow py-2" />
 
       <div className="flex flex-col justify-center items-stretch py-4">
-        <Button size="md">
-          HIGHWAY CODE
-        </Button>
+        <Button size="md">HIGHWAY CODE</Button>
       </div>
 
       <div className="flex flex-col justify-center items-stretch py-4">
-        <Button size="md">
-          DEFENSIVE DRIVING
-        </Button>
+        <Button size="md">DEFENSIVE DRIVING</Button>
       </div>
 
       <div className="flex flex-col justify-center items-stretch py-4">
-        <Button size="md">
-          INSTRUCTOR COURSE
-        </Button>
+        <Button size="md">INSTRUCTOR COURSE</Button>
       </div>
 
       <div className="flex flex-col justify-center items-stretch pt-4">
-        <Button size="md">
-          SCHOOL REGISTRATION
-        </Button>
+        <Button size="md">SCHOOL REGISTRATION</Button>
       </div>
-
     </Layout>
-  )
+  );
 }

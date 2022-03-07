@@ -4,8 +4,7 @@ interface Props {
   title: string;
 }
 
-export function QuestionTitle ( props: Props ) {
-
+export function QuestionTitle(props: Props) {
   const { questionNumber, numQuestions, title } = props;
 
   return (
@@ -13,10 +12,7 @@ export function QuestionTitle ( props: Props ) {
       <span className="text-md font-semibold py-2">
         Question {questionNumber} of {numQuestions}
       </span>
-      <span className="text-md py-2 text-center">
-        {title}
-      </span>
+      <span className="text-md py-2 text-center">{title}</span>
     </div>
-  )
-
+  );
 }

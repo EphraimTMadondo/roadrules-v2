@@ -1,9 +1,4 @@
-import { ResponsivePie } from '@nivo/pie'
-
-interface ProgressPieChartProps {
-  elements: PieChartElement[];
-  effectiveValue: number;
-}
+import { ResponsivePie } from '@nivo/pie';
 
 interface PieChartElement {
   id: string;
@@ -12,24 +7,32 @@ interface PieChartElement {
   color: string;
 }
 
-export default function ProgressPieChart ( props: ProgressPieChartProps ) {
+interface ProgressPieChartProps {
+  elements: PieChartElement[];
+  effectiveValue: number;
+}
 
-  const { elements, effectiveValue } = props;
-
-  const CenteredMetric = ( { centerX, centerY }: any ) => {
-
+function CenteredMetricFactory(effectiveValue: number) {
+  return function CenteredMetric(props: { centerX: number; centerY: number }) {
+    const { centerX, centerY } = props;
     return (
       <text
         x={centerX}
         y={centerY}
         textAnchor="middle"
         dominantBaseline="central"
-        style={{ color: "#FFFFFF", fontSize: '24px', }}
+        style={{ color: '#FFFFFF', fontSize: '24px' }}
       >
         {effectiveValue}%
       </text>
-    )
-  }
+    );
+  };
+}
+
+export default function ProgressPieChart(props: ProgressPieChartProps) {
+  const { elements, effectiveValue } = props;
+
+  const CenteredMetric = CenteredMetricFactory(effectiveValue);
 
   return (
     <ResponsivePie
@@ -40,12 +43,12 @@ export default function ProgressPieChart ( props: ProgressPieChartProps ) {
       cornerRadius={3}
       activeOuterRadiusOffset={8}
       borderWidth={1}
-      layers={[ 'arcs', 'arcLabels', 'arcLinkLabels', 'legends', CenteredMetric ]}
+      layers={['arcs', 'arcLabels', 'arcLinkLabels', 'legends', CenteredMetric]}
       borderColor={{
         from: 'color',
-        modifiers: [ [ 'darker', 0.2 ] ]
+        modifiers: [['darker', 0.2]],
       }}
-      colors={elements.map( el => el.color )}
+      colors={elements.map((el) => el.color)}
       enableArcLabels={false}
       enableArcLinkLabels={false}
       defs={[
@@ -56,24 +59,23 @@ export default function ProgressPieChart ( props: ProgressPieChartProps ) {
           color: 'rgba(255, 255, 255, 0.3)',
           rotation: -45,
           lineWidth: 6,
-          spacing: 10
-        }
+          spacing: 10,
+        },
       ]}
       fill={[
         {
           match: {
-            id: 'wrong'
+            id: 'wrong',
           },
-          id: 'lines'
+          id: 'lines',
         },
         {
           match: {
-            id: 'correct'
+            id: 'correct',
           },
-          id: 'lines'
+          id: 'lines',
         },
       ]}
     />
-  )
-
+  );
 }
