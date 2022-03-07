@@ -1,4 +1,4 @@
-name: Test Development
+name: Integration Into Master
 
 on:
   pull_request:
