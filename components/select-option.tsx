@@ -1,4 +1,5 @@
-import { Checkbox } from "@mantine/core";
+import { Checkbox } from '@mantine/core';
+import { greyBorder, redBorder, tealBorder } from '../lib/tailwind-utils';
 
 interface SelectOptionProps {
   id: string;
@@ -9,106 +10,35 @@ interface SelectOptionProps {
   disabled?: boolean;
 }
 
-export function SelectOption ( props: SelectOptionProps ) {
-
+export function SelectOption(props: SelectOptionProps) {
   const { id, content, selected } = props;
   const { onClick, disabled, wrong } = props;
 
-  return (
-    <>
-      {
-        selected && !wrong &&
-        <SelectedContainer onClick={onClick}>
-          <span className="text-md font-semi-bold pr-2">
-            {id}. {content}
-          </span>
-          <span className="grow"></span>
-          <Checkbox
-            checked={selected}
-            disabled={disabled}
-            readOnly
-          />
-        </SelectedContainer>
-      }
-      {
-        wrong &&
-        <WrongContainer onClick={onClick}>
-          <span className="text-md font-semi-bold pr-2">
-            {id}. {content}
-          </span>
-          <span className="grow"></span>
-          <Checkbox
-            checked={selected}
-            disabled={disabled}
-            readOnly
-          />
-        </WrongContainer>
-      }
-      {
-        !selected && !wrong &&
-        <NormalContainer onClick={onClick}>
-          <span className="text-md font-semi-bold pr-2">
-            {id}. {content}
-          </span>
-          <span className="grow"></span>
-          <Checkbox
-            checked={selected}
-            disabled={disabled}
-            readOnly
-          />
-        </NormalContainer>
-      }
-    </>
-  )
+  const borderMap: [boolean | undefined, string][] = [
+    [selected && !wrong, tealBorder],
+    [wrong, redBorder],
+    [!selected && !wrong, greyBorder],
+  ];
 
-}
+  const border = borderMap.find((el) => el[0])?.[1] || '';
 
-interface ContainerProps {
-  children: any;
-  onClick?: () => void;
-}
+  const hoverClass = disabled ? '' : ' hover:cursor-pointer';
 
-function NormalContainer ( props: ContainerProps ) {
-
-  const { children, onClick } = props;
+  const className = `flex flex-row justify-start items-center ${border}${hoverClass}`;
 
   return (
     <div
+      role="button"
       onClick={onClick}
-      className="flex flex-row justify-start items-center rounded p-4 border border-solid border-slate-300 hover:cursor-pointer"
+      onKeyPress={onClick}
+      className={className}
+      aria-hidden="true"
     >
-      {children}
+      <span className="text-md font-semi-bold pr-2">
+        {id}. {content}
+      </span>
+      <span className="grow" />
+      <Checkbox checked={selected} disabled={disabled} readOnly />
     </div>
-  )
-
-}
-
-function WrongContainer ( props: ContainerProps ) {
-
-  const { children, onClick } = props;
-
-  return (
-    <div
-      onClick={onClick}
-      className="flex flex-row justify-start items-center rounded p-4 border border-solid border-red-600 hover:cursor-pointer"
-    >
-      {children}
-    </div>
-  )
-
-}
-
-function SelectedContainer ( props: ContainerProps ) {
-
-  const { children, onClick } = props;
-
-  return (
-    <div
-      onClick={onClick}
-      className="flex flex-row justify-start items-center rounded p-4 border border-solid border-teal-600 hover:cursor-pointer"
-    >
-      {children}
-    </div>
-  )
-
+  );
 }

@@ -1,8 +1,9 @@
 import { Question } from '@prisma/client';
-import { SelectOption } from '../components/select-option';
+import { SelectOption } from './select-option';
 import { OptionId } from '../lib/questions-client-logic';
 import { CorrectAnswerAlert } from './correct-answer-alert';
 import { QuestionTitle } from './question-title';
+import { SelectOptionContainer } from './select-option-container';
 import { StandardImage } from './standard-image';
 import { WrongAnswerAlert } from './wrong-answer-alert';
 
@@ -16,73 +17,60 @@ interface DetailedResponseProps {
   correct: boolean;
 }
 
-export default function DetailedResponse ( props: DetailedResponseProps ) {
-
-  const { question, questionNumber, numQuestions } = props;
+export default function DetailedResponse(props: DetailedResponseProps) {
+  const { key, question, questionNumber, numQuestions } = props;
   const { selectedOption, correct } = props;
 
   return (
-    <>
+    <div key={key}>
       <QuestionTitle
         questionNumber={questionNumber}
         numQuestions={numQuestions}
         title={question.text}
       />
 
-      {
-        question.image &&
+      {question.image && (
         <StandardImage
           src={question.image}
           alt="Question illustration"
           layout="fill"
           objectFit="scale-down"
         />
-      }
+      )}
 
-      <div className="flex flex-col justify-center items-stretch py-2">
+      <SelectOptionContainer>
         <SelectOption
           id="A"
           content={question.option1}
-          selected={selectedOption === "option1"}
-          disabled={true}
-          wrong={!correct && selectedOption === "option1"}
+          selected={selectedOption === 'option1'}
+          disabled
+          wrong={!correct && selectedOption === 'option1'}
         />
-      </div>
+      </SelectOptionContainer>
 
-      <div className="flex flex-col justify-center items-stretch py-2">
+      <SelectOptionContainer>
         <SelectOption
           id="B"
           content={question.option2}
-          selected={selectedOption === "option2"}
-          disabled={true}
-          wrong={!correct && selectedOption === "option2"}
+          selected={selectedOption === 'option2'}
+          disabled
+          wrong={!correct && selectedOption === 'option2'}
         />
-      </div>
+      </SelectOptionContainer>
 
-      <div className="flex flex-col justify-center items-stretch py-2">
+      <SelectOptionContainer>
         <SelectOption
           id="C"
           content={question.option3}
-          selected={selectedOption === "option3"}
-          disabled={true}
-          wrong={!correct && selectedOption === "option3"}
+          selected={selectedOption === 'option3'}
+          disabled
+          wrong={!correct && selectedOption === 'option3'}
         />
-      </div>
+      </SelectOptionContainer>
 
-      {
-        correct &&
-        <CorrectAnswerAlert />
-      }
+      {correct && <CorrectAnswerAlert />}
 
-      {
-        !correct &&
-        <WrongAnswerAlert
-          question={question}
-          correct={true}
-        />
-      }
-
-    </>
-  )
-
+      {!correct && <WrongAnswerAlert question={question} correct />}
+    </div>
+  );
 }

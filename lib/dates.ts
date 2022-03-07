@@ -1,9 +1,5 @@
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 
-export function minusWeeksFromDate ( date: Date, numWeeks: number ) {
-
-  return dayjs( date )
-    .subtract( numWeeks, "week" )
-    .toDate();
-    
+export function minusWeeksFromDate(date: Date, numWeeks: number) {
+  return dayjs(date).subtract(numWeeks, 'week').toDate();
 }

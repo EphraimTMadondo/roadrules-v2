@@ -1,76 +1,139 @@
 import { Stepper } from '@mantine/core';
-import Head from 'next/head';
-import { useState } from 'react';
+import { useForm } from '@mantine/hooks';
+import {
+  Auth,
+  ConfirmationResult,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+} from 'firebase/auth';
+import { useCallback, useState } from 'react';
 import Layout from '../components/layout';
-import { Toolbar } from '../components/toolbar';
 import { VerificationOne } from '../components/verification-one';
 import { VerificationThree } from '../components/verification-three';
 import { VerificationTwo } from '../components/verification-two';
+import { Inputs } from '../lib/verification';
 
-import { useRouter } from 'next/router'
+async function resetRecaptcha() {
+  const widgetId =
+    await // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    ((window as any).recaptchaVerifier as RecaptchaVerifier).render();
 
-// interface Inputs {
-//   phoneNumber: string;
-// }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const { grecaptcha }: { grecaptcha: { ready: any; reset: any } } =
+    window as any;
 
-export default function Verification () {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  grecaptcha.ready(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    grecaptcha.reset(widgetId);
+  });
+}
 
-  const router = useRouter();
+export default function Verification() {
+  const [active, setActive] = useState(0);
+  const [confirmationResult, setConfirmationResult] = useState<
+    ConfirmationResult | undefined
+  >(undefined);
+  const [sendingCode, setSendingCode] = useState<boolean>(false);
+  const [verifying, setVerifying] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
-  const [ active, setActive ] = useState( 0 );
+  const form = useForm<Inputs>({
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      gender: 'Male',
+      province: '',
+      country: '',
+      phoneNumber: '',
+      code: '',
+    },
+  });
 
-  function nextStep () {
+  const nextStep = useCallback(
+    () => setActive((current) => (current < 3 ? current + 1 : current)),
+    [setActive]
+  );
 
-    return setActive( current => {
+  // function prevStep() {
+  //   return setActive((current) => (current > 0 ? current - 1 : current));
+  // }
 
-      return current < 3 ?
-        current + 1 :
-        current;
+  const sendVerificationCode = useCallback(
+    async (phoneNumber: string, auth: Auth, appVerifier: RecaptchaVerifier) => {
+      try {
+        setSendingCode(true);
 
-    } );
+        const newResult = await signInWithPhoneNumber(
+          auth,
+          phoneNumber,
+          appVerifier
+        );
+        setConfirmationResult(newResult);
+      } catch (reason: any) {
+        resetRecaptcha();
+      } finally {
+        setSendingCode(false);
+      }
+    },
+    [setConfirmationResult, setSendingCode]
+  );
 
+  async function handleSubmit(data: Inputs) {
+    try {
+      setVerifying(true);
+
+      // console.log(data);
+
+      if (confirmationResult) {
+        const result = await confirmationResult.confirm(data.code);
+        window.alert(JSON.stringify(result));
+        // console.log(result);
+        // register and push to main menu.
+        // router.push( "/main-menu" );
+      }
+    } catch (err: any) {
+      setError('Verification code, please try again.');
+    } finally {
+      setVerifying(false);
+    }
   }
-
-  function prevStep () {
-
-    return setActive( current => {
-
-      return current > 0 ?
-        current - 1 :
-        current;
-
-    } );
-
-  }
-
-  function conclude () {
-    router.push( "/main-menu" );
-  }
-
-  // const { register, handleSubmit } = useForm<Inputs>();
-
-  // function onSubmit ( data: Inputs ) {
-  //   console.log( data );
-  //   // router.push( "/verify" );
-  // };
 
   return (
     <Layout title="Welcome to Road Rules">
-
-      <div className="flex flex-col justify-start items-stretch">
-        <Stepper active={active} onStepClick={setActive} breakpoint="md" size="md">
+      <form
+        onSubmit={form.onSubmit(handleSubmit)}
+        className="flex flex-col justify-start items-stretch"
+      >
+        <Stepper
+          active={active}
+          onStepClick={setActive}
+          breakpoint="md"
+          size="md"
+        >
           <Stepper.Step label="Enter Details" className="h-min-full">
-            <VerificationOne toNextStep={nextStep} />
+            <VerificationOne toNextStep={nextStep} form={form} />
           </Stepper.Step>
           <Stepper.Step label="Send Code">
-            <VerificationTwo toNextStep={nextStep} />
+            <VerificationTwo
+              toNextStep={nextStep}
+              form={form}
+              sendVerificationCode={sendVerificationCode}
+              error={error}
+              setError={setError}
+            />
           </Stepper.Step>
           <Stepper.Step label="Verify Phone Number">
-            <VerificationThree toNextStep={conclude} />
+            <VerificationThree
+              form={form}
+              sendingCode={sendingCode}
+              verifying={verifying}
+              error={error}
+            />
           </Stepper.Step>
         </Stepper>
-      </div>
-
+      </form>
     </Layout>
-  )
+  );
 }

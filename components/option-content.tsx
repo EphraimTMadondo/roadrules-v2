@@ -1,9 +1,4 @@
-import { OptionId } from "../lib/questions-client-logic";
-
-interface OptionContentProps {
-  optionId: OptionId;
-  question: ThreeOptioned;
-}
+import { OptionId } from '../lib/questions-client-logic';
 
 interface ThreeOptioned {
   option1: string;
@@ -11,25 +6,23 @@ interface ThreeOptioned {
   option3: string;
 }
 
-export function OptionContent ( props: OptionContentProps ) {
+interface OptionContentProps {
+  optionId: OptionId;
+  question: ThreeOptioned;
+}
 
+export function OptionContent(props: OptionContentProps) {
   const { optionId, question } = props;
 
-  const map: [ OptionId, string ][] = [
-    [ "option1", question.option1, ],
-    [ "option2", question.option2, ],
-    [ "option3", question.option3, ]
+  const map: [OptionId, string][] = [
+    ['option1', question.option1],
+    ['option2', question.option2],
+    ['option3', question.option3],
   ];
 
-  const match = map
-    .find( pair => pair[ 0 ] === optionId );
+  const match = map.find((pair) => pair[0] === optionId);
 
-  const displayValue = match?.[ 1 ] || "";
+  const displayValue = match?.[1] || '';
 
-  return (
-    <span>
-      {displayValue}
-    </span>
-  )
-
+  return <span>{displayValue}</span>;
 }

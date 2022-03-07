@@ -1,0 +1,116 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home matches previous snapshot 1`] = `
+<div>
+  <div
+    class="flex flex-col justify-start items-stretch"
+  >
+    <div
+      class="flex flex-col justify-start items-stretch bg-slate-100"
+    >
+      <div
+        class="flex flex-row justify-center items-stretch p-4"
+      >
+        <div
+          class="flex flex-col justify-start items-stretch w-full sm:w-4/5 md:w-2/5"
+        >
+          <div
+            class="flex flex-row justify-center items-stretch"
+          >
+            <div
+              class="mantine-Paper-root mantine-Card-root w-full flex flex-col justify-start items-stretch mantine-8z5hl6"
+            >
+              <div
+                class="mantine-Card-cardSection flex flex-col justify-start items-stretch p-6 mantine-12r4hr5"
+              >
+                <div
+                  class="grow"
+                />
+                <div
+                  class="flex flex-row justify-center items-center py-8"
+                >
+                  <div
+                    class="relative h-56 w-full overflow-hidden"
+                  >
+                    <span
+                      style="box-sizing: border-box; display: block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;"
+                    >
+                      <img
+                        alt="Road Rules"
+                        data-nimg="fill"
+                        decoding="async"
+                        role="rrLogo"
+                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                        style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%; object-fit: scale-down;"
+                      />
+                      <noscript />
+                    </span>
+                  </div>
+                </div>
+                <div
+                  class="grow"
+                />
+                <div
+                  class="flex flex-col justify-center items-stretch"
+                >
+                  <p
+                    style="text-align: center;"
+                  >
+                    Powered by the 
+                    <br />
+                    Traffic Safety Council of Zimbabwe
+                  </p>
+                </div>
+                <div
+                  class="flex flex-row justify-center items-center pb-8"
+                >
+                  <div
+                    class="relative h-48 w-full overflow-hidden"
+                  >
+                    <span
+                      style="box-sizing: border-box; display: block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;"
+                    >
+                      <img
+                        alt="Traffic Safety Council Logo"
+                        data-nimg="fill"
+                        decoding="async"
+                        role="tscLogo"
+                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                        style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%; object-fit: scale-down;"
+                      />
+                      <noscript />
+                    </span>
+                  </div>
+                </div>
+                <div
+                  class="grow"
+                />
+                <div
+                  class="flex flex-col justify-center items-stretch pt-4"
+                >
+                  <button
+                    class="mantine-Button-filled mantine-Button-root mantine-15a7yqh"
+                    href="/terms-and-conditions"
+                    role="button"
+                    type="button"
+                  >
+                    <div
+                      class="mantine-3xbgk5 mantine-Button-inner"
+                    >
+                      <span
+                        class="mantine-qo1k2 mantine-Button-label"
+                      >
+                        NEXT
+                      </span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

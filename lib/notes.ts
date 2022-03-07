@@ -1,9 +1,6 @@
-import { prisma } from "./db";
+import { prisma } from './db';
 
-export async function getNotes () {
-
+export async function getNotes() {
   const notes = await prisma.note.findMany();
-
   return notes;
-
 }

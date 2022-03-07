@@ -1,11 +1,10 @@
-import { Alert, Button, LoadingOverlay } from '@mantine/core';
+import { Alert } from '@mantine/core';
 
 interface Props {
   error: string;
 }
 
-export function ErrorAlert ( props: Props ) {
-
+export function ErrorAlert(props: Props) {
   const { error } = props;
 
   return (
@@ -18,6 +17,5 @@ export function ErrorAlert ( props: Props ) {
         {error}
       </Alert>
     </div>
-  )
-
+  );
 }

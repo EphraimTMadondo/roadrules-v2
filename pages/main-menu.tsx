@@ -3,36 +3,31 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useCallback } from 'react';
 import Layout from '../components/layout';
 import { Toolbar } from '../components/toolbar';
 
-export default function MainMenu () {
-
+export default function MainMenu() {
   const router = useRouter();
 
-  function back () {
+  const back = useCallback(() => {
     router.back();
-  }
+  }, [router]);
 
-  const title = "Road Rules";
+  const title = 'Road Rules';
 
   return (
     <Layout>
-
       <Head>
         <title>{title}</title>
       </Head>
 
-      <Toolbar
-        title={title}
-        leftIcon="arrow_back"
-        leftIconAction={back}
-      />
+      <Toolbar title={title} leftIcon="arrow_back" leftIconAction={back} />
 
-      <div className="grow py-2"></div>
+      <div className="grow py-2" />
 
       <div className="flex flex-col justify-center items-stretch">
-        <p style={{ textAlign: "center" }}>
+        <p style={{ textAlign: 'center' }}>
           Powered by the <br />
           Traffic Safety Council of Zimbabwe
         </p>
@@ -49,13 +44,11 @@ export default function MainMenu () {
         </div>
       </div>
 
-      <div className="grow py-2"></div>
+      <div className="grow py-2" />
 
       <div className="flex flex-col justify-center items-stretch py-4">
-        <Link href="/driving-lessons-menu">
-          <Button size="md">
-            DRIVING LESSONS
-          </Button>
+        <Link passHref href="/driving-lessons-menu">
+          <Button size="md">DRIVING LESSONS</Button>
         </Link>
       </div>
 
@@ -76,7 +69,6 @@ export default function MainMenu () {
           TRAFFIC SAFETY COUNCIL
         </Button>
       </div>
-
     </Layout>
-  )
+  );
 }
