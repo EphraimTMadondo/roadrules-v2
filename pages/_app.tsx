@@ -7,18 +7,6 @@ import Head from 'next/head';
 import '../styles/globals.css';
 import { AppRouter } from './api/trpc/[trpc]';
 
-const envVars = [
-  process.env.NEXT_PUBLIC_SERVER_URL,
-  process.env.RECAPTCHA_SITE_KEY,
-  process.env.NODE_ENV,
-];
-
-const missingEnvVars = envVars.filter((el) => !el);
-
-if (missingEnvVars.length) {
-  throw new Error('Env variables missing.');
-}
-
 const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || '';
 const recaptchaSiteKey = process.env.RECAPTCHA_SITE_KEY || '';
 const nodeEnv = process.env.NODE_ENV || '';
