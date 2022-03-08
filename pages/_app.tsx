@@ -37,6 +37,17 @@ function MyApp(props: AppProps) {
           src={`https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`}
         /> */}
 
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />
+        {/*
+          eslint-disable-next-line @next/next/no-page-custom-font
+          */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+        />
         <link rel="manifest" href="/manifest.json" />
         <link
           href="/icons/road_rules_logo-16_x_16.png"
