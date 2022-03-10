@@ -42,7 +42,7 @@ export function Toolbar(props: ToolbarProps) {
         </ActionIcon>
       )}
       <div className="grow" />
-      <span className="text-lg font-semibold">{title}</span>
+      <span className="text-lg text-center font-semibold">{title}</span>
       <div className="grow" />
       {!rightIcon && !RightElement && (
         <ActionIcon

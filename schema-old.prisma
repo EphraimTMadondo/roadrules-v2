@@ -38,27 +38,12 @@ model Note {
 }
 
 model Province {
-  id       Int    @id @default(autoincrement())
-  province String @db.VarChar(100)
-
-  country   Country @relation(fields: [countryId], references: [id])
-  countryId Int
-
-  createdAt BigInt
-  updatedAt BigInt
-
-  users User[]
-  @@map("provinces")
-}
-
-model Country {
   id        Int    @id @default(autoincrement())
-  country   String @db.VarChar(100)
+  province  String @db.VarChar(100)
   createdAt BigInt
   updatedAt BigInt
 
-  provinces Province[]
-  @@map("countries")
+  @@map("provinces")
 }
 
 model Question {
@@ -72,15 +57,11 @@ model Question {
   correctOption       String @db.VarChar(20)
   correctlyAnswered   Int
   incorrectlyAnswered Int
+  questionTypeId      Int
+  explanation         String @db.Text
+  createdAt           BigInt
+  updatedAt           BigInt
 
-  questionType   QuestionType @relation(fields: [questionTypeId], references: [id])
-  questionTypeId Int
-
-  explanation String @db.Text
-  createdAt   BigInt
-  updatedAt   BigInt
-
-  responses Response[]
   @@map("questions")
 }
 
@@ -90,43 +71,32 @@ model QuestionType {
   createdAt    BigInt
   updatedAt    BigInt
 
-  questions Question[]
   @@map("questiontypes")
 }
 
 model Response {
-  id Int @id @default(autoincrement())
-
-  question   Question @relation(fields: [questionId], references: [id])
+  id         Int     @id @default(autoincrement())
   questionId Int
-
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
-
-  choice    String  @db.VarChar(10)
-  correct   Boolean
-  createdAt BigInt
-  updatedAt BigInt
+  userId     Int
+  choice     String  @db.VarChar(10)
+  correct    Boolean
+  createdAt  BigInt
+  updatedAt  BigInt
 
   @@map("responses")
 }
 
 model User {
-  id          Int    @id @default(autoincrement())
-  username    String @db.VarChar(20)
-  pin         String @db.Text
-  kind        String @db.VarChar(10)
-  firstName   String @db.VarChar(50)
-  lastName    String @db.VarChar(50)
-  gender      String @db.VarChar(10)
-  phoneNumber String @db.VarChar(25)
+  id             Int    @id @default(autoincrement())
+  username       String @db.VarChar(20)
+  pin            String @db.Text
+  kind           String @db.VarChar(10)
+  fullName       String @db.VarChar(50)
+  phoneNumber    String @db.VarChar(25)
+  activationCode String @db.VarChar(10)
+  location       String @db.VarChar(200)
+  createdAt      BigInt
+  updatedAt      BigInt
 
-  province   Province @relation(fields: [provinceId], references: [id])
-  provinceId Int
-
-  createdAt BigInt
-  updatedAt BigInt
-
-  responses Response[]
   @@map("users")
 }

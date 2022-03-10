@@ -44,12 +44,12 @@ export default function Questions(props: PageProps) {
     }))
   );
 
-  const [isLoading, setisLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
   const mutation = trpc.useMutation('response.create', {
     onMutate: () => {
-      setisLoading(true);
+      setIsLoading(true);
       setError('');
     },
     onError: ({ message }: { message: string }) => {
@@ -63,7 +63,7 @@ export default function Questions(props: PageProps) {
       });
     },
     onSettled: () => {
-      setisLoading(false);
+      setIsLoading(false);
     },
   });
 
@@ -113,7 +113,7 @@ export default function Questions(props: PageProps) {
       )}
       {question && (
         <QuestionComponent
-          key={question.questionNumber.toString()}
+          key={question.id}
           title="Practice"
           question={question}
           questionNumber={question.questionNumber}

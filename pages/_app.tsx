@@ -8,7 +8,7 @@ import '../styles/globals.css';
 import { AppRouter } from './api/trpc/[trpc]';
 
 const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || '';
-// const recaptchaSiteKey = process.env.RECAPTCHA_SITE_KEY || '';
+const recaptchaSiteKey = process.env.RECAPTCHA_SITE_KEY || '';
 const nodeEnv = process.env.NODE_ENV || '';
 
 function MyApp(props: AppProps) {
@@ -32,10 +32,10 @@ function MyApp(props: AppProps) {
 
         <title>Road Rules</title>
 
-        {/* <script
+        <script
           async
           src={`https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`}
-        /> */}
+        />
 
         <link
           rel="stylesheet"
@@ -74,6 +74,7 @@ function MyApp(props: AppProps) {
         }}
       >
         <NotificationsProvider>
+          {/* <div id="recaptcha-container" style={{ height: 200, width: 200 }} /> */}
           <Component {...pageProps} />
         </NotificationsProvider>
       </MantineProvider>

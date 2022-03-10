@@ -37,7 +37,8 @@ export default function ProgressPieChart(props: ProgressPieChartProps) {
   return (
     <ResponsivePie
       data={elements}
-      margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
+      margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
+      // margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
       innerRadius={0.6}
       padAngle={0.7}
       cornerRadius={3}

@@ -15,7 +15,6 @@ import { Timer } from './timer';
 import { WrongAnswerAlert } from './wrong-answer-alert';
 
 interface QuestionComponentProps {
-  key: string;
   title: string;
   question: Question;
   questionNumber: number;
@@ -30,7 +29,7 @@ interface QuestionComponentProps {
 }
 
 export default function QuestionComponent(props: QuestionComponentProps) {
-  const { key, title, question, questionNumber, numQuestions } = props;
+  const { title, question, questionNumber, numQuestions } = props;
   const { processResponse, nextQuestion, isLoading } = props;
   const { error, timed, secondsLeft, crunchTime } = props;
 
@@ -67,7 +66,7 @@ export default function QuestionComponent(props: QuestionComponentProps) {
     : undefined;
 
   return (
-    <Layout key={key} className="relative" title={title}>
+    <Layout className="relative" title={title}>
       <Toolbar title={title} RightElement={RightElement} />
 
       <LoadingOverlay visible={isLoading || false} transitionDuration={500} />

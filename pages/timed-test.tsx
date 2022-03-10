@@ -46,7 +46,7 @@ export default function TimedTest(props: PageProps) {
     }))
   );
 
-  const [isLoading, setisLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [secondsLeft, setSecondsLeft] = useState<number>(480);
 
@@ -67,7 +67,7 @@ export default function TimedTest(props: PageProps) {
 
   const mutation = trpc.useMutation('response.create', {
     onMutate: () => {
-      setisLoading(true);
+      setIsLoading(true);
       setError('');
     },
     onError: ({ message }: { message: string }) => {
@@ -81,7 +81,7 @@ export default function TimedTest(props: PageProps) {
       });
     },
     onSettled: () => {
-      setisLoading(false);
+      setIsLoading(false);
     },
   });
 
@@ -127,7 +127,7 @@ export default function TimedTest(props: PageProps) {
       )}
       {question && (
         <QuestionComponent
-          key={question.questionNumber.toString()}
+          key={question.id}
           title={title}
           question={question}
           questionNumber={question.questionNumber}

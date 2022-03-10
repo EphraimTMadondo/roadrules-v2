@@ -7,3 +7,15 @@ html, body, #__next {
   background-color: rgb(241 245 249);
   height: 100%;
 }
+
+@layer components {
+  .grey-border {
+    @apply border border-solid rounded border-slate-300;
+  }
+  .teal-border {
+    @apply border border-solid rounded border-teal-300;
+  }
+  .red-border {
+    @apply border border-solid rounded border-red-300;
+  }
+}

@@ -1,6 +1,5 @@
 import { Question } from '@prisma/client';
 import { OptionId } from '../lib/questions-client-logic';
-import { redBorder, tealBorder } from '../lib/tailwind-utils';
 import { ABC } from './abc';
 import { OptionContent } from './option-content';
 
@@ -9,6 +8,9 @@ interface Props {
   correct: boolean;
   showIcon?: boolean;
 }
+
+const redBorder = 'border border-solid rounded border-red-600';
+const tealBorder = 'border border-solid rounded border-teal-600';
 
 export function ResponseComponent(props: Props) {
   const { question, correct, showIcon } = props;

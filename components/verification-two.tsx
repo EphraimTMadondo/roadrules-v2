@@ -1,58 +1,70 @@
-import { Autocomplete, Button, TextInput } from '@mantine/core';
+import { Button, TextInput } from '@mantine/core';
 import { UseForm } from '@mantine/hooks/lib/use-form/use-form';
-import { Auth, getAuth, RecaptchaVerifier } from 'firebase/auth';
-import { useCallback, useState } from 'react';
+import { useNotifications } from '@mantine/notifications';
+import {
+  getAuth,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+} from 'firebase/auth';
+import { useCallback, useEffect, useState } from 'react';
+import { app } from '../lib/firebase';
 import { Inputs } from '../lib/verification';
-import { ErrorAlert } from './error-alert';
 
 interface VerificationTwoProps {
   toNextStep: () => void;
   form: UseForm<Inputs>;
-  sendVerificationCode: (
-    phoneNumber: string,
-    auth: Auth,
-    appVerifier: RecaptchaVerifier
-  ) => any;
-  error: string;
-  setError: (error: string) => any;
+  sendingCode: boolean;
+  setSendingCode: (sendingCode: boolean) => void;
 }
 
 export function VerificationTwo(props: VerificationTwoProps) {
-  const { toNextStep, form, sendVerificationCode, error, setError } = props;
+  const { toNextStep, form, sendingCode, setSendingCode } = props;
 
-  const countries = ['Zimbabwe', 'Zambia', 'South Africa'];
+  const [passedRecaptcha, setPassedRecaptcha] = useState(false);
+  // const [sendingCode, setSendingCode] = useState(false);
+  const notifications = useNotifications();
 
-  const [passedRecaptcha, setPassedRecaptcha] = useState<boolean>(false);
-
-  const auth = getAuth();
-  // auth.languageCode = 'it';
+  const auth = getAuth(app);
   auth.useDeviceLanguage();
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  let appVerifier: RecaptchaVerifier = (
-    window as unknown as { recaptchaVerifier: RecaptchaVerifier }
-  ).recaptchaVerifier;
+  const onSubmitLogin = useCallback(async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const appVerifier = (window as any).recaptchaVerifier as RecaptchaVerifier;
 
-  appVerifier = new RecaptchaVerifier(
-    'recaptcha-container',
-    {
-      size: 'normal',
-      callback: () => {
-        // reCAPTCHA solved, allow signInWithPhoneNumber.
-        setPassedRecaptcha(true);
-      },
-      'expired-callback': () => {
-        // Response expired. Ask user to solve reCAPTCHA again.
-        setError("Recaptcha session's expired, please try again.");
-      },
-    },
-    auth
-  );
+    try {
+      setSendingCode(true);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      (window as any).confirmationResult = await signInWithPhoneNumber(
+        auth,
+        form.values.phoneNumber,
+        appVerifier
+      );
+      notifications.showNotification({
+        message: 'Verification Code Sent!',
+        color: 'teal',
+        icon: <i className="material-icons">done</i>,
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setSendingCode(false);
+    }
+  }, [auth, setSendingCode, notifications, form.values.phoneNumber]);
 
-  const buttonOnClick = useCallback(() => {
-    sendVerificationCode('', auth, appVerifier);
-    toNextStep();
-  }, [auth, appVerifier, sendVerificationCode, toNextStep]);
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    (window as any).recaptchaVerifier = new RecaptchaVerifier(
+      'recaptcha-container',
+      {
+        size: 'invisible',
+        callback: () => {
+          setPassedRecaptcha(true);
+          onSubmitLogin();
+        },
+      },
+      auth
+    );
+  }, [auth, onSubmitLogin, setPassedRecaptcha]);
 
   return (
     <div className="flex flex-col justify-center items-stretch pt-8">
@@ -63,20 +75,10 @@ export function VerificationTwo(props: VerificationTwoProps) {
       </div>
 
       <span className="text-sm text-center py-2">
-        We will send an SMS to verify your phone number.
+        Enter your phone number,
         <br />
-        Enter your country code and phone number.
+        we will send a verification code via SMS.
       </span>
-
-      <div className="flex flex-col justify-center items-stretch py-4">
-        <Autocomplete
-          label="Country"
-          placeholder="Pick Country"
-          data={countries}
-          {...form.getInputProps('country')}
-          required
-        />
-      </div>
 
       <div className="flex flex-col justify-center items-stretch py-4">
         <TextInput
@@ -87,15 +89,21 @@ export function VerificationTwo(props: VerificationTwoProps) {
         />
       </div>
 
-      <div className="flex flex-col justify-center items-stretch py-4">
-        <div id="recaptcha-container" />
-      </div>
-
-      {error && <ErrorAlert error={error} />}
+      <div
+        id="recaptcha-container"
+        className="flex flex-row justify-center items-stretch"
+      />
 
       <div className="flex flex-col justify-center items-stretch pt-8">
-        <Button onClick={buttonOnClick} size="md" disabled={!passedRecaptcha}>
-          SEND CODE
+        <Button
+          onClick={passedRecaptcha ? toNextStep : onSubmitLogin}
+          size="md"
+          disabled={sendingCode}
+          loading={sendingCode}
+        >
+          {passedRecaptcha && 'NEXT'}
+          {!passedRecaptcha && !sendingCode && 'SEND CODE'}
+          {!passedRecaptcha && sendingCode && 'SENDING CODE...'}
         </Button>
       </div>
     </div>

@@ -1,20 +1,29 @@
-import { Button, Select, TextInput } from '@mantine/core';
+import { Button, Select, SelectItem, TextInput } from '@mantine/core';
 import { UseForm } from '@mantine/hooks/lib/use-form/use-form';
 import { Inputs } from '../lib/verification';
 
 interface VerificationOneProps {
   toNextStep: () => void;
+  countryOptions: SelectItem[];
+  defaultCountryId: number | undefined;
+  provinceOptions: SelectItem[];
   form: UseForm<Inputs>;
 }
 
 export function VerificationOne(props: VerificationOneProps) {
-  const { toNextStep, form } = props;
+  const {
+    toNextStep,
+    countryOptions,
+    defaultCountryId,
+    provinceOptions,
+    form,
+  } = props;
 
   return (
     <div className="flex flex-col justify-center items-stretch pt-8">
       <div className="flex flex-col justify-center items-center">
-        <span className="font-bold text-lg text-center py-2">
-          Provide the following details
+        <span className="font-bold text-lg text-center pt-2 pb-4">
+          Please provide the following details
         </span>
       </div>
 
@@ -40,17 +49,29 @@ export function VerificationOne(props: VerificationOneProps) {
         <Select
           placeholder="Gender"
           label="Gender"
-          data={['Male', 'Femail']}
+          data={['Male', 'Female']}
           {...form.getInputProps('gender')}
           required
         />
       </div>
 
+      <div className="flex flex-col justify-center items-stretch py-4">
+        <Select
+          label="Country"
+          placeholder="Pick Country"
+          data={countryOptions}
+          defaultValue={defaultCountryId?.toString()}
+          {...form.getInputProps('countryId')}
+          required
+        />
+      </div>
+
       <div className="flex flex-col justify-center items-stretch py-2">
-        <TextInput
+        <Select
           placeholder="Province"
           label="Province"
-          {...form.getInputProps('province')}
+          data={provinceOptions}
+          {...form.getInputProps('provinceId')}
           required
         />
       </div>
