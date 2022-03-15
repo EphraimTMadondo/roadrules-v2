@@ -29,12 +29,13 @@ export default function DrivingLessonsMenu() {
       </div>
 
       <div className="flex flex-row justify-center items-center">
-        <div className="relative h-48 w-full overflow-hidden">
+        <div className="relative h-56 w-10/12 overflow-hidden">
           <Image
             src="/images/tsc_logo.png"
             alt="Traffic Safety Council Logo"
             layout="fill"
-            objectFit="scale-down"
+            objectFit="contain"
+            // objectFit="scale-down"
           />
         </div>
       </div>

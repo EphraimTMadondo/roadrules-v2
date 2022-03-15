@@ -82,7 +82,8 @@ export default function QuestionComponent(props: QuestionComponentProps) {
           src={question.image}
           alt="Question illustration"
           layout="fill"
-          objectFit="scale-down"
+          objectFit="contain"
+          // objectFit="scale-down"
         />
       )}
 

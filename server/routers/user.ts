@@ -1,19 +1,32 @@
 import { z } from 'zod';
 import { prisma } from '../../lib/db';
-import { genderSchema } from '../../lib/gender';
-import { phoneNumberSchema } from '../../lib/phone-numbers';
+import { authVerCode, sendVerCode } from '../../lib/twilio';
+import {
+  AuthCodeSchema,
+  CreateUserSchema,
+  PhoneNumberSchema,
+  SendCodeSchema,
+} from '../../lib/user-schemas';
 import { BaseContext, createRouter } from '../create-router';
 
 export const userRoutes = createRouter<BaseContext>()
+  .mutation('sendCode', {
+    input: SendCodeSchema,
+    resolve: async ({ input }) => {
+      await sendVerCode(input.phoneNumber);
+      return {};
+    },
+  })
+  .mutation('authCode', {
+    input: AuthCodeSchema,
+    resolve: async ({ input }) => {
+      const verified = await authVerCode(input.phoneNumber, input.code);
+      return { verified };
+    },
+  })
   .mutation('create', {
     // check for validity
-    input: z.object({
-      firstName: z.string().min(1).max(50),
-      lastName: z.string().min(1).max(50),
-      gender: genderSchema,
-      phoneNumber: phoneNumberSchema,
-      provinceId: z.number().int().min(1),
-    }),
+    input: CreateUserSchema,
     resolve: async ({ input, ctx }) => {
       // check for duplication
       const duplicate = await prisma.user.findFirst({
@@ -55,7 +68,7 @@ export const userRoutes = createRouter<BaseContext>()
   .mutation('signIn', {
     // check for validity
     input: z.object({
-      phoneNumber: phoneNumberSchema,
+      phoneNumber: PhoneNumberSchema,
     }),
     resolve: async ({ input, ctx }) => {
       const user = await prisma.user.findFirst({

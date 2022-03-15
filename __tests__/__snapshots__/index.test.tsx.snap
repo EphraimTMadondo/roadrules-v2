@@ -30,7 +30,7 @@ exports[`Home matches previous snapshot 1`] = `
                   class="flex flex-row justify-center items-center py-8"
                 >
                   <div
-                    class="relative h-56 w-full overflow-hidden"
+                    class="relative h-72 w-full overflow-hidden"
                   >
                     <span
                       style="box-sizing: border-box; display: block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;"
@@ -65,13 +65,13 @@ exports[`Home matches previous snapshot 1`] = `
                   class="flex flex-row justify-center items-center pb-8"
                 >
                   <div
-                    class="relative h-48 w-full overflow-hidden"
+                    class="relative h-72 w-full overflow-hidden"
                   >
                     <span
                       style="box-sizing: border-box; display: block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;"
                     >
                       <img
-                        alt="Traffic Safety Council Logo"
+                        alt="Traffic Safety Council"
                         data-nimg="fill"
                         decoding="async"
                         role="tscLogo"

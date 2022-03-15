@@ -1,25 +1,47 @@
 import { LoadingOverlay, Stepper } from '@mantine/core';
 import { useForm } from '@mantine/hooks';
 import { useNotifications } from '@mantine/notifications';
+import { DefaultErrorShape, Maybe } from '@trpc/server';
 import { useCallback, useState } from 'react';
+import { ZodError } from 'zod';
 import { ErrorAlert } from '../components/error-alert';
 import Layout from '../components/layout';
 import { VerificationOne } from '../components/verification-one';
 import { VerificationThree } from '../components/verification-three';
 import { VerificationTwo } from '../components/verification-two';
 import { capitalize } from '../lib/strings';
+import {
+  AuthCodeSchema,
+  AuthCode,
+  CreateUser,
+  CreateUserSchema,
+  SendCode,
+  SendCodeSchema,
+} from '../lib/user-schemas';
 import { Inputs } from '../lib/verification';
+import { customErrorMap, zodErrorsToString } from '../lib/zod-utils';
 import { trpc } from '../utils/trpc';
 
 export default function Verification() {
   const [active, setActive] = useState(0);
 
-  const [sendingCode, setSendingCode] = useState<boolean>(false);
-  const [verifying, setVerifying] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [sendCodeError, setSendCodeError] = useState<string>('');
   const [registrationError, setRegistrationError] = useState<string>('');
-  const [isRegistering, setIsRegistering] = useState(false);
 
   const notifications = useNotifications();
+
+  const toDetails = useCallback(() => {
+    setActive(0);
+  }, [setActive]);
+
+  const toSendCode = useCallback(() => {
+    setActive(1);
+  }, [setActive]);
+
+  const toAuthCode = useCallback(() => {
+    setActive(2);
+  }, [setActive]);
 
   const form = useForm<Inputs>({
     initialValues: {
@@ -30,6 +52,116 @@ export default function Verification() {
       countryId: 0,
       phoneNumber: '',
       code: '',
+    },
+    validationRules: {
+      firstName: (value) => {
+        if (!value) toDetails();
+        return !!value;
+      },
+      lastName: (value) => {
+        if (!value) toDetails();
+        return !!value;
+      },
+      gender: (value) => {
+        if (!value) toDetails();
+        return !!value;
+      },
+      provinceId: (value) => {
+        if (!value) toDetails();
+        return !!value;
+      },
+      phoneNumber: (value) => {
+        if (!value) toSendCode();
+        return !!value;
+      },
+    },
+    errorMessages: {
+      firstName: 'Please enter your first name.',
+      lastName: 'Please enter your last name.',
+      gender: 'Please select your gender.',
+      provinceId: 'Please select your province.',
+      phoneNumber: 'Please enter your phone number.',
+    },
+  });
+
+  const sendCodeMutation = trpc.useMutation('user.sendCode', {
+    onMutate: () => {
+      setLoading(true);
+      setSendCodeError('');
+    },
+    onError: ({ message }: { message: string }) => {
+      setSendCodeError(capitalize(message));
+      toSendCode();
+    },
+    onSuccess: () => {
+      notifications.showNotification({
+        message: 'Code Sent!',
+        color: 'teal',
+        icon: <i className="material-icons">done</i>,
+      });
+      toAuthCode();
+    },
+    onSettled: () => {
+      setLoading(false);
+    },
+  });
+
+  const createUserMutation = trpc.useMutation('user.create', {
+    onMutate: () => {
+      setLoading(true);
+      setRegistrationError('');
+    },
+    onError: ({ message }: { message: string }) => {
+      setRegistrationError(capitalize(message));
+    },
+    onSuccess: () => {
+      notifications.showNotification({
+        message: 'Registration Complete!',
+        color: 'teal',
+        icon: <i className="material-icons">done</i>,
+      });
+    },
+    onSettled: () => {
+      setLoading(false);
+    },
+  });
+
+  const authCodeMutation = trpc.useMutation('user.authCode', {
+    onMutate: () => {
+      setLoading(true);
+      setRegistrationError('');
+    },
+    onError: (err) => {
+      setRegistrationError(capitalize(err?.message));
+      toAuthCode();
+    },
+    onSuccess: () => {
+      notifications.showNotification({
+        message: 'Code verified!',
+        color: 'teal',
+        icon: <i className="material-icons">done</i>,
+      });
+      const createUserDetails: CreateUser = {
+        firstName: form.values.firstName,
+        lastName: form.values.lastName,
+        gender: form.values.gender,
+        provinceId: Number(form.values.provinceId),
+        phoneNumber: form.values.phoneNumber,
+      };
+      try {
+        CreateUserSchema.parse(createUserDetails, { errorMap: customErrorMap });
+        createUserMutation.mutate(createUserDetails);
+      } catch (err) {
+        const fallbackMessage = 'Failed to create user, please try again.';
+        if (err instanceof ZodError) {
+          setRegistrationError(zodErrorsToString(err) || fallbackMessage);
+        } else {
+          setRegistrationError(fallbackMessage);
+        }
+      }
+    },
+    onSettled: () => {
+      setLoading(false);
     },
   });
 
@@ -58,63 +190,55 @@ export default function Verification() {
       }))
     : [];
 
-  const mutation = trpc.useMutation('user.create', {
-    onMutate: () => {
-      setIsRegistering(true);
-      setRegistrationError('');
-    },
-    onError: ({ message }: { message: string }) => {
-      setRegistrationError(capitalize(message));
-    },
-    onSuccess: () => {
-      notifications.showNotification({
-        message: 'Registration Complete!',
-        color: 'teal',
-        icon: <i className="material-icons">done</i>,
-      });
-    },
-    onSettled: () => {
-      setIsRegistering(false);
-    },
-  });
-
-  const toSendCode = useCallback(() => {
-    setActive(1);
-  }, [setActive]);
-
   const nextStep = useCallback(
     () => setActive((current) => (current < 3 ? current + 1 : current)),
     [setActive]
   );
 
-  async function handleSubmit(data: Inputs) {
+  const sendCode = useCallback(() => {
+    if (!form.values.phoneNumber) {
+      setSendCodeError('Please enter your phone number first.');
+      return toSendCode();
+    }
+
+    const sendCodeDetails: SendCode = {
+      phoneNumber: form.values.phoneNumber,
+    };
     try {
-      setVerifying(true);
+      SendCodeSchema.parse(sendCodeDetails, { errorMap: customErrorMap });
+      sendCodeMutation.mutate(sendCodeDetails);
+    } catch (err) {
+      const fallbackMessage =
+        'Failed to send verification code, please try again.';
+      if (err instanceof ZodError) {
+        setRegistrationError(zodErrorsToString(err) || fallbackMessage);
+      } else {
+        setRegistrationError(fallbackMessage);
+      }
+    }
+  }, [form, sendCodeMutation, setSendCodeError, toSendCode]);
+
+  function handleSubmit(data: Inputs) {
+    try {
+      setLoading(true);
       setRegistrationError('');
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const {
-        confirmationResult,
-      }: { confirmationResult: { confirm: (code: string) => any } } =
-        window as any;
-
-      if (confirmationResult) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        await confirmationResult.confirm(data.code);
-        // register and push to main menu.
-        mutation.mutate({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          gender: data.gender,
-          phoneNumber: data.phoneNumber,
-          provinceId: Number(data.provinceId),
-        });
-        // router.push( "/main-menu" );
+      const authCodeDetails: AuthCode = {
+        phoneNumber: data.phoneNumber,
+        // code: data.code.toString(),
+        code: data.code.toString(),
+      };
+      AuthCodeSchema.parse(authCodeDetails, { errorMap: customErrorMap });
+      authCodeMutation.mutate(authCodeDetails);
+    } catch (err) {
+      const fallbackMessage = 'Verification failed, please try again.';
+      if (err instanceof ZodError) {
+        setRegistrationError(zodErrorsToString(err) || fallbackMessage);
+      } else {
+        setRegistrationError(fallbackMessage);
       }
-    } catch (err: any) {
-      setRegistrationError('Verification failed, please try again.');
     } finally {
-      setVerifying(false);
+      setLoading(false);
     }
   }
 
@@ -124,7 +248,7 @@ export default function Verification() {
         onSubmit={form.onSubmit(handleSubmit)}
         className="flex flex-col justify-start items-stretch"
       >
-        <LoadingOverlay visible={isLoading || isRegistering} />
+        <LoadingOverlay visible={isLoading} />
 
         <Stepper
           active={active}
@@ -139,7 +263,7 @@ export default function Verification() {
             label="Enter Details"
             className="h-min-full"
             // allowStepSelect={active > 0}
-            allowStepSelect={!sendingCode && !verifying}
+            allowStepSelect={!loading}
           >
             <VerificationOne
               form={form}
@@ -152,23 +276,23 @@ export default function Verification() {
           <Stepper.Step
             label="Send Code"
             // allowStepSelect={active > 1}
-            allowStepSelect={!sendingCode && !verifying}
+            allowStepSelect={!loading}
           >
             <VerificationTwo
-              toNextStep={nextStep}
-              sendingCode={sendingCode}
-              setSendingCode={setSendingCode}
               form={form}
+              sendCode={sendCode}
+              loading={loading}
+              error={sendCodeError}
             />
           </Stepper.Step>
           <Stepper.Step
             label="Verify Number"
             // allowStepSelect={active > 2}
-            allowStepSelect={!sendingCode && !verifying}
+            allowStepSelect={!loading}
           >
             <VerificationThree
               form={form}
-              verifying={verifying}
+              loading={loading}
               error={registrationError}
               toSendCode={toSendCode}
             />

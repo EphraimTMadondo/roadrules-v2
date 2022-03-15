@@ -1,70 +1,17 @@
 import { Button, TextInput } from '@mantine/core';
 import { UseForm } from '@mantine/hooks/lib/use-form/use-form';
-import { useNotifications } from '@mantine/notifications';
-import {
-  getAuth,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-} from 'firebase/auth';
-import { useCallback, useEffect, useState } from 'react';
-import { app } from '../lib/firebase';
 import { Inputs } from '../lib/verification';
+import { ErrorAlert } from './error-alert';
 
 interface VerificationTwoProps {
-  toNextStep: () => void;
   form: UseForm<Inputs>;
-  sendingCode: boolean;
-  setSendingCode: (sendingCode: boolean) => void;
+  sendCode: () => void;
+  loading: boolean;
+  error: string;
 }
 
 export function VerificationTwo(props: VerificationTwoProps) {
-  const { toNextStep, form, sendingCode, setSendingCode } = props;
-
-  const [passedRecaptcha, setPassedRecaptcha] = useState(false);
-  // const [sendingCode, setSendingCode] = useState(false);
-  const notifications = useNotifications();
-
-  const auth = getAuth(app);
-  auth.useDeviceLanguage();
-
-  const onSubmitLogin = useCallback(async () => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const appVerifier = (window as any).recaptchaVerifier as RecaptchaVerifier;
-
-    try {
-      setSendingCode(true);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      (window as any).confirmationResult = await signInWithPhoneNumber(
-        auth,
-        form.values.phoneNumber,
-        appVerifier
-      );
-      notifications.showNotification({
-        message: 'Verification Code Sent!',
-        color: 'teal',
-        icon: <i className="material-icons">done</i>,
-      });
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setSendingCode(false);
-    }
-  }, [auth, setSendingCode, notifications, form.values.phoneNumber]);
-
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    (window as any).recaptchaVerifier = new RecaptchaVerifier(
-      'recaptcha-container',
-      {
-        size: 'invisible',
-        callback: () => {
-          setPassedRecaptcha(true);
-          onSubmitLogin();
-        },
-      },
-      auth
-    );
-  }, [auth, onSubmitLogin, setPassedRecaptcha]);
+  const { form, loading, sendCode, error } = props;
 
   return (
     <div className="flex flex-col justify-center items-stretch pt-8">
@@ -89,21 +36,17 @@ export function VerificationTwo(props: VerificationTwoProps) {
         />
       </div>
 
-      <div
-        id="recaptcha-container"
-        className="flex flex-row justify-center items-stretch"
-      />
+      {error && <ErrorAlert error={error} />}
 
       <div className="flex flex-col justify-center items-stretch pt-8">
         <Button
-          onClick={passedRecaptcha ? toNextStep : onSubmitLogin}
+          onClick={sendCode}
           size="md"
-          disabled={sendingCode}
-          loading={sendingCode}
+          disabled={loading}
+          loading={loading}
         >
-          {passedRecaptcha && 'NEXT'}
-          {!passedRecaptcha && !sendingCode && 'SEND CODE'}
-          {!passedRecaptcha && sendingCode && 'SENDING CODE...'}
+          {!loading && 'SEND CODE'}
+          {loading && 'PROCESSING...'}
         </Button>
       </div>
     </div>

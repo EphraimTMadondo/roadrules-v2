@@ -5,17 +5,17 @@ import { ErrorAlert } from './error-alert';
 
 interface VerificationThreeProps {
   form: UseForm<Inputs>;
-  loading: boolean;
+  verifying: boolean;
   error: string;
   toSendCode: () => void;
 }
 
 export function VerificationThree(props: VerificationThreeProps) {
-  const { form, loading, error, toSendCode } = props;
+  const { form, verifying, error, toSendCode } = props;
 
   return (
     <div className="flex flex-col justify-center items-stretch pt-8 relative">
-      <LoadingOverlay visible={loading} />
+      <LoadingOverlay visible={verifying} />
 
       <div className="flex flex-col justify-center items-center">
         <span className="font-bold text-lg text-center py-2">
@@ -25,6 +25,8 @@ export function VerificationThree(props: VerificationThreeProps) {
 
       <span className="text-sm text-center py-2">
         Please enter the code you received to verify your credentials.
+        {/* <br />
+        This may take a few minutes. */}
       </span>
 
       {error && <ErrorAlert error={error} />}
