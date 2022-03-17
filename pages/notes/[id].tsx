@@ -1,6 +1,6 @@
 import { Alert, Button } from '@mantine/core';
 import { Note } from '@prisma/client';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
@@ -9,7 +9,7 @@ import { Toolbar } from '../../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../../lib/errors';
 import { getNotes } from '../../lib/notes';
 import {
-  createISRPageProps,
+  createSSRPageProps,
   getDataFromPageProps,
   PageProps,
 } from '../../lib/props';
@@ -21,7 +21,7 @@ interface Data {
   loadingError?: string;
 }
 
-export default function NotePage(props: PageProps) {
+export default function EditNotePage(props: PageProps) {
   const data = getDataFromPageProps<Data>(props, {
     note: null,
     previousNoteId: 0,
@@ -98,11 +98,11 @@ export default function NotePage(props: PageProps) {
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   try {
     const id = Number(params?.id || 0);
 
-    const notes = await getNotes();
+    const notes = (await getNotes()).sort((a, b) => a.refNumber - b.refNumber);
 
     const note = notes.find((el) => el.id === id);
 
@@ -121,14 +121,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       return [previous, next];
     })();
 
-    return createISRPageProps<Data>({
+    return createSSRPageProps<Data>({
       note: note || null,
       previousNoteId,
       nextNoteId,
     });
   } catch (error: unknown) {
     const { message } = error as { message: string };
-    return createISRPageProps<Data>({
+    return createSSRPageProps<Data>({
       note: null,
       previousNoteId: 0,
       nextNoteId: 0,
@@ -137,18 +137,3 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     });
   }
 };
-
-export async function getStaticPaths() {
-  const notes = await getNotes();
-
-  const paths = notes.map((note) => ({
-    params: {
-      id: note.id.toString(),
-    },
-  }));
-
-  return {
-    paths,
-    fallback: 'blocking',
-  };
-}

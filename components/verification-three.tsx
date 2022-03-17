@@ -8,10 +8,11 @@ interface VerificationThreeProps {
   loading: boolean;
   error: string;
   toSendCode: () => void;
+  sendCode: () => void;
 }
 
 export function VerificationThree(props: VerificationThreeProps) {
-  const { form, loading, error, toSendCode } = props;
+  const { form, loading, error, toSendCode, sendCode } = props;
 
   return (
     <div className="flex flex-col justify-center items-stretch pt-8 relative">
@@ -33,6 +34,9 @@ export function VerificationThree(props: VerificationThreeProps) {
         <NumberInput
           hideControls
           label="Code"
+          inputMode="numeric"
+          autoComplete="one-time-code"
+          pattern="\d{6}"
           {...form.getInputProps('code')}
           required
         />
@@ -48,7 +52,7 @@ export function VerificationThree(props: VerificationThreeProps) {
         <Button
           variant="light"
           leftIcon={<i className="material-icons">mail</i>}
-          onClick={toSendCode}
+          onClick={sendCode}
         >
           Resend Code
         </Button>

@@ -1,7 +1,7 @@
 import { LoadingOverlay, Stepper } from '@mantine/core';
 import { useForm } from '@mantine/hooks';
 import { useNotifications } from '@mantine/notifications';
-import { DefaultErrorShape, Maybe } from '@trpc/server';
+import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { ZodError } from 'zod';
 import { ErrorAlert } from '../components/error-alert';
@@ -11,8 +11,8 @@ import { VerificationThree } from '../components/verification-three';
 import { VerificationTwo } from '../components/verification-two';
 import { capitalize } from '../lib/strings';
 import {
-  AuthCodeSchema,
   AuthCode,
+  AuthCodeSchema,
   CreateUser,
   CreateUserSchema,
   SendCode,
@@ -28,6 +28,8 @@ export default function Verification() {
   const [loading, setLoading] = useState<boolean>(false);
   const [sendCodeError, setSendCodeError] = useState<string>('');
   const [registrationError, setRegistrationError] = useState<string>('');
+
+  const router = useRouter();
 
   const notifications = useNotifications();
 
@@ -120,6 +122,7 @@ export default function Verification() {
         color: 'teal',
         icon: <i className="material-icons">done</i>,
       });
+      router.push('/main-menu');
     },
     onSettled: () => {
       setLoading(false);
@@ -295,6 +298,7 @@ export default function Verification() {
               loading={loading}
               error={registrationError}
               toSendCode={toSendCode}
+              sendCode={sendCode}
             />
           </Stepper.Step>
         </Stepper>

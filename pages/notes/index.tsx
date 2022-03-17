@@ -1,14 +1,15 @@
 import { Button } from '@mantine/core';
 import { Note } from '@prisma/client';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
-import { FALLBACK_ERROR_MESSAGE } from '../../lib/errors';
 import Layout from '../../components/layout';
 import { Toolbar } from '../../components/toolbar';
+import { FALLBACK_ERROR_MESSAGE } from '../../lib/errors';
 import { getNotes } from '../../lib/notes';
 import {
-  createISRPageProps,
+  createSSRPageProps,
   getDataFromPageProps,
   PageProps,
 } from '../../lib/props';
@@ -57,18 +58,18 @@ export default function Notes(props: PageProps) {
   );
 }
 
-export async function getStaticProps() {
+export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const notes = await getNotes();
+    const notes = (await getNotes()).sort((a, b) => a.refNumber - b.refNumber);
 
-    return createISRPageProps<Data>({
+    return createSSRPageProps<Data>({
       notes,
     });
   } catch ({ message }) {
-    return createISRPageProps<Data>({
+    return createSSRPageProps<Data>({
       notes: [],
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       loadingError: (message as string) || FALLBACK_ERROR_MESSAGE,
     });
   }
-}
+};
