@@ -8,6 +8,7 @@ interface VerificationOneProps {
   defaultCountryId: number | undefined;
   provinceOptions: SelectItem[];
   form: UseForm<Inputs>;
+  onCountryChange: (event: any) => void;
 }
 
 export function VerificationOne(props: VerificationOneProps) {
@@ -17,6 +18,7 @@ export function VerificationOne(props: VerificationOneProps) {
     defaultCountryId,
     provinceOptions,
     form,
+    onCountryChange,
   } = props;
 
   return (
@@ -62,6 +64,7 @@ export function VerificationOne(props: VerificationOneProps) {
           data={countryOptions}
           defaultValue={defaultCountryId?.toString()}
           {...form.getInputProps('countryId')}
+          onChange={onCountryChange}
           required
         />
       </div>

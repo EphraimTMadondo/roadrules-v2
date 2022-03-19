@@ -23,7 +23,33 @@ import { customErrorMap, zodErrorsToString } from '../lib/zod-utils';
 import { trpc } from '../utils/trpc';
 
 export default function Verification() {
+  const {
+    isLoading,
+    error,
+    isError,
+    data: fetchedData,
+  } = trpc.useQuery(['province.list']);
+
+  const countries = fetchedData?.countries || [];
+
   const [active, setActive] = useState(0);
+  const [countryId, setCountryId] = useState<number | undefined>(
+    countries[0]?.id || undefined
+  );
+
+  const countryOptions = countries.map((country) => ({
+    value: country.id.toString(),
+    label: country.country,
+  }));
+
+  const provinceOptions = countryId
+    ? (
+        countries.find((country) => country.id === countryId)?.provinces || []
+      ).map((province) => ({
+        value: province.id.toString(),
+        label: province.province,
+      }))
+    : [];
 
   const [loading, setLoading] = useState<boolean>(false);
   const [sendCodeError, setSendCodeError] = useState<string>('');
@@ -168,30 +194,15 @@ export default function Verification() {
     },
   });
 
-  const {
-    isLoading,
-    error,
-    isError,
-    data: fetchedData,
-  } = trpc.useQuery(['province.list']);
-
-  const countries = fetchedData?.countries || [];
-
-  const countryOptions = countries.map((country) => ({
-    value: country.id.toString(),
-    label: country.country,
-  }));
-
-  const countryId = form.values.countryId || countries[0]?.id || undefined;
-
-  const provinceOptions = countryId
-    ? (
-        countries.find((country) => country.id === countryId)?.provinces || []
-      ).map((province) => ({
-        value: province.id.toString(),
-        label: province.province,
-      }))
-    : [];
+  const onCountryChange = useCallback(
+    (value: string | null) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const newCountryId = Number(value || '0');
+      form.setFieldValue('countryId', newCountryId);
+      setCountryId(newCountryId);
+    },
+    [setCountryId, form]
+  );
 
   const nextStep = useCallback(
     () => setActive((current) => (current < 3 ? current + 1 : current)),
@@ -274,6 +285,7 @@ export default function Verification() {
               provinceOptions={provinceOptions}
               countryOptions={countryOptions}
               defaultCountryId={countryId}
+              onCountryChange={onCountryChange}
             />
           </Stepper.Step>
           <Stepper.Step
