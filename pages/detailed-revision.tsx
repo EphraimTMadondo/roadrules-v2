@@ -1,7 +1,7 @@
 import { Alert, Button } from '@mantine/core';
 import { Question, Response } from '@prisma/client';
 import { GetServerSideProps } from 'next';
-import Link from 'next/link';
+// import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import DetailedResponse from '../components/detailed-response';
@@ -68,7 +68,11 @@ export default function DetailedRevision(props: PageProps) {
 
   return (
     <Layout title={title}>
-      <Toolbar title={title} leftIcon="arrow_back" leftIconAction={back} />
+      <Toolbar
+        title={title}
+        // leftIcon="arrow_back"
+        // leftIconAction={back}
+      />
 
       {loadingError && (
         <div className="flex flex-col justify-start items-stretch pt-4">
@@ -92,14 +96,17 @@ export default function DetailedRevision(props: PageProps) {
             correct={response.correct}
           />
           <div className="flex flex-col justify-center items-stretch pt-4">
-            {response.responseNumber === responses.length && (
-              <Link passHref href="/progress">
-                <Button variant="light" size="md">
-                  BACK
-                </Button>
-              </Link>
+            {response.responseNumber === initialResponses.length && (
+              <Button onClick={back} variant="light" size="md">
+                BACK
+              </Button>
+              // <Link passHref href="/progress">
+              //   <Button variant="light" size="md">
+              //     BACK
+              //   </Button>
+              // </Link>
             )}
-            {response.responseNumber !== responses.length && (
+            {response.responseNumber !== initialResponses.length && (
               <Button onClick={nextOnClick} size="md">
                 NEXT
               </Button>

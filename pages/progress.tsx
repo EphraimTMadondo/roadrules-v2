@@ -2,8 +2,8 @@ import { Alert, Button, useMantineTheme } from '@mantine/core';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useCallback } from 'react';
+// import { useRouter } from 'next/router';
+// import { useCallback } from 'react';
 import Layout from '../components/layout';
 import { Toolbar } from '../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../lib/errors';
@@ -38,13 +38,13 @@ export default function Progress(props: PageProps) {
 
   const { numCorrect, numWrong, loadingError } = data;
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const theme = useMantineTheme();
 
-  const back = useCallback(() => {
-    router.push('/driving-lessons-menu');
-  }, [router]);
+  // const back = useCallback(() => {
+  //   router.push('/driving-lessons-menu');
+  // }, [router]);
 
   const title = 'Progress';
 
@@ -57,7 +57,11 @@ export default function Progress(props: PageProps) {
 
   return (
     <Layout title={title}>
-      <Toolbar title={title} leftIcon="arrow_back" leftIconAction={back} />
+      <Toolbar
+        title={title}
+        // leftIcon="arrow_back"
+        // leftIconAction={back}
+      />
 
       {loadingError && (
         <div className="flex flex-col justify-start items-stretch pt-4">

@@ -1,23 +1,27 @@
 import { Button } from '@mantine/core';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useCallback } from 'react';
+// import { useRouter } from 'next/router';
+// import { useCallback } from 'react';
 import Layout from '../components/layout';
 import { Toolbar } from '../components/toolbar';
 
 export default function DrivingLessonsMenu() {
-  const router = useRouter();
+  // const router = useRouter();
 
-  const back = useCallback(() => {
-    router.push('/main-menu');
-  }, [router]);
+  // const back = useCallback(() => {
+  //   router.push('/main-menu');
+  // }, [router]);
 
   const title = 'Driving Lessons';
 
   return (
     <Layout title={title}>
-      <Toolbar title={title} leftIcon="arrow_back" leftIconAction={back} />
+      <Toolbar
+        title={title}
+        // leftIcon="arrow_back"
+        // leftIconAction={back}
+      />
 
       <div className="grow py-2" />
 

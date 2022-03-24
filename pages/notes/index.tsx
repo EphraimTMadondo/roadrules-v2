@@ -1,9 +1,16 @@
-import { Button } from '@mantine/core';
+import {
+  UnstyledButton,
+  Group,
+  Avatar,
+  Text,
+  Button,
+  useMantineTheme,
+} from '@mantine/core';
 import { Note } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useCallback } from 'react';
+// import { useRouter } from 'next/router';
+// import { useCallback } from 'react';
 import Layout from '../../components/layout';
 import { Toolbar } from '../../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../../lib/errors';
@@ -27,29 +34,51 @@ export default function Notes(props: PageProps) {
 
   const { notes } = data;
 
-  const router = useRouter();
+  const theme = useMantineTheme();
 
-  const back = useCallback(
-    () => router.push('/driving-lessons-menu'),
-    [router]
-  );
+  // const router = useRouter();
+
+  // const back = useCallback(
+  //   () => router.push('/driving-lessons-menu'),
+  //   [router]
+  // );
 
   const title = 'Notes';
 
   return (
     <Layout title={title}>
-      <Toolbar title={title} leftIcon="arrow_back" leftIconAction={back} />
+      <Toolbar
+        title={title}
+        // leftIcon="arrow_back"
+        // leftIconAction={back}
+      />
 
       <div className="flex flex-col justify-start items-stretch pt-8">
         {notes.map((note) => (
           <div
             key={note.id}
-            className="flex flex-col justify-start items-stretch py-3"
+            className="flex flex-col justify-start items-stretch py-6"
           >
             <Link passHref href={`/notes/${note.id}`}>
-              <Button size="md" variant="light">
+              <UnstyledButton
+                className="rounded-md"
+                style={{ backgroundColor: theme.colors.teal[0] }}
+              >
+                <div className="flex flex-row justify-center items-center p-4">
+                  <Text
+                    className="text-center font-bold"
+                    style={{ color: theme.colors.teal[9] }}
+                  >
+                    {note.title}
+                  </Text>
+                </div>
+                {/* <Group>
+                  
+                </Group> */}
+              </UnstyledButton>
+              {/* <Button size="md" variant="light">
                 {note.title}
-              </Button>
+              </Button> */}
             </Link>
           </div>
         ))}

@@ -2,17 +2,17 @@ import { Button } from '@mantine/core';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useCallback } from 'react';
+// import { useRouter } from 'next/router';
+// import { useCallback } from 'react';
 import Layout from '../components/layout';
 import { Toolbar } from '../components/toolbar';
 
 export default function MainMenu() {
-  const router = useRouter();
+  // const router = useRouter();
 
-  const back = useCallback(() => {
-    router.back();
-  }, [router]);
+  // const back = useCallback(() => {
+  //   router.back();
+  // }, [router]);
 
   const title = 'Road Rules';
 
@@ -22,7 +22,11 @@ export default function MainMenu() {
         <title>{title}</title>
       </Head>
 
-      <Toolbar title={title} leftIcon="arrow_back" leftIconAction={back} />
+      <Toolbar
+        title={title}
+        // leftIcon="arrow_back"
+        // leftIconAction={back}
+      />
 
       <div className="grow py-2" />
 

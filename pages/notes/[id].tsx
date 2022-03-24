@@ -2,8 +2,8 @@ import { Alert, Button } from '@mantine/core';
 import { Note } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useCallback } from 'react';
+// import { useRouter } from 'next/router';
+// import { useCallback } from 'react';
 import Layout from '../../components/layout';
 import { Toolbar } from '../../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../../lib/errors';
@@ -29,32 +29,32 @@ export default function EditNotePage(props: PageProps) {
     loadingError: FALLBACK_ERROR_MESSAGE,
   });
 
-  const { note, previousNoteId, nextNoteId } = data;
+  const { note, nextNoteId } = data;
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const title = 'Note';
 
-  const back = useCallback(() => {
-    if (previousNoteId) {
-      return router.push(`/notes/${previousNoteId}`);
-    }
-    return router.push('/notes');
-  }, [previousNoteId, router]);
+  // const back = useCallback(() => {
+  //   if (previousNoteId) {
+  //     return router.push(`/notes/${previousNoteId}`);
+  //   }
+  //   return router.push('/notes');
+  // }, [previousNoteId, router]);
 
-  const forward = useCallback(
-    () => router.push(`/notes/${nextNoteId}`),
-    [router, nextNoteId]
-  );
+  // const forward = useCallback(
+  //   () => router.push(`/notes/${nextNoteId}`),
+  //   [router, nextNoteId]
+  // );
 
   return (
     <Layout title={title}>
       <Toolbar
         title={note?.title || 'Note'}
-        leftIcon="arrow_back"
-        leftIconAction={back}
-        rightIcon={nextNoteId ? 'arrow_forward' : undefined}
-        rightIconAction={nextNoteId ? forward : undefined}
+        // leftIcon="arrow_back"
+        // leftIconAction={back}
+        // rightIcon={nextNoteId ? 'arrow_forward' : undefined}
+        // rightIconAction={nextNoteId ? forward : undefined}
       />
 
       {note && (

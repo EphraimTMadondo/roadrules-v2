@@ -122,11 +122,11 @@ export default function Verification() {
       toSendCode();
     },
     onSuccess: () => {
-      notifications.showNotification({
-        message: 'Code Sent!',
-        color: 'teal',
-        icon: <i className="material-icons">done</i>,
-      });
+      // notifications.showNotification({
+      //   message: 'Code Sent!',
+      //   color: 'teal',
+      //   icon: <i className="material-icons">done</i>,
+      // });
       toAuthCode();
     },
     onSettled: () => {
@@ -143,11 +143,11 @@ export default function Verification() {
       setRegistrationError(capitalize(message));
     },
     onSuccess: () => {
-      notifications.showNotification({
-        message: 'Registration Complete!',
-        color: 'teal',
-        icon: <i className="material-icons">done</i>,
-      });
+      // notifications.showNotification({
+      //   message: 'Registration Complete!',
+      //   color: 'teal',
+      //   icon: <i className="material-icons">done</i>,
+      // });
       router.push('/main-menu');
     },
     onSettled: () => {
@@ -165,11 +165,11 @@ export default function Verification() {
       toAuthCode();
     },
     onSuccess: () => {
-      notifications.showNotification({
-        message: 'Code verified!',
-        color: 'teal',
-        icon: <i className="material-icons">done</i>,
-      });
+      // notifications.showNotification({
+      //   message: 'Code verified!',
+      //   color: 'teal',
+      //   icon: <i className="material-icons">done</i>,
+      // });
       const createUserDetails: CreateUser = {
         firstName: form.values.firstName,
         lastName: form.values.lastName,

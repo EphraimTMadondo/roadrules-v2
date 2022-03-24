@@ -1,8 +1,8 @@
 import { Alert } from '@mantine/core';
 import { Question, Response } from '@prisma/client';
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
-import { useCallback } from 'react';
+// import { useRouter } from 'next/router';
+// import { useCallback } from 'react';
 import Layout from '../components/layout';
 import { ResponseComponent } from '../components/response';
 import { Toolbar } from '../components/toolbar';
@@ -31,17 +31,21 @@ export default function QuickRevision(props: PageProps) {
 
   const { responses, loadingError } = data;
 
-  const router = useRouter();
+  // const router = useRouter();
 
-  const back = useCallback(() => {
-    router.back();
-  }, [router]);
+  // const back = useCallback(() => {
+  //   router.back();
+  // }, [router]);
 
   const title = 'Quick Revision';
 
   return (
     <Layout title={title}>
-      <Toolbar title={title} leftIcon="arrow_back" leftIconAction={back} />
+      <Toolbar
+        title={title}
+        // leftIcon="arrow_back"
+        // leftIconAction={back}
+      />
 
       {loadingError && (
         <div className="flex flex-col justify-start items-stretch pt-4">

@@ -15,6 +15,7 @@ import {
 } from '../lib/props';
 import { getQuestions } from '../lib/questions';
 import { OptionId } from '../lib/questions-client-logic';
+import { CRUNCH_TIME, TEST_DURATION } from '../lib/tests';
 import { trpc } from '../utils/trpc';
 
 interface Data {
@@ -37,7 +38,6 @@ export default function TimedTest(props: PageProps) {
   const title = 'Test';
 
   const router = useRouter();
-  const notifications = useNotifications();
 
   const [questions, setQuestions] = useState<CustomQuestion[]>(
     initialQuestions.map((initialQuestion) => ({
@@ -48,7 +48,7 @@ export default function TimedTest(props: PageProps) {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const [secondsLeft, setSecondsLeft] = useState<number>(480);
+  const [secondsLeft, setSecondsLeft] = useState<number>(TEST_DURATION);
 
   useEffect(() => {
     let timer: any;
@@ -73,13 +73,7 @@ export default function TimedTest(props: PageProps) {
     onError: ({ message }: { message: string }) => {
       setError(message || '');
     },
-    onSuccess: () => {
-      notifications.showNotification({
-        message: 'Response recorded!',
-        color: 'teal',
-        icon: <i className="material-icons">done</i>,
-      });
-    },
+    onSuccess: () => {},
     onSettled: () => {
       setIsLoading(false);
     },
@@ -138,7 +132,7 @@ export default function TimedTest(props: PageProps) {
           error={error}
           timed
           secondsLeft={secondsLeft}
-          crunchTime={secondsLeft < 60}
+          crunchTime={secondsLeft < CRUNCH_TIME}
         />
       )}
     </>

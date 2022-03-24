@@ -35,7 +35,6 @@ export default function Questions(props: PageProps) {
   const { initialQuestions, loadingError } = data;
 
   const router = useRouter();
-  const notifications = useNotifications();
 
   const [questions, setQuestions] = useState<CustomQuestion[]>(
     initialQuestions.map((initialQuestion) => ({
@@ -55,13 +54,7 @@ export default function Questions(props: PageProps) {
     onError: ({ message }: { message: string }) => {
       setError(message || '');
     },
-    onSuccess: () => {
-      notifications.showNotification({
-        message: 'Response recorded!',
-        color: 'teal',
-        icon: <i className="material-icons">done</i>,
-      });
-    },
+    onSuccess: () => {},
     onSettled: () => {
       setIsLoading(false);
     },
