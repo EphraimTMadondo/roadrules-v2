@@ -1,8 +1,7 @@
-import { useNotifications } from '@mantine/notifications';
 import { Question } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { ErrorAlert } from '../components/error-alert';
 import Layout from '../components/layout';
 import QuestionComponent from '../components/question';
@@ -15,7 +14,7 @@ import {
 } from '../lib/props';
 import { getQuestions } from '../lib/questions';
 import { OptionId } from '../lib/questions-client-logic';
-import { CRUNCH_TIME, TEST_DURATION } from '../lib/tests';
+// import { CRUNCH_TIME, TEST_DURATION } from '../lib/tests';
 import { trpc } from '../utils/trpc';
 
 interface Data {
@@ -48,22 +47,26 @@ export default function TimedTest(props: PageProps) {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const [secondsLeft, setSecondsLeft] = useState<number>(TEST_DURATION);
+  // const [secondsLeft, setSecondsLeft] = useState<number>(TEST_DURATION);
 
-  useEffect(() => {
-    let timer: any;
+  // useEffect(() => {
+  //   let timer: any;
 
-    if (secondsLeft === 0) {
-      router.push('/progress');
-    } else {
-      timer = setTimeout(() => {
-        setSecondsLeft((prevState) => prevState - 1);
-      }, 1000);
-    }
+  //   if (secondsLeft === 0) {
+  //     router.push('/progress');
+  //   } else {
+  //     timer = setTimeout(() => {
+  //       setSecondsLeft((prevState) => prevState - 1);
+  //     }, 1000);
+  //   }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return () => clearTimeout(timer);
-  }, [router, secondsLeft]);
+  //   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  //   return () => clearTimeout(timer);
+  // }, [router, secondsLeft]);
+
+  const onTimerRunOut = useCallback(() => {
+    router.push('/progress');
+  }, [router]);
 
   const mutation = trpc.useMutation('response.create', {
     onMutate: () => {
@@ -130,9 +133,10 @@ export default function TimedTest(props: PageProps) {
           nextQuestion={nextQuestion}
           isLoading={isLoading}
           error={error}
+          onTimerRunOut={onTimerRunOut}
           timed
-          secondsLeft={secondsLeft}
-          crunchTime={secondsLeft < CRUNCH_TIME}
+          // secondsLeft={secondsLeft}
+          // crunchTime={secondsLeft < CRUNCH_TIME}
         />
       )}
     </>

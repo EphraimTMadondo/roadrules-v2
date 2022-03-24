@@ -64,7 +64,14 @@ export function Toolbar(props: ToolbarProps) {
           <i className="material-icons font-semibold">{rightIcon}</i>
         </ActionIcon>
       )}
-      {RightElement && <RightElement />}
+      {RightElement && (
+        <div
+          className="flex flex-col justify-center items-stretch"
+          style={{ flex: '0 0 auto', overflow: 'hidden' }}
+        >
+          <RightElement />
+        </div>
+      )}
     </div>
   );
 }

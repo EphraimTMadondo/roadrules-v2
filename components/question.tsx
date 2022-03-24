@@ -11,8 +11,10 @@ import { ErrorAlert } from './error-alert';
 import { QuestionTitle } from './question-title';
 import { SelectOptionContainer } from './select-option-container';
 import { StandardImage } from './standard-image';
-import { Timer } from './timer';
+// import { Timer } from './timer';
 import { WrongAnswerAlert } from './wrong-answer-alert';
+import { TestTimer } from './test-timer';
+import { ToolbarForTimer } from './toolbar-for-timer';
 
 interface QuestionComponentProps {
   title: string;
@@ -24,14 +26,16 @@ interface QuestionComponentProps {
   isLoading?: boolean;
   error?: string;
   timed?: boolean;
-  secondsLeft?: number;
-  crunchTime?: boolean;
+  // secondsLeft?: number;
+  // crunchTime?: boolean;
+  onTimerRunOut: () => void;
 }
 
 export default function QuestionComponent(props: QuestionComponentProps) {
   const { title, question, questionNumber, numQuestions } = props;
   const { processResponse, nextQuestion, isLoading } = props;
-  const { error, timed, secondsLeft, crunchTime } = props;
+  // const { error, timed, secondsLeft, crunchTime } = props;
+  const { error, timed, onTimerRunOut } = props;
 
   const [selectedOption, setSelectedOption] = useState<OptionId | undefined>(
     undefined
@@ -58,16 +62,20 @@ export default function QuestionComponent(props: QuestionComponentProps) {
 
   const RightElement = timed
     ? () => (
-        <Timer
-          secondsLeft={secondsLeft || 0}
-          crunchTime={crunchTime || false}
-        />
+        <TestTimer onTimerRunOut={onTimerRunOut} />
+        // <Timer
+        //   secondsLeft={secondsLeft || 0}
+        //   crunchTime={crunchTime || false}
+        // />
       )
     : undefined;
 
   return (
     <Layout className="relative" title={title}>
-      <Toolbar title={title} RightElement={RightElement} />
+      {RightElement && (
+        <ToolbarForTimer title={title} RightElement={RightElement} />
+      )}
+      {!RightElement && <Toolbar title={title} RightElement={RightElement} />}
 
       <LoadingOverlay visible={isLoading || false} transitionDuration={500} />
 
