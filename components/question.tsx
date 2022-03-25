@@ -10,9 +10,7 @@ import { QuestionTitle } from './question-title';
 import { SelectOption } from './select-option';
 import { SelectOptionContainer } from './select-option-container';
 import { StandardImage } from './standard-image';
-import { TestTimer } from './test-timer';
 import { Toolbar } from './toolbar';
-import { ToolbarForTimer } from './toolbar-for-timer';
 import { WrongAnswerPopup } from './wrong-answer-popup';
 
 interface QuestionComponentProps {
@@ -24,17 +22,12 @@ interface QuestionComponentProps {
   nextQuestion: (question: Question) => void;
   isLoading?: boolean;
   error?: string;
-  timed?: boolean;
-  // secondsLeft?: number;
-  // crunchTime?: boolean;
-  onTimerRunOut: () => void;
 }
 
 export default function QuestionComponent(props: QuestionComponentProps) {
   const { title, question, questionNumber, numQuestions } = props;
-  const { processResponse, nextQuestion, isLoading } = props;
-  // const { error, timed, secondsLeft, crunchTime } = props;
-  const { error, timed, onTimerRunOut } = props;
+  const { processResponse, nextQuestion } = props;
+  const { error, isLoading } = props;
 
   const [selectedOption, setSelectedOption] = useState<OptionId | undefined>(
     undefined
@@ -59,16 +52,9 @@ export default function QuestionComponent(props: QuestionComponentProps) {
     [question, nextQuestion]
   );
 
-  const RightElement = timed
-    ? () => <TestTimer onTimerRunOut={onTimerRunOut} />
-    : undefined;
-
   return (
     <Layout className="relative" title={title}>
-      {RightElement && (
-        <ToolbarForTimer title={title} RightElement={RightElement} />
-      )}
-      {!RightElement && <Toolbar title={title} RightElement={RightElement} />}
+      <Toolbar title={title} RightElement={undefined} />
 
       <LoadingOverlay visible={isLoading || false} transitionDuration={500} />
 
@@ -122,7 +108,6 @@ export default function QuestionComponent(props: QuestionComponentProps) {
         </>
       )}
 
-      {/* {submitted && correct && <CorrectAnswerAlert />} */}
       {submitted && correct && (
         <CorrectAnswerPopup
           buttonCaption={
@@ -131,10 +116,6 @@ export default function QuestionComponent(props: QuestionComponentProps) {
           buttonOnClick={nextAction}
         />
       )}
-
-      {/* {submitted && !correct && (
-        <WrongAnswerAlert question={question} correct />
-      )} */}
 
       {submitted && !correct && (
         <WrongAnswerPopup

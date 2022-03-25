@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { ErrorAlert } from '../components/error-alert';
 import Layout from '../components/layout';
-import QuestionComponent from '../components/question';
+import TimedQuestion from '../components/timed-question';
 import { Toolbar } from '../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../lib/errors';
 import {
@@ -14,7 +14,6 @@ import {
 } from '../lib/props';
 import { getQuestions } from '../lib/questions';
 import { OptionId } from '../lib/questions-client-logic';
-// import { CRUNCH_TIME, TEST_DURATION } from '../lib/tests';
 import { trpc } from '../utils/trpc';
 
 interface Data {
@@ -47,22 +46,6 @@ export default function TimedTest(props: PageProps) {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  // const [secondsLeft, setSecondsLeft] = useState<number>(TEST_DURATION);
-
-  // useEffect(() => {
-  //   let timer: any;
-
-  //   if (secondsLeft === 0) {
-  //     router.push('/progress');
-  //   } else {
-  //     timer = setTimeout(() => {
-  //       setSecondsLeft((prevState) => prevState - 1);
-  //     }, 1000);
-  //   }
-
-  //   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  //   return () => clearTimeout(timer);
-  // }, [router, secondsLeft]);
 
   const onTimerRunOut = useCallback(() => {
     router.push('/progress');
@@ -123,7 +106,7 @@ export default function TimedTest(props: PageProps) {
         </Layout>
       )}
       {question && (
-        <QuestionComponent
+        <TimedQuestion
           key={question.id}
           title={title}
           question={question}
@@ -134,9 +117,6 @@ export default function TimedTest(props: PageProps) {
           isLoading={isLoading}
           error={error}
           onTimerRunOut={onTimerRunOut}
-          timed
-          // secondsLeft={secondsLeft}
-          // crunchTime={secondsLeft < CRUNCH_TIME}
         />
       )}
     </>

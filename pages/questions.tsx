@@ -114,7 +114,6 @@ export default function Questions(props: PageProps) {
           nextQuestion={nextQuestion}
           isLoading={isLoading}
           error={error}
-          onTimerRunOut={() => {}}
         />
       )}
     </>
