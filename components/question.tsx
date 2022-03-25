@@ -2,19 +2,18 @@ import { Button, LoadingOverlay } from '@mantine/core';
 import { Question } from '@prisma/client';
 import Link from 'next/link';
 import { useCallback, useState } from 'react';
-import Layout from './layout';
-import { SelectOption } from './select-option';
-import { Toolbar } from './toolbar';
 import { OptionId } from '../lib/questions-client-logic';
-import { CorrectAnswerAlert } from './correct-answer-alert';
+import { CorrectAnswerPopup } from './correct-answer-popup';
 import { ErrorAlert } from './error-alert';
+import Layout from './layout';
 import { QuestionTitle } from './question-title';
+import { SelectOption } from './select-option';
 import { SelectOptionContainer } from './select-option-container';
 import { StandardImage } from './standard-image';
-// import { Timer } from './timer';
-import { WrongAnswerAlert } from './wrong-answer-alert';
 import { TestTimer } from './test-timer';
+import { Toolbar } from './toolbar';
 import { ToolbarForTimer } from './toolbar-for-timer';
+import { WrongAnswerPopup } from './wrong-answer-popup';
 
 interface QuestionComponentProps {
   title: string;
@@ -61,13 +60,7 @@ export default function QuestionComponent(props: QuestionComponentProps) {
   );
 
   const RightElement = timed
-    ? () => (
-        <TestTimer onTimerRunOut={onTimerRunOut} />
-        // <Timer
-        //   secondsLeft={secondsLeft || 0}
-        //   crunchTime={crunchTime || false}
-        // />
-      )
+    ? () => <TestTimer onTimerRunOut={onTimerRunOut} />
     : undefined;
 
   return (
@@ -129,10 +122,29 @@ export default function QuestionComponent(props: QuestionComponentProps) {
         </>
       )}
 
-      {submitted && correct && <CorrectAnswerAlert />}
+      {/* {submitted && correct && <CorrectAnswerAlert />} */}
+      {submitted && correct && (
+        <CorrectAnswerPopup
+          buttonCaption={
+            questionNumber === numQuestions ? 'VIEW PROGRESS' : 'NEXT'
+          }
+          buttonOnClick={nextAction}
+        />
+      )}
+
+      {/* {submitted && !correct && (
+        <WrongAnswerAlert question={question} correct />
+      )} */}
 
       {submitted && !correct && (
-        <WrongAnswerAlert question={question} correct />
+        <WrongAnswerPopup
+          question={question}
+          correct
+          buttonCaption={
+            questionNumber === numQuestions ? 'VIEW PROGRESS' : 'NEXT'
+          }
+          buttonOnClick={nextAction}
+        />
       )}
 
       {error && <ErrorAlert error={error} />}
