@@ -97,6 +97,8 @@ model QuestionType {
 model Response {
   id Int @id @default(autoincrement())
 
+  batchIdentifier String? @db.VarChar(200)
+
   question   Question @relation(fields: [questionId], references: [id])
   questionId Int
 

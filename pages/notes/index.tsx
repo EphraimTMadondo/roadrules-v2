@@ -1,16 +1,7 @@
-import {
-  UnstyledButton,
-  Group,
-  Avatar,
-  Text,
-  Button,
-  useMantineTheme,
-} from '@mantine/core';
+import { Text, UnstyledButton, useMantineTheme } from '@mantine/core';
 import { Note } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-// import { useRouter } from 'next/router';
-// import { useCallback } from 'react';
 import Layout from '../../components/layout';
 import { Toolbar } from '../../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../../lib/errors';
@@ -20,6 +11,8 @@ import {
   getDataFromPageProps,
   PageProps,
 } from '../../lib/props';
+import { withSessionSsr } from '../../lib/with-session';
+import { getCurrentUser } from '../api/trpc/[trpc]';
 
 interface Data {
   notes: Note[];
@@ -36,22 +29,11 @@ export default function Notes(props: PageProps) {
 
   const theme = useMantineTheme();
 
-  // const router = useRouter();
-
-  // const back = useCallback(
-  //   () => router.push('/driving-lessons-menu'),
-  //   [router]
-  // );
-
   const title = 'Notes';
 
   return (
     <Layout title={title}>
-      <Toolbar
-        title={title}
-        // leftIcon="arrow_back"
-        // leftIconAction={back}
-      />
+      <Toolbar title={title} />
 
       <div className="flex flex-col justify-start items-stretch pt-8">
         {notes.map((note) => (
@@ -72,13 +54,7 @@ export default function Notes(props: PageProps) {
                     {note.title}
                   </Text>
                 </div>
-                {/* <Group>
-                  
-                </Group> */}
               </UnstyledButton>
-              {/* <Button size="md" variant="light">
-                {note.title}
-              </Button> */}
             </Link>
           </div>
         ))}
@@ -87,18 +63,33 @@ export default function Notes(props: PageProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    const notes = (await getNotes()).sort((a, b) => a.refNumber - b.refNumber);
+export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
+  async ({ req }) => {
+    try {
+      const currentUser = getCurrentUser(req.session);
 
-    return createSSRPageProps<Data>({
-      notes,
-    });
-  } catch ({ message }) {
-    return createSSRPageProps<Data>({
-      notes: [],
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      loadingError: (message as string) || FALLBACK_ERROR_MESSAGE,
-    });
+      if (!currentUser) {
+        return {
+          redirect: {
+            destination: '/sign-in',
+            permanent: false,
+          },
+        };
+      }
+
+      const notes = (await getNotes()).sort(
+        (a, b) => a.refNumber - b.refNumber
+      );
+
+      return createSSRPageProps<Data>({
+        notes,
+      });
+    } catch ({ message }) {
+      return createSSRPageProps<Data>({
+        notes: [],
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        loadingError: (message as string) || FALLBACK_ERROR_MESSAGE,
+      });
+    }
   }
-};
+);

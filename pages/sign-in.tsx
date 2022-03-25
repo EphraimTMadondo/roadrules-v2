@@ -85,7 +85,7 @@ export default function SignInPage() {
   }
 
   return (
-    <Layout title="Road Rules - Sign In" className="relative">
+    <Layout title="Sign In" className="relative">
       <Toolbar title="Sign In" />
 
       <form

@@ -4,6 +4,7 @@ import { GetServerSideProps } from 'next';
 // import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
+import { withSessionSsr } from '../lib/with-session';
 import DetailedResponse from '../components/detailed-response';
 import Layout from '../components/layout';
 import { Toolbar } from '../components/toolbar';
@@ -14,7 +15,8 @@ import {
   PageProps,
 } from '../lib/props';
 import { OptionId } from '../lib/questions-client-logic';
-import { getLastWeekResponses } from '../lib/responses';
+import { getBatchResponses, getLastWeekResponses } from '../lib/responses';
+import { getCurrentUser } from './api/trpc/[trpc]';
 
 interface CustomResponse extends Response {
   question: Question;
@@ -68,11 +70,7 @@ export default function DetailedRevision(props: PageProps) {
 
   return (
     <Layout title={title}>
-      <Toolbar
-        title={title}
-        // leftIcon="arrow_back"
-        // leftIconAction={back}
-      />
+      <Toolbar title={title} />
 
       {loadingError && (
         <div className="flex flex-col justify-start items-stretch pt-4">
@@ -100,11 +98,6 @@ export default function DetailedRevision(props: PageProps) {
               <Button onClick={back} variant="light" size="md">
                 BACK
               </Button>
-              // <Link passHref href="/progress">
-              //   <Button variant="light" size="md">
-              //     BACK
-              //   </Button>
-              // </Link>
             )}
             {response.responseNumber !== initialResponses.length && (
               <Button onClick={nextOnClick} size="md">
@@ -118,21 +111,42 @@ export default function DetailedRevision(props: PageProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    const responses = await getLastWeekResponses(
-      new Date(),
-      'includeQuestions'
-    );
+export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
+  async ({ req, query }) => {
+    try {
+      const currentUser = getCurrentUser(req.session);
 
-    return createSSRPageProps<Data>({
-      responses,
-    });
-  } catch (error: any) {
-    return createSSRPageProps<Data>({
-      responses: [],
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      loadingError: (error?.message as string) || FALLBACK_ERROR_MESSAGE,
-    });
+      if (!currentUser) {
+        return {
+          redirect: {
+            destination: '/sign-in',
+            permanent: false,
+          },
+        };
+      }
+
+      const { batchIdentifier } = query;
+
+      const responses = await (async () => {
+        if (batchIdentifier) {
+          return getBatchResponses(batchIdentifier as string);
+        }
+        return getLastWeekResponses(
+          currentUser.id,
+          new Date(),
+          'includeQuestions'
+        );
+      })();
+
+      return createSSRPageProps<Data>({
+        responses,
+      });
+    } catch (error: any) {
+      return createSSRPageProps<Data>({
+        responses: [],
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        loadingError: (error?.message as string) || FALLBACK_ERROR_MESSAGE,
+      });
+    }
   }
-};
+);

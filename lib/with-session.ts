@@ -18,6 +18,10 @@ declare module 'iron-session' {
   }
 }
 
+export type Indexable = {
+  [key: string]: unknown;
+};
+
 const sessionOptions: IronSessionOptions = {
   password: process.env.SESSION_PASSWORD || '',
   cookieName: process.env.COOKIE_NAME || '',
@@ -30,10 +34,6 @@ const sessionOptions: IronSessionOptions = {
 export function withSessionRoute(handler: NextApiHandler) {
   return withIronSessionApiRoute(handler, sessionOptions);
 }
-
-type Indexable = {
-  [key: string]: unknown;
-};
 
 type Handler<P> = (
   context: GetServerSidePropsContext

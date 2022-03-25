@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay } from '@mantine/core';
+import { Button } from '@mantine/core';
 import { Question } from '@prisma/client';
 import Link from 'next/link';
 import { useCallback, useState } from 'react';
@@ -19,7 +19,6 @@ interface TimedQuestionProps {
   numQuestions: number;
   processResponse: (question: Question, selectedOption: OptionId) => any;
   nextQuestion: (question: Question) => void;
-  isLoading: boolean;
   error?: string;
   onTimerRunOut: () => void;
 }
@@ -27,7 +26,7 @@ interface TimedQuestionProps {
 export default function TimedQuestion(props: TimedQuestionProps) {
   const { title, question, questionNumber, numQuestions } = props;
   const { processResponse, nextQuestion } = props;
-  const { isLoading, error, onTimerRunOut } = props;
+  const { error, onTimerRunOut } = props;
 
   const [selectedOption, setSelectedOption] = useState<OptionId | undefined>(
     undefined
@@ -50,7 +49,6 @@ export default function TimedQuestion(props: TimedQuestionProps) {
         title={title}
         RightElement={<TestTimer onTimerRunOut={onTimerRunOut} />}
       />
-      <LoadingOverlay visible={isLoading} transitionDuration={500} />
 
       <QuestionTitle
         questionNumber={questionNumber}
@@ -106,7 +104,7 @@ export default function TimedQuestion(props: TimedQuestionProps) {
         </Button>
       </div>
       <div className="flex flex-col justify-center items-stretch pt-4">
-        <Link passHref href="/driving-lessons-menu">
+        <Link passHref href="/progress?lastBatch=lastBatch">
           <Button size="md" variant="light">
             QUIT
           </Button>

@@ -7,31 +7,30 @@ export const responseRoutes = createProtectedRouter().mutation('create', {
   input: z.object({
     questionId: z.number().int().min(1),
     choice: optionIdSchema,
+    batchIdentifier: z.string(),
   }),
-  resolve: async ({ input }) => {
-    const [user, question] = await Promise.all([
-      prisma.user.findFirst({
-        where: {
-          username: 'Allan',
-        },
-      }),
-      prisma.question.findUnique({
-        where: {
-          id: input.questionId,
-        },
-      }),
-    ]);
+  resolve: async ({ input, ctx }) => {
+    const question = await prisma.question.findUnique({
+      where: {
+        id: input.questionId,
+      },
+    });
 
-    if (!user) throw new Error('user not found');
+    const currentUser = ctx.req.session.user;
+
+    if (!currentUser) {
+      throw new Error('please sign in first');
+    }
 
     if (!question) throw new Error('question not found');
 
     await prisma.response.create({
       data: {
         questionId: input.questionId,
-        userId: user.id,
+        userId: currentUser.id,
         choice: input.choice,
         correct: input.choice === question.correctOption,
+        batchIdentifier: input.batchIdentifier,
         createdAt: new Date().getTime(),
         updatedAt: new Date().getTime(),
       },

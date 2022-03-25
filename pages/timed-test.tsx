@@ -7,6 +7,7 @@ import Layout from '../components/layout';
 import TimedQuestion from '../components/timed-question';
 import { Toolbar } from '../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../lib/errors';
+import { createKey } from '../lib/keys';
 import {
   createSSRPageProps,
   getDataFromPageProps,
@@ -14,10 +15,13 @@ import {
 } from '../lib/props';
 import { getQuestions } from '../lib/questions';
 import { OptionId } from '../lib/questions-client-logic';
+import { withSessionSsr } from '../lib/with-session';
 import { trpc } from '../utils/trpc';
+import { getCurrentUser } from './api/trpc/[trpc]';
 
 interface Data {
   initialQuestions: Question[];
+  batchIdentifier: string;
   loadingError?: string;
 }
 
@@ -28,10 +32,11 @@ interface CustomQuestion extends Question {
 export default function TimedTest(props: PageProps) {
   const data = getDataFromPageProps<Data>(props, {
     initialQuestions: [],
+    batchIdentifier: '',
     loadingError: FALLBACK_ERROR_MESSAGE,
   });
 
-  const { initialQuestions, loadingError } = data;
+  const { initialQuestions, batchIdentifier, loadingError } = data;
 
   const title = 'Test';
 
@@ -47,8 +52,10 @@ export default function TimedTest(props: PageProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
+  console.log(isLoading);
+
   const onTimerRunOut = useCallback(() => {
-    router.push('/progress');
+    router.push('/progress?lastBatch=lastBatch');
   }, [router]);
 
   const mutation = trpc.useMutation('response.create', {
@@ -72,9 +79,10 @@ export default function TimedTest(props: PageProps) {
       mutation.mutate({
         questionId: inputQuestion.id,
         choice: selectedOption,
+        batchIdentifier,
       });
     },
-    [mutation]
+    [mutation, batchIdentifier]
   );
 
   const nextQuestion = useCallback(
@@ -114,7 +122,6 @@ export default function TimedTest(props: PageProps) {
           numQuestions={initialQuestions.length}
           processResponse={processResponse}
           nextQuestion={nextQuestion}
-          isLoading={isLoading}
           error={error}
           onTimerRunOut={onTimerRunOut}
         />
@@ -125,18 +132,33 @@ export default function TimedTest(props: PageProps) {
 
 const LIMIT = 25;
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    const questions = await getQuestions(LIMIT);
+export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
+  async ({ req }) => {
+    try {
+      const currentUser = getCurrentUser(req.session);
 
-    return createSSRPageProps<Data>({
-      initialQuestions: questions,
-    });
-  } catch (error: any) {
-    return createSSRPageProps<Data>({
-      initialQuestions: [],
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      loadingError: (error?.message as string) || FALLBACK_ERROR_MESSAGE,
-    });
+      if (!currentUser) {
+        return {
+          redirect: {
+            destination: '/sign-in',
+            permanent: false,
+          },
+        };
+      }
+
+      const questions = await getQuestions(LIMIT);
+
+      return createSSRPageProps<Data>({
+        initialQuestions: questions,
+        batchIdentifier: createKey(),
+      });
+    } catch (error: any) {
+      return createSSRPageProps<Data>({
+        initialQuestions: [],
+        batchIdentifier: '',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        loadingError: (error?.message as string) || FALLBACK_ERROR_MESSAGE,
+      });
+    }
   }
-};
+);

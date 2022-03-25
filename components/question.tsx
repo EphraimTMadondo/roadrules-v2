@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay } from '@mantine/core';
+import { Button } from '@mantine/core';
 import { Question } from '@prisma/client';
 import Link from 'next/link';
 import { useCallback, useState } from 'react';
@@ -20,14 +20,13 @@ interface QuestionComponentProps {
   numQuestions: number;
   processResponse: (question: Question, selectedOption: OptionId) => any;
   nextQuestion: (question: Question) => void;
-  isLoading?: boolean;
   error?: string;
 }
 
 export default function QuestionComponent(props: QuestionComponentProps) {
   const { title, question, questionNumber, numQuestions } = props;
   const { processResponse, nextQuestion } = props;
-  const { error, isLoading } = props;
+  const { error } = props;
 
   const [selectedOption, setSelectedOption] = useState<OptionId | undefined>(
     undefined
@@ -55,8 +54,6 @@ export default function QuestionComponent(props: QuestionComponentProps) {
   return (
     <Layout className="relative" title={title}>
       <Toolbar title={title} RightElement={undefined} />
-
-      <LoadingOverlay visible={isLoading || false} transitionDuration={500} />
 
       <QuestionTitle
         questionNumber={questionNumber}
@@ -145,7 +142,7 @@ export default function QuestionComponent(props: QuestionComponentProps) {
         </div>
       )}
       <div className="flex flex-col justify-center items-stretch pt-4">
-        <Link passHref href="/driving-lessons-menu">
+        <Link passHref href="/progress?lastBatch=lastBatch">
           <Button size="md" variant="light">
             QUIT
           </Button>
