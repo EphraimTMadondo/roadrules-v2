@@ -51,7 +51,7 @@ export default function Home() {
       <div className="grow" />
 
       <div className="flex flex-col justify-center items-stretch pt-4">
-        <Link passHref href="/terms-and-conditions">
+        <Link passHref href="/sign-in">
           <Button role="button" size="md">
             NEXT
           </Button>

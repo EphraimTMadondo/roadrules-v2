@@ -6,4 +6,6 @@ export interface Inputs {
   countryId: number | undefined;
   phoneNumber: string;
   code: string;
+  pin: string;
+  reEnterPin: string;
 }

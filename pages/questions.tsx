@@ -1,4 +1,3 @@
-import { useNotifications } from '@mantine/notifications';
 import { Question } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';

@@ -1,5 +1,6 @@
-import { Button, TextInput } from '@mantine/core';
+import { Button, PasswordInput, TextInput } from '@mantine/core';
 import { UseForm } from '@mantine/hooks/lib/use-form/use-form';
+import { EyeCheck, EyeOff } from 'tabler-icons-react';
 import { Inputs } from '../lib/verification';
 import { ErrorAlert } from './error-alert';
 
@@ -32,6 +33,38 @@ export function VerificationTwo(props: VerificationTwoProps) {
           placeholder="+263 77 777 7777"
           label="Phone Number"
           {...form.getInputProps('phoneNumber')}
+          required
+        />
+      </div>
+
+      <div className="flex flex-col justify-center items-stretch py-4">
+        <PasswordInput
+          label="Pin (4 digits)"
+          placeholder="Enter your pin (4 digits)"
+          // eslint-disable-next-line react/no-unstable-nested-components
+          visibilityToggleIcon={({ reveal, size }) =>
+            reveal ? <EyeOff size={size} /> : <EyeCheck size={size} />
+          }
+          {...form.getInputProps('pin')}
+          inputMode="numeric"
+          autoComplete="pin"
+          pattern="\d{4}"
+          required
+        />
+      </div>
+
+      <div className="flex flex-col justify-center items-stretch py-4">
+        <PasswordInput
+          label="Re-enter Pin (4 digits)"
+          placeholder="Re-enter your pin (4 digits)"
+          // eslint-disable-next-line react/no-unstable-nested-components
+          visibilityToggleIcon={({ reveal, size }) =>
+            reveal ? <EyeOff size={size} /> : <EyeCheck size={size} />
+          }
+          {...form.getInputProps('reEnterPin')}
+          inputMode="numeric"
+          autoComplete="pin"
+          pattern="\d{4}"
           required
         />
       </div>

@@ -1,11 +1,11 @@
-import { z } from 'zod';
 import { prisma } from '../../lib/db';
+import { createHashedPassword, passwordMatchesHash } from '../../lib/hashing';
 import { authVerCode, sendVerCode } from '../../lib/twilio';
 import {
   AuthCodeSchema,
   CreateUserSchema,
-  PhoneNumberSchema,
   SendCodeSchema,
+  SignInSchema,
 } from '../../lib/user-schemas';
 import { BaseContext, createRouter } from '../create-router';
 
@@ -39,11 +39,15 @@ export const userRoutes = createRouter<BaseContext>()
         throw new Error('phone number already used');
       }
 
+      if (input.pin !== input.reEnterPin) {
+        throw new Error('please make sure the pins match');
+      }
+
       // record in db
       const newUser = await prisma.user.create({
         data: {
           username: '',
-          pin: '',
+          pin: await createHashedPassword(input.pin),
           kind: 'Learner',
           firstName: input.firstName,
           lastName: input.lastName,
@@ -67,9 +71,7 @@ export const userRoutes = createRouter<BaseContext>()
   })
   .mutation('signIn', {
     // check for validity
-    input: z.object({
-      phoneNumber: PhoneNumberSchema,
-    }),
+    input: SignInSchema,
     resolve: async ({ input, ctx }) => {
       const user = await prisma.user.findFirst({
         where: {
@@ -79,6 +81,12 @@ export const userRoutes = createRouter<BaseContext>()
 
       if (!user) {
         throw new Error('phone number not found');
+      }
+
+      const authorized = await passwordMatchesHash(input.pin, user.pin);
+
+      if (!authorized) {
+        throw new Error('incorrect credentials');
       }
 
       // create session and sign in

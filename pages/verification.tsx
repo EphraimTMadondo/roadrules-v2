@@ -1,6 +1,6 @@
-import { LoadingOverlay, Stepper } from '@mantine/core';
+import { Button, LoadingOverlay, Stepper } from '@mantine/core';
 import { useForm } from '@mantine/hooks';
-import { useNotifications } from '@mantine/notifications';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { ZodError } from 'zod';
@@ -57,8 +57,6 @@ export default function Verification() {
 
   const router = useRouter();
 
-  const notifications = useNotifications();
-
   const toDetails = useCallback(() => {
     setActive(0);
   }, [setActive]);
@@ -80,6 +78,8 @@ export default function Verification() {
       countryId: 0,
       phoneNumber: '',
       code: '',
+      pin: '',
+      reEnterPin: '',
     },
     validationRules: {
       firstName: (value) => {
@@ -102,6 +102,14 @@ export default function Verification() {
         if (!value) toSendCode();
         return !!value;
       },
+      pin: (value) => {
+        if (!value) toSendCode();
+        return !!value;
+      },
+      reEnterPin: (value) => {
+        if (!value) toSendCode();
+        return !!value;
+      },
     },
     errorMessages: {
       firstName: 'Please enter your first name.',
@@ -109,6 +117,8 @@ export default function Verification() {
       gender: 'Please select your gender.',
       provinceId: 'Please select your province.',
       phoneNumber: 'Please enter your phone number.',
+      pin: 'Please enter your pin.',
+      reEnterPin: 'Please re-enter your pin.',
     },
   });
 
@@ -176,9 +186,16 @@ export default function Verification() {
         gender: form.values.gender,
         provinceId: Number(form.values.provinceId),
         phoneNumber: form.values.phoneNumber,
+        pin: form.values.pin,
+        reEnterPin: form.values.reEnterPin,
       };
       try {
         CreateUserSchema.parse(createUserDetails, { errorMap: customErrorMap });
+
+        if (createUserDetails.pin !== createUserDetails.reEnterPin) {
+          throw new Error('Please make sure the pins match.');
+        }
+
         createUserMutation.mutate(createUserDetails);
       } catch (err) {
         const fallbackMessage = 'Failed to create user, please try again.';
@@ -314,6 +331,14 @@ export default function Verification() {
             />
           </Stepper.Step>
         </Stepper>
+
+        <div className="flex flex-col justify-center items-stretch pt-4">
+          <Link passHref href="/sign-in">
+            <Button variant="light" role="button" size="md">
+              Already have an account? Click to sign in!
+            </Button>
+          </Link>
+        </div>
 
         {isError && <ErrorAlert error={error.message} />}
       </form>
