@@ -13,14 +13,15 @@ export default function Home() {
     <Layout title="Welcome to Road Rules">
       <div className="grow" />
 
-      <div className="flex flex-row justify-center items-center py-8">
-        <div className="relative h-56 w-full overflow-hidden">
+      <div className="flex flex-row justify-center items-center py-4">
+        <div className="relative h-72 w-10/12 overflow-hidden">
           <Image
             role={roles.rrLogo}
             src="/images/road_rules_logo.png"
             alt="Road Rules"
             layout="fill"
-            objectFit="scale-down"
+            objectFit="contain"
+            // objectFit="scale-down"
           />
         </div>
       </div>
@@ -28,20 +29,21 @@ export default function Home() {
       <div className="grow" />
 
       <div className="flex flex-col justify-center items-stretch">
-        <p style={{ textAlign: 'center' }}>
+        <p className="text-lg text-center">
           Powered by the <br />
           Traffic Safety Council of Zimbabwe
         </p>
       </div>
 
-      <div className="flex flex-row justify-center items-center pb-8">
-        <div className="relative h-48 w-full overflow-hidden">
+      <div className="flex flex-row justify-center items-center p-4">
+        <div className="relative h-56 w-10/12 overflow-hidden">
           <Image
             role={roles.tscLogo}
             src="/images/tsc_logo.png"
-            alt="Traffic Safety Council Logo"
+            alt="Traffic Safety Council"
             layout="fill"
-            objectFit="scale-down"
+            objectFit="contain"
+            // objectFit="scale-down"
           />
         </div>
       </div>
@@ -49,7 +51,7 @@ export default function Home() {
       <div className="grow" />
 
       <div className="flex flex-col justify-center items-stretch pt-4">
-        <Link passHref href="/terms-and-conditions">
+        <Link passHref href="/sign-in">
           <Button role="button" size="md">
             NEXT
           </Button>

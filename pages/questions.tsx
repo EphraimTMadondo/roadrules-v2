@@ -1,4 +1,3 @@
-import { useNotifications } from '@mantine/notifications';
 import { Question } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
@@ -8,6 +7,7 @@ import Layout from '../components/layout';
 import QuestionComponent from '../components/question';
 import { Toolbar } from '../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../lib/errors';
+import { createKey } from '../lib/keys';
 import {
   createSSRPageProps,
   getDataFromPageProps,
@@ -15,10 +15,13 @@ import {
 } from '../lib/props';
 import { getQuestions } from '../lib/questions';
 import { OptionId } from '../lib/questions-client-logic';
+import { withSessionSsr } from '../lib/with-session';
 import { trpc } from '../utils/trpc';
+import { getCurrentUser } from './api/trpc/[trpc]';
 
 interface Data {
   initialQuestions: Question[];
+  batchIdentifier: string;
   loadingError?: string;
 }
 
@@ -29,13 +32,13 @@ interface CustomQuestion extends Question {
 export default function Questions(props: PageProps) {
   const data: Data = getDataFromPageProps(props, {
     initialQuestions: [],
+    batchIdentifier: '',
     loadingError: FALLBACK_ERROR_MESSAGE,
   });
 
-  const { initialQuestions, loadingError } = data;
+  const { initialQuestions, batchIdentifier, loadingError } = data;
 
   const router = useRouter();
-  const notifications = useNotifications();
 
   const [questions, setQuestions] = useState<CustomQuestion[]>(
     initialQuestions.map((initialQuestion) => ({
@@ -44,26 +47,22 @@ export default function Questions(props: PageProps) {
     }))
   );
 
-  const [isLoading, setisLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+
+  console.log(isLoading);
 
   const mutation = trpc.useMutation('response.create', {
     onMutate: () => {
-      setisLoading(true);
+      setIsLoading(true);
       setError('');
     },
     onError: ({ message }: { message: string }) => {
       setError(message || '');
     },
-    onSuccess: () => {
-      notifications.showNotification({
-        message: 'Response recorded!',
-        color: 'teal',
-        icon: <i className="material-icons">done</i>,
-      });
-    },
+    onSuccess: () => {},
     onSettled: () => {
-      setisLoading(false);
+      setIsLoading(false);
     },
   });
 
@@ -74,15 +73,16 @@ export default function Questions(props: PageProps) {
       mutation.mutate({
         questionId: inputQuestion.id,
         choice: selectedOption,
+        batchIdentifier,
       });
     },
-    [mutation]
+    [mutation, batchIdentifier]
   );
 
   const nextQuestion = useCallback(
     (inputQuestion: Question) => {
       if (questions.length === 1) {
-        return router.push('/progress');
+        return router.push('/progress?lastBatch=lastBatch');
       }
 
       setQuestions((prevState) =>
@@ -113,14 +113,13 @@ export default function Questions(props: PageProps) {
       )}
       {question && (
         <QuestionComponent
-          key={question.questionNumber.toString()}
+          key={question.id}
           title="Practice"
           question={question}
           questionNumber={question.questionNumber}
           numQuestions={initialQuestions.length}
           processResponse={processResponse}
           nextQuestion={nextQuestion}
-          isLoading={isLoading}
           error={error}
         />
       )}
@@ -130,18 +129,33 @@ export default function Questions(props: PageProps) {
 
 const LIMIT = 25;
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    const questions = await getQuestions(LIMIT);
+export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
+  async ({ req }) => {
+    try {
+      const currentUser = getCurrentUser(req.session);
 
-    return createSSRPageProps<Data>({
-      initialQuestions: questions,
-    });
-  } catch (error: any) {
-    return createSSRPageProps<Data>({
-      initialQuestions: [],
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      loadingError: (error?.message as string) || FALLBACK_ERROR_MESSAGE,
-    });
+      if (!currentUser) {
+        return {
+          redirect: {
+            destination: '/sign-in',
+            permanent: false,
+          },
+        };
+      }
+
+      const questions = await getQuestions(LIMIT);
+
+      return createSSRPageProps<Data>({
+        initialQuestions: questions,
+        batchIdentifier: createKey(),
+      });
+    } catch (error: any) {
+      return createSSRPageProps<Data>({
+        initialQuestions: [],
+        batchIdentifier: '',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        loadingError: (error?.message as string) || FALLBACK_ERROR_MESSAGE,
+      });
+    }
   }
-};
+);

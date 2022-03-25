@@ -1,4 +1,6 @@
-export interface PageProps {
+import { Indexable } from './with-session';
+
+export interface PageProps extends Indexable {
   data: string;
 }
 

@@ -42,7 +42,7 @@ export function Toolbar(props: ToolbarProps) {
         </ActionIcon>
       )}
       <div className="grow" />
-      <span className="text-lg font-semibold">{title}</span>
+      <span className="text-lg text-center font-semibold">{title}</span>
       <div className="grow" />
       {!rightIcon && !RightElement && (
         <ActionIcon
@@ -64,7 +64,14 @@ export function Toolbar(props: ToolbarProps) {
           <i className="material-icons font-semibold">{rightIcon}</i>
         </ActionIcon>
       )}
-      {RightElement && <RightElement />}
+      {RightElement && (
+        <div
+          className="flex flex-col justify-center items-stretch"
+          style={{ flex: '0 0 auto', overflow: 'hidden' }}
+        >
+          <RightElement />
+        </div>
+      )}
     </div>
   );
 }

@@ -13,10 +13,11 @@
     ".next/cache"
   ],
   "dependencies": {
-    "@mantine/core": "^3.6.8",
-    "@mantine/hooks": "^3.6.8",
+    "@mantine/core": "^3.6.14",
+    "@mantine/hooks": "^3.6.14",
     "@mantine/next": "^3.6.8",
     "@mantine/notifications": "^3.6.11",
+    "@mantine/rte": "^3.6.14",
     "@nivo/core": "^0.79.0",
     "@nivo/pie": "^0.79.1",
     "@prisma/client": "^3.9.2",
@@ -24,22 +25,26 @@
     "@trpc/next": "^9.20.0",
     "@trpc/react": "^9.20.0",
     "@trpc/server": "^9.20.0",
+    "@types/bcryptjs": "^2.4.2",
+    "autoprefixer": "^10.4.2",
+    "bcryptjs": "^2.4.3",
     "clsx": "^1.1.1",
     "dayjs": "^1.10.7",
-    "firebase": "^9.6.7",
     "framer-motion": "^6.2.8",
+    "iron-session": "^6.0.5",
     "next": "latest",
     "next-pwa": "^5.4.1",
+    "postcss": "^8.4.6",
+    "prisma": "^3.9.2",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-query": "^3.34.16",
+    "tabler-icons-react": "^1.41.0",
+    "tailwindcss": "^3.0.23",
+    "twilio": "^3.75.1",
     "uuid": "^8.3.2",
-    "zod": "^3.12.0",
-    "autoprefixer": "^10.4.2",
-    "postcss": "^8.4.6",
-    "prisma": "^3.9.2",
-    "tailwindcss": "^3.0.23"
+    "zod": "^3.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
@@ -66,6 +71,7 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "jest": "^27.5.1",
     "prettier": "^2.5.1",
+    "ts-node": "^10.7.0",
     "typescript": "^4.6.2"
   }
 }

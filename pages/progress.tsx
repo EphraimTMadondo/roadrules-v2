@@ -2,17 +2,23 @@ import { Alert, Button, useMantineTheme } from '@mantine/core';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useCallback } from 'react';
 import Layout from '../components/layout';
 import { Toolbar } from '../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../lib/errors';
+import { perc } from '../lib/numbers';
 import {
   createSSRPageProps,
   getDataFromPageProps,
   PageProps,
 } from '../lib/props';
-import { getLastWeekResponseNumbers } from '../lib/responses';
+import {
+  BatchIdentifier,
+  getLastBatchResponseNumbers,
+  getLastWeekResponseNumbers,
+  ResponseNumbers,
+} from '../lib/responses';
+import { withSessionSsr } from '../lib/with-session';
+import { getCurrentUser } from './api/trpc/[trpc]';
 
 const ProgressPieChart = dynamic(
   () => import('../components/progress-pie-chart'),
@@ -22,11 +28,8 @@ const ProgressPieChart = dynamic(
 interface Data {
   numCorrect: number;
   numWrong: number;
+  batchIdentifier?: string;
   loadingError?: string;
-}
-
-function perc(fraction: number) {
-  return fraction * 100;
 }
 
 export default function Progress(props: PageProps) {
@@ -36,15 +39,9 @@ export default function Progress(props: PageProps) {
     loadingError: FALLBACK_ERROR_MESSAGE,
   });
 
-  const { numCorrect, numWrong, loadingError } = data;
-
-  const router = useRouter();
+  const { numCorrect, numWrong, batchIdentifier, loadingError } = data;
 
   const theme = useMantineTheme();
-
-  const back = useCallback(() => {
-    router.push('/driving-lessons-menu');
-  }, [router]);
 
   const title = 'Progress';
 
@@ -57,7 +54,7 @@ export default function Progress(props: PageProps) {
 
   return (
     <Layout title={title}>
-      <Toolbar title={title} leftIcon="arrow_back" leftIconAction={back} />
+      <Toolbar title={title} />
 
       {loadingError && (
         <div className="flex flex-col justify-start items-stretch pt-4">
@@ -100,22 +97,36 @@ export default function Progress(props: PageProps) {
           </div>
 
           <div className="flex flex-col justify-center items-stretch">
-            <p className="text-center text-red-500">
-              Your weekly average score is below the required pass mark of 88%,
-              keep practising.
+            <p className="text-center font-semibold text-red-500">
+              Your {batchIdentifier ? '' : 'weekly '}average score is below the
+              required pass mark of 88%, keep practising.
             </p>
           </div>
 
           <div className="grow py-2" />
 
           <div className="flex flex-col justify-center items-stretch py-4">
-            <Link passHref href="/quick-revision">
+            <Link
+              passHref
+              href={
+                batchIdentifier
+                  ? `/quick-revision?batchIdentifier=${batchIdentifier}`
+                  : 'quick-revision'
+              }
+            >
               <Button size="md">QUICK REVISION</Button>
             </Link>
           </div>
 
           <div className="flex flex-col justify-center items-stretch py-4">
-            <Link passHref href="/detailed-revision">
+            <Link
+              passHref
+              href={
+                batchIdentifier
+                  ? `/detailed-revision?batchIdentifier=${batchIdentifier}`
+                  : '/detailed-revision'
+              }
+            >
               <Button size="md">DETAILED REVISION</Button>
             </Link>
           </div>
@@ -125,22 +136,50 @@ export default function Progress(props: PageProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    const { numCorrect, numWrong } = await getLastWeekResponseNumbers(
-      new Date()
-    );
+export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
+  async ({ req, query }) => {
+    try {
+      const currentUser = getCurrentUser(req.session);
 
-    return createSSRPageProps<Data>({
-      numCorrect,
-      numWrong,
-    });
-  } catch (error: any) {
-    return createSSRPageProps<Data>({
-      numCorrect: 0,
-      numWrong: 0,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      loadingError: (error?.message as string) || FALLBACK_ERROR_MESSAGE,
-    });
+      if (!currentUser) {
+        return {
+          redirect: {
+            destination: '/sign-in',
+            permanent: false,
+          },
+        };
+      }
+
+      const { lastBatch } = query;
+
+      const {
+        numCorrect,
+        numWrong,
+        batchIdentifier,
+      }: ResponseNumbers & BatchIdentifier = await (async () => {
+        if (lastBatch) {
+          return getLastBatchResponseNumbers(currentUser.id);
+        }
+        const result = await getLastWeekResponseNumbers(
+          currentUser.id,
+          new Date()
+        );
+
+        return { ...result, batchIdentifier: '' };
+      })();
+
+      return createSSRPageProps<Data>({
+        numCorrect,
+        numWrong,
+        batchIdentifier,
+      });
+    } catch (error: any) {
+      return createSSRPageProps<Data>({
+        numCorrect: 0,
+        numWrong: 0,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        loadingError: (error?.message as string) || FALLBACK_ERROR_MESSAGE,
+      });
+    }
   }
-};
+);

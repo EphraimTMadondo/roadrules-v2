@@ -26,22 +26,15 @@ export default function Layout(props: LayoutProps) {
       <div className="flex flex-col justify-start items-stretch bg-slate-100">
         <div className="flex flex-row justify-center items-stretch p-4">
           <CustomCenter>
-            <motion.div
-              layout
-              animate={{ scale: [0.95, 1] }}
-              transition={{ duration: 0.2, staggerChildren: 1 }}
-              className="flex flex-row justify-center items-stretch"
+            <Card
+              shadow="xl"
+              padding="xl"
+              className="w-full flex flex-col justify-start items-stretch"
             >
-              <Card
-                shadow="xl"
-                padding="xl"
-                className="w-full flex flex-col justify-start items-stretch"
-              >
-                <Card.Section className="flex flex-col justify-start items-stretch p-6">
-                  {children}
-                </Card.Section>
-              </Card>
-            </motion.div>
+              <Card.Section className="flex flex-col justify-start items-stretch p-6">
+                {children}
+              </Card.Section>
+            </Card>
           </CustomCenter>
         </div>
       </div>

@@ -1,38 +1,32 @@
-import { Button, LoadingOverlay } from '@mantine/core';
+import { Button } from '@mantine/core';
 import { Question } from '@prisma/client';
 import Link from 'next/link';
 import { useCallback, useState } from 'react';
-import Layout from './layout';
-import { SelectOption } from './select-option';
-import { Toolbar } from './toolbar';
 import { OptionId } from '../lib/questions-client-logic';
-import { CorrectAnswerAlert } from './correct-answer-alert';
+import { CorrectAnswerPopup } from './correct-answer-popup';
 import { ErrorAlert } from './error-alert';
+import Layout from './layout';
 import { QuestionTitle } from './question-title';
+import { SelectOption } from './select-option';
 import { SelectOptionContainer } from './select-option-container';
 import { StandardImage } from './standard-image';
-import { Timer } from './timer';
-import { WrongAnswerAlert } from './wrong-answer-alert';
+import { Toolbar } from './toolbar';
+import { WrongAnswerPopup } from './wrong-answer-popup';
 
 interface QuestionComponentProps {
-  key: string;
   title: string;
   question: Question;
   questionNumber: number;
   numQuestions: number;
   processResponse: (question: Question, selectedOption: OptionId) => any;
   nextQuestion: (question: Question) => void;
-  isLoading?: boolean;
   error?: string;
-  timed?: boolean;
-  secondsLeft?: number;
-  crunchTime?: boolean;
 }
 
 export default function QuestionComponent(props: QuestionComponentProps) {
-  const { key, title, question, questionNumber, numQuestions } = props;
-  const { processResponse, nextQuestion, isLoading } = props;
-  const { error, timed, secondsLeft, crunchTime } = props;
+  const { title, question, questionNumber, numQuestions } = props;
+  const { processResponse, nextQuestion } = props;
+  const { error } = props;
 
   const [selectedOption, setSelectedOption] = useState<OptionId | undefined>(
     undefined
@@ -57,20 +51,9 @@ export default function QuestionComponent(props: QuestionComponentProps) {
     [question, nextQuestion]
   );
 
-  const RightElement = timed
-    ? () => (
-        <Timer
-          secondsLeft={secondsLeft || 0}
-          crunchTime={crunchTime || false}
-        />
-      )
-    : undefined;
-
   return (
-    <Layout key={key} className="relative" title={title}>
-      <Toolbar title={title} RightElement={RightElement} />
-
-      <LoadingOverlay visible={isLoading || false} transitionDuration={500} />
+    <Layout className="relative" title={title}>
+      <Toolbar title={title} RightElement={undefined} />
 
       <QuestionTitle
         questionNumber={questionNumber}
@@ -83,7 +66,8 @@ export default function QuestionComponent(props: QuestionComponentProps) {
           src={question.image}
           alt="Question illustration"
           layout="fill"
-          objectFit="scale-down"
+          objectFit="contain"
+          // objectFit="scale-down"
         />
       )}
 
@@ -121,10 +105,24 @@ export default function QuestionComponent(props: QuestionComponentProps) {
         </>
       )}
 
-      {submitted && correct && <CorrectAnswerAlert />}
+      {submitted && correct && (
+        <CorrectAnswerPopup
+          buttonCaption={
+            questionNumber === numQuestions ? 'VIEW PROGRESS' : 'NEXT'
+          }
+          buttonOnClick={nextAction}
+        />
+      )}
 
       {submitted && !correct && (
-        <WrongAnswerAlert question={question} correct />
+        <WrongAnswerPopup
+          question={question}
+          correct
+          buttonCaption={
+            questionNumber === numQuestions ? 'VIEW PROGRESS' : 'NEXT'
+          }
+          buttonOnClick={nextAction}
+        />
       )}
 
       {error && <ErrorAlert error={error} />}
@@ -144,7 +142,7 @@ export default function QuestionComponent(props: QuestionComponentProps) {
         </div>
       )}
       <div className="flex flex-col justify-center items-stretch pt-4">
-        <Link passHref href="/driving-lessons-menu">
+        <Link passHref href="/progress?lastBatch=lastBatch">
           <Button size="md" variant="light">
             QUIT
           </Button>

@@ -5,17 +5,18 @@ import { ErrorAlert } from './error-alert';
 
 interface VerificationThreeProps {
   form: UseForm<Inputs>;
-  sendingCode: boolean;
-  verifying: boolean;
-  error?: string;
+  loading: boolean;
+  error: string;
+  toSendCode: () => void;
+  sendCode: () => void;
 }
 
 export function VerificationThree(props: VerificationThreeProps) {
-  const { form, sendingCode, verifying, error } = props;
+  const { form, loading, error, toSendCode, sendCode } = props;
 
   return (
     <div className="flex flex-col justify-center items-stretch pt-8 relative">
-      <LoadingOverlay visible={sendingCode || verifying} />
+      <LoadingOverlay visible={loading} />
 
       <div className="flex flex-col justify-center items-center">
         <span className="font-bold text-lg text-center py-2">
@@ -24,9 +25,7 @@ export function VerificationThree(props: VerificationThreeProps) {
       </div>
 
       <span className="text-sm text-center py-2">
-        This may take a few minutes.
-        <br />
-        Enter the code you received to verify your credentials.
+        Please enter the code you received to verify your credentials.
       </span>
 
       {error && <ErrorAlert error={error} />}
@@ -35,6 +34,9 @@ export function VerificationThree(props: VerificationThreeProps) {
         <NumberInput
           hideControls
           label="Code"
+          inputMode="numeric"
+          autoComplete="one-time-code"
+          pattern="\d{6}"
           {...form.getInputProps('code')}
           required
         />
@@ -49,7 +51,9 @@ export function VerificationThree(props: VerificationThreeProps) {
       <div className="flex flex-col justify-center items-stretch py-4">
         <Button
           variant="light"
+          size="md"
           leftIcon={<i className="material-icons">mail</i>}
+          onClick={sendCode}
         >
           Resend Code
         </Button>
@@ -58,7 +62,9 @@ export function VerificationThree(props: VerificationThreeProps) {
       <div className="flex flex-col justify-center items-stretch py-4">
         <Button
           variant="light"
+          size="md"
           leftIcon={<i className="material-icons">edit</i>}
+          onClick={toSendCode}
         >
           Change Number
         </Button>
@@ -67,6 +73,7 @@ export function VerificationThree(props: VerificationThreeProps) {
       <div className="flex flex-col justify-center items-stretch py-4">
         <Button
           variant="light"
+          size="md"
           leftIcon={<i className="material-icons">help</i>}
         >
           Help

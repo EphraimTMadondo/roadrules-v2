@@ -1,5 +1,4 @@
 import { Checkbox } from '@mantine/core';
-import { greyBorder, redBorder, tealBorder } from '../lib/tailwind-utils';
 
 interface SelectOptionProps {
   id: string;
@@ -14,24 +13,22 @@ export function SelectOption(props: SelectOptionProps) {
   const { id, content, selected } = props;
   const { onClick, disabled, wrong } = props;
 
-  const borderMap: [boolean | undefined, string][] = [
-    [selected && !wrong, tealBorder],
-    [wrong, redBorder],
-    [!selected && !wrong, greyBorder],
-  ];
+  const border = (() => {
+    if (selected && !wrong) return 'teal-border';
 
-  const border = borderMap.find((el) => el[0])?.[1] || '';
+    if (wrong) return 'red-border';
 
-  const hoverClass = disabled ? '' : ' hover:cursor-pointer';
-
-  const className = `flex flex-row justify-start items-center ${border}${hoverClass}`;
+    return 'grey-border';
+  })();
 
   return (
     <div
       role="button"
       onClick={onClick}
       onKeyPress={onClick}
-      className={className}
+      className={`flex flex-row justify-start items-center p-4 ${border} ${
+        disabled ? '' : 'hover:cursor-pointer'
+      }`}
       aria-hidden="true"
     >
       <span className="text-md font-semi-bold pr-2">

@@ -2,8 +2,10 @@ export interface Inputs {
   firstName: string;
   lastName: string;
   gender: 'Male' | 'Female';
-  province: string;
-  country: string;
+  provinceId: number;
+  countryId: number | undefined;
   phoneNumber: string;
   code: string;
+  pin: string;
+  reEnterPin: string;
 }

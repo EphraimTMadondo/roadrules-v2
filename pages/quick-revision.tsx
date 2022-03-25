@@ -1,8 +1,6 @@
 import { Alert } from '@mantine/core';
 import { Question, Response } from '@prisma/client';
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
-import { useCallback } from 'react';
 import Layout from '../components/layout';
 import { ResponseComponent } from '../components/response';
 import { Toolbar } from '../components/toolbar';
@@ -12,7 +10,9 @@ import {
   getDataFromPageProps,
   PageProps,
 } from '../lib/props';
-import { getLastWeekResponses } from '../lib/responses';
+import { getBatchResponses, getLastWeekResponses } from '../lib/responses';
+import { withSessionSsr } from '../lib/with-session';
+import { getCurrentUser } from './api/trpc/[trpc]';
 
 interface CustomResponse extends Response {
   question: Question;
@@ -31,17 +31,11 @@ export default function QuickRevision(props: PageProps) {
 
   const { responses, loadingError } = data;
 
-  const router = useRouter();
-
-  const back = useCallback(() => {
-    router.back();
-  }, [router]);
-
   const title = 'Quick Revision';
 
   return (
     <Layout title={title}>
-      <Toolbar title={title} leftIcon="arrow_back" leftIconAction={back} />
+      <Toolbar title={title} />
 
       {loadingError && (
         <div className="flex flex-col justify-start items-stretch pt-4">
@@ -74,21 +68,42 @@ export default function QuickRevision(props: PageProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    const responses = await getLastWeekResponses(
-      new Date(),
-      'includeQuestions'
-    );
+export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
+  async ({ req, query }) => {
+    try {
+      const currentUser = getCurrentUser(req.session);
 
-    return createSSRPageProps<Data>({
-      responses,
-    });
-  } catch (reason: any) {
-    return createSSRPageProps<Data>({
-      responses: [],
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      loadingError: (reason?.message as string) || FALLBACK_ERROR_MESSAGE,
-    });
+      if (!currentUser) {
+        return {
+          redirect: {
+            destination: '/sign-in',
+            permanent: false,
+          },
+        };
+      }
+
+      const { batchIdentifier } = query;
+
+      const responses = await (async () => {
+        if (batchIdentifier) {
+          return getBatchResponses(batchIdentifier as string);
+        }
+        return getLastWeekResponses(
+          currentUser.id,
+          new Date(),
+          'includeQuestions'
+        );
+      })();
+
+      return createSSRPageProps<Data>({
+        responses,
+      });
+    } catch (reason: any) {
+      return createSSRPageProps<Data>({
+        responses: [],
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        loadingError: (reason?.message as string) || FALLBACK_ERROR_MESSAGE,
+      });
+    }
   }
-};
+);

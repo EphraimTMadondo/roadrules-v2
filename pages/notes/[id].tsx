@@ -1,18 +1,18 @@
 import { Alert, Button } from '@mantine/core';
 import { Note } from '@prisma/client';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useCallback } from 'react';
+import { getNotes } from '../../lib/notes';
 import Layout from '../../components/layout';
 import { Toolbar } from '../../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../../lib/errors';
-import { getNotes } from '../../lib/notes';
 import {
-  createISRPageProps,
+  createSSRPageProps,
   getDataFromPageProps,
   PageProps,
 } from '../../lib/props';
+import { withSessionSsr } from '../../lib/with-session';
+import { getCurrentUser } from '../api/trpc/[trpc]';
 
 interface Data {
   note: Note | null;
@@ -21,7 +21,7 @@ interface Data {
   loadingError?: string;
 }
 
-export default function NotePage(props: PageProps) {
+export default function EditNotePage(props: PageProps) {
   const data = getDataFromPageProps<Data>(props, {
     note: null,
     previousNoteId: 0,
@@ -29,33 +29,13 @@ export default function NotePage(props: PageProps) {
     loadingError: FALLBACK_ERROR_MESSAGE,
   });
 
-  const { note, previousNoteId, nextNoteId } = data;
-
-  const router = useRouter();
+  const { note, nextNoteId } = data;
 
   const title = 'Note';
 
-  const back = useCallback(() => {
-    if (previousNoteId) {
-      return router.push(`/notes/${previousNoteId}`);
-    }
-    return router.push('/notes');
-  }, [previousNoteId, router]);
-
-  const forward = useCallback(
-    () => router.push(`/notes/${nextNoteId}`),
-    [router, nextNoteId]
-  );
-
   return (
     <Layout title={title}>
-      <Toolbar
-        title={note?.title || 'Note'}
-        leftIcon="arrow_back"
-        leftIconAction={back}
-        rightIcon={nextNoteId ? 'arrow_forward' : undefined}
-        rightIconAction={nextNoteId ? forward : undefined}
-      />
+      <Toolbar title={note?.title || 'Note'} />
 
       {note && (
         <>
@@ -98,57 +78,57 @@ export default function NotePage(props: PageProps) {
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  try {
-    const id = Number(params?.id || 0);
+export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
+  async ({ req, params }) => {
+    try {
+      const currentUser = getCurrentUser(req.session);
 
-    const notes = await getNotes();
-
-    const note = notes.find((el) => el.id === id);
-
-    const [previousNoteId, nextNoteId] = (() => {
-      if (!note) {
-        return [0, 0];
+      if (!currentUser) {
+        return {
+          redirect: {
+            destination: '/sign-in',
+            permanent: false,
+          },
+        };
       }
 
-      const currentIndex = notes.indexOf(note);
+      const id = Number(params?.id || 0);
 
-      const previous = currentIndex === 0 ? 0 : notes[currentIndex - 1].id;
+      const notes = (await getNotes()).sort(
+        (a, b) => a.refNumber - b.refNumber
+      );
 
-      const next =
-        currentIndex === notes.length - 1 ? 0 : notes[currentIndex + 1].id;
+      const note = notes.find((el) => el.id === id);
 
-      return [previous, next];
-    })();
+      const [previousNoteId, nextNoteId] = (() => {
+        if (!note) {
+          return [0, 0];
+        }
 
-    return createISRPageProps<Data>({
-      note: note || null,
-      previousNoteId,
-      nextNoteId,
-    });
-  } catch (error: unknown) {
-    const { message } = error as { message: string };
-    return createISRPageProps<Data>({
-      note: null,
-      previousNoteId: 0,
-      nextNoteId: 0,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      loadingError: message || FALLBACK_ERROR_MESSAGE,
-    });
+        const currentIndex = notes.indexOf(note);
+
+        const previous = currentIndex === 0 ? 0 : notes[currentIndex - 1].id;
+
+        const next =
+          currentIndex === notes.length - 1 ? 0 : notes[currentIndex + 1].id;
+
+        return [previous, next];
+      })();
+
+      return createSSRPageProps<Data>({
+        note: note || null,
+        previousNoteId,
+        nextNoteId,
+      });
+    } catch (error: unknown) {
+      const { message } = error as { message: string };
+      return createSSRPageProps<Data>({
+        note: null,
+        previousNoteId: 0,
+        nextNoteId: 0,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        loadingError: message || FALLBACK_ERROR_MESSAGE,
+      });
+    }
   }
-};
-
-export async function getStaticPaths() {
-  const notes = await getNotes();
-
-  const paths = notes.map((note) => ({
-    params: {
-      id: note.id.toString(),
-    },
-  }));
-
-  return {
-    paths,
-    fallback: 'blocking',
-  };
-}
+);

@@ -1,10 +1,12 @@
 import { pad } from '../lib/strings';
-import { redBorder, tealBorder } from '../lib/tailwind-utils';
 
 interface Props {
   secondsLeft: number;
   crunchTime: boolean;
 }
+
+const redBorder = 'border border-solid rounded border-red-600';
+const tealBorder = 'border border-solid rounded border-teal-600';
 
 export function Timer(props: Props) {
   const { secondsLeft, crunchTime } = props;
@@ -15,8 +17,8 @@ export function Timer(props: Props) {
   const seconds = pad((secondsLeft % 60).toString(), 2, '0');
 
   const [border, bgColor] = crunchTime
-    ? [redBorder, 'bg-teal-600']
-    : [tealBorder, 'bg-red-600'];
+    ? [redBorder, 'bg-red-600']
+    : [tealBorder, 'bg-teal-600'];
 
   return (
     <div className="flex flex-col p-2">

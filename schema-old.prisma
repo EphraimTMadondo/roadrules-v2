@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model DrivingSchool {
+  id        Int     @id @default(autoincrement())
+  title     String  @db.VarChar(200)
+  image     String  @db.Text
+  html      String  @db.Text
+  rating    Int
+  city      String  @db.VarChar(50)
+  latitude  Decimal @db.Decimal(10, 8)
+  longitude Decimal @db.Decimal(11, 8)
+  cost      Int
+  phone     String  @db.VarChar(20)
+  whatsapp  String  @db.VarChar(20)
+  messenger String  @db.VarChar(50)
+  createdAt BigInt
+  updatedAt BigInt
+
+  @@map("drivingschools")
+}
+
+model Note {
+  id        Int    @id @default(autoincrement())
+  refNumber Int
+  title     String @db.VarChar(300)
+  html      String @db.Text
+  createdAt BigInt
+  updatedAt BigInt
+
+  @@map("notes")
+}
+
+model Province {
+  id        Int    @id @default(autoincrement())
+  province  String @db.VarChar(100)
+  createdAt BigInt
+  updatedAt BigInt
+
+  @@map("provinces")
+}
+
+model Question {
+  id                  Int    @id @default(autoincrement())
+  refNumber           Int
+  text                String @db.Text
+  image               String @db.Text
+  option1             String @db.Text
+  option2             String @db.Text
+  option3             String @db.Text
+  correctOption       String @db.VarChar(20)
+  correctlyAnswered   Int
+  incorrectlyAnswered Int
+  questionTypeId      Int
+  explanation         String @db.Text
+  createdAt           BigInt
+  updatedAt           BigInt
+
+  @@map("questions")
+}
+
+model QuestionType {
+  id           Int    @id @default(autoincrement())
+  questionType String @db.VarChar(20)
+  createdAt    BigInt
+  updatedAt    BigInt
+
+  @@map("questiontypes")
+}
+
+model Response {
+  id         Int     @id @default(autoincrement())
+  questionId Int
+  userId     Int
+  choice     String  @db.VarChar(10)
+  correct    Boolean
+  createdAt  BigInt
+  updatedAt  BigInt
+
+  @@map("responses")
+}
+
+model User {
+  id             Int    @id @default(autoincrement())
+  username       String @db.VarChar(20)
+  pin            String @db.Text
+  kind           String @db.VarChar(10)
+  fullName       String @db.VarChar(50)
+  phoneNumber    String @db.VarChar(25)
+  activationCode String @db.VarChar(10)
+  location       String @db.VarChar(200)
+  createdAt      BigInt
+  updatedAt      BigInt
+
+  @@map("users")
+}

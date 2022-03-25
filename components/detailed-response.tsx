@@ -34,7 +34,8 @@ export default function DetailedResponse(props: DetailedResponseProps) {
           src={question.image}
           alt="Question illustration"
           layout="fill"
-          objectFit="scale-down"
+          objectFit="contain"
+          // objectFit="scale-down"
         />
       )}
 

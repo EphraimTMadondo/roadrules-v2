@@ -1,48 +1,41 @@
 import { z } from 'zod';
 import { prisma } from '../../lib/db';
 import { optionIdSchema } from '../../lib/questions-client-logic';
-import { createRouter } from '../create-router';
+import { createProtectedRouter } from '../protected-router';
 
-export const responseRoutes = createRouter()
-  .mutation('create', {
-    input: z.object({
-      questionId: z.number().int().min(1),
-      choice: optionIdSchema,
-    }),
-    resolve: async ({ input }) => {
-      const [user, question] = await Promise.all([
-        prisma.user.findFirst({
-          where: {
-            username: 'Allan',
-          },
-        }),
-        prisma.question.findUnique({
-          where: {
-            id: input.questionId,
-          },
-        }),
-      ]);
+export const responseRoutes = createProtectedRouter().mutation('create', {
+  input: z.object({
+    questionId: z.number().int().min(1),
+    choice: optionIdSchema,
+    batchIdentifier: z.string(),
+  }),
+  resolve: async ({ input, ctx }) => {
+    const question = await prisma.question.findUnique({
+      where: {
+        id: input.questionId,
+      },
+    });
 
-      if (!user) throw new Error('user not found');
+    const currentUser = ctx.req.session.user;
 
-      if (!question) throw new Error('question not found');
+    if (!currentUser) {
+      throw new Error('please sign in first');
+    }
 
-      await prisma.response.create({
-        data: {
-          questionId: input.questionId,
-          userId: user.id,
-          choice: input.choice,
-          correct: input.choice === question.correctOption,
-          createdAt: new Date().getTime(),
-          updatedAt: new Date().getTime(),
-        },
-      });
+    if (!question) throw new Error('question not found');
 
-      return {};
-    },
-  })
-  .query('list', {
-    resolve() {
-      return [];
-    },
-  });
+    await prisma.response.create({
+      data: {
+        questionId: input.questionId,
+        userId: currentUser.id,
+        choice: input.choice,
+        correct: input.choice === question.correctOption,
+        batchIdentifier: input.batchIdentifier,
+        createdAt: new Date().getTime(),
+        updatedAt: new Date().getTime(),
+      },
+    });
+
+    return {};
+  },
+});

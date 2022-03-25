@@ -38,12 +38,27 @@ model Note {
 }
 
 model Province {
-  id        Int    @id @default(autoincrement())
-  province  String @db.VarChar(100)
+  id       Int    @id @default(autoincrement())
+  province String @db.VarChar(100)
+
+  country   Country @relation(fields: [countryId], references: [id])
+  countryId Int
+
   createdAt BigInt
   updatedAt BigInt
 
+  users User[]
   @@map("provinces")
+}
+
+model Country {
+  id        Int    @id @default(autoincrement())
+  country   String @db.VarChar(100)
+  createdAt BigInt
+  updatedAt BigInt
+
+  provinces Province[]
+  @@map("countries")
 }
 
 model Question {
@@ -66,7 +81,6 @@ model Question {
   updatedAt   BigInt
 
   responses Response[]
-
   @@map("questions")
 }
 
@@ -77,12 +91,13 @@ model QuestionType {
   updatedAt    BigInt
 
   questions Question[]
-
   @@map("questiontypes")
 }
 
 model Response {
   id Int @id @default(autoincrement())
+
+  batchIdentifier String? @db.VarChar(200)
 
   question   Question @relation(fields: [questionId], references: [id])
   questionId Int
@@ -99,18 +114,21 @@ model Response {
 }
 
 model User {
-  id             Int    @id @default(autoincrement())
-  username       String @db.VarChar(20)
-  pin            String @db.Text
-  kind           String @db.VarChar(10)
-  fullName       String @db.VarChar(50)
-  phoneNumber    String @db.VarChar(25)
-  activationCode String @db.VarChar(10)
-  location       String @db.VarChar(200)
-  createdAt      BigInt
-  updatedAt      BigInt
+  id          Int    @id @default(autoincrement())
+  username    String @db.VarChar(20)
+  pin         String @db.Text
+  kind        String @db.VarChar(10)
+  firstName   String @db.VarChar(50)
+  lastName    String @db.VarChar(50)
+  gender      String @db.VarChar(10)
+  phoneNumber String @db.VarChar(25)
+
+  province   Province @relation(fields: [provinceId], references: [id])
+  provinceId Int
+
+  createdAt BigInt
+  updatedAt BigInt
 
   responses Response[]
-
   @@map("users")
 }
