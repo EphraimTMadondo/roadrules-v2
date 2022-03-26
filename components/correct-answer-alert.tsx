@@ -1,10 +1,26 @@
-export function CorrectAnswerAlert() {
+import { Question } from '@prisma/client';
+import { ResponseComponent } from './response';
+
+interface Props {
+  question: Question;
+}
+
+export function CorrectAnswerAlert(props: Props) {
+  const { question } = props;
   return (
-    <div className="flex flex-row justify-center items-center py-8 bg-teal-50">
-      <span className="text-md p-2 text-center font-semibold text-teal-500">
-        Correct!
-      </span>
-      <i className="p-2 material-icons text-teal-500">check_circle</i>
+    <div className="flex flex-col justify-center items-stretch">
+      <div className="flex flex-row justify-center items-center py-2">
+        <span className="text-lg font-semibold p-2 text-center text-teal-500">
+          Correct!
+        </span>
+        <i
+          className="p-2 material-icons text-teal-500"
+          style={{ fontSize: '56' }}
+        >
+          check_circle
+        </i>
+      </div>
+      <ResponseComponent question={question} correct />
     </div>
   );
 }

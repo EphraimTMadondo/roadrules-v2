@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, NumberInput } from '@mantine/core';
+import { Button, LoadingOverlay, TextInput } from '@mantine/core';
 import { UseForm } from '@mantine/hooks/lib/use-form/use-form';
 import { Inputs } from '../lib/verification';
 import { ErrorAlert } from './error-alert';
@@ -31,15 +31,21 @@ export function VerificationThree(props: VerificationThreeProps) {
       {error && <ErrorAlert error={error} />}
 
       <div className="flex flex-col justify-center items-stretch py-4">
-        <NumberInput
-          hideControls
+        <TextInput
+          placeholder="Code"
           label="Code"
-          inputMode="numeric"
-          autoComplete="one-time-code"
-          pattern="\d{6}"
           {...form.getInputProps('code')}
           required
         />
+        {/* <NumberInput
+          hideControls
+          label="Code"
+          // inputMode="numeric"
+          // autoComplete="one-time-code"
+          // pattern="\d{6}"
+          {...form.getInputProps('code')}
+          required
+        /> */}
       </div>
 
       <div className="flex flex-col justify-center items-stretch pt-4 pb-8">

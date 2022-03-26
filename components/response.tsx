@@ -7,13 +7,14 @@ interface Props {
   question: Question;
   correct: boolean;
   showIcon?: boolean;
+  showQsn?: boolean;
 }
 
 const redBorder = 'border border-solid rounded border-red-600';
 const tealBorder = 'border border-solid rounded border-teal-600';
 
 export function ResponseComponent(props: Props) {
-  const { question, correct, showIcon } = props;
+  const { showQsn, question, correct, showIcon } = props;
 
   const border = correct ? tealBorder : redBorder;
 
@@ -29,6 +30,9 @@ export function ResponseComponent(props: Props) {
           </div>
         )}
         <div className="flex grow flex-col justify-start items-start">
+          {showQsn && (
+            <span className="text-md py-2 font-semibold">{question.text}</span>
+          )}
           <span className="text-md font-semibold py-2">
             <ABC optionId={question.correctOption as OptionId} />
             .&nbsp;

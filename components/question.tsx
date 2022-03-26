@@ -107,6 +107,7 @@ export default function QuestionComponent(props: QuestionComponentProps) {
 
       {submitted && correct && (
         <CorrectAnswerPopup
+          question={question}
           buttonCaption={
             questionNumber === numQuestions ? 'VIEW PROGRESS' : 'NEXT'
           }
@@ -141,13 +142,13 @@ export default function QuestionComponent(props: QuestionComponentProps) {
           </Button>
         </div>
       )}
-      <div className="flex flex-col justify-center items-stretch pt-4">
+      {/* <div className="flex flex-col justify-center items-stretch pt-4">
         <Link passHref href="/progress?lastBatch=lastBatch">
           <Button size="md" variant="light">
             QUIT
           </Button>
         </Link>
-      </div>
+      </div> */}
     </Layout>
   );
 }

@@ -59,6 +59,7 @@ export default function QuickRevision(props: PageProps) {
                 question={response.question}
                 correct={response.correct}
                 showIcon
+                showQsn
               />
             </div>
           ))}

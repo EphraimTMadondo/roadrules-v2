@@ -13,7 +13,7 @@ export default function Home() {
     <Layout title="Welcome to Road Rules">
       <div className="grow" />
 
-      <div className="flex flex-row justify-center items-center py-4">
+      <div className="flex flex-row justify-center items-center py-2">
         <div className="relative h-72 w-10/12 overflow-hidden">
           <Image
             role={roles.rrLogo}
