@@ -136,7 +136,10 @@ export default function SignInPage() {
         <div className="flex flex-col justify-center items-stretch pt-4">
           <Link passHref href="/terms-and-conditions">
             <Button variant="light" role="button" size="md">
-              Don't have an account? Click to register!
+              <span className="flex sm:hidden">CREATE ACCOUNT</span>
+              <span className="hidden sm:inline-flex">
+                Don't have an account? Click to register!
+              </span>
             </Button>
           </Link>
         </div>

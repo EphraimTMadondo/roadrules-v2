@@ -72,7 +72,7 @@ export default function Progress(props: PageProps) {
           <div className="grow py-2" />
 
           <div className="flex flex-row justify-center items-center">
-            <div className="relative h-96 w-full overflow-hidden">
+            <div className="relative h-80 w-full overflow-hidden">
               <ProgressPieChart
                 effectiveValue={percentageCorrect}
                 elements={[
@@ -96,12 +96,14 @@ export default function Progress(props: PageProps) {
             </div>
           </div>
 
-          <div className="flex flex-col justify-center items-stretch">
-            <p className="text-center font-semibold text-red-500">
-              Your {batchIdentifier ? '' : 'weekly '}average score is below the
-              required pass mark of 88%, keep practising.
-            </p>
-          </div>
+          {percentageCorrect < 88 && (
+            <div className="flex flex-col justify-center items-stretch">
+              <p className="text-center font-semibold text-red-500">
+                Your {batchIdentifier ? '' : 'weekly '}average score is below
+                the required pass mark of 88%, keep practising.
+              </p>
+            </div>
+          )}
 
           <div className="grow py-2" />
 

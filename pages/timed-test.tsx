@@ -1,11 +1,11 @@
 import { Question } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
-import { ErrorAlert } from '../components/error-alert';
+import { useCallback } from 'react';
 import Layout from '../components/layout';
-import TimedQuestion from '../components/timed-question';
-import { Toolbar } from '../components/toolbar';
+import { TestTimer } from '../components/test-timer';
+import TimedTestComponent from '../components/timed-test';
+import { ToolbarForTimer } from '../components/toolbar-for-timer';
 import { FALLBACK_ERROR_MESSAGE } from '../lib/errors';
 import { createKey } from '../lib/keys';
 import {
@@ -14,19 +14,13 @@ import {
   PageProps,
 } from '../lib/props';
 import { getQuestions } from '../lib/questions';
-import { OptionId } from '../lib/questions-client-logic';
 import { withSessionSsr } from '../lib/with-session';
-import { trpc } from '../utils/trpc';
 import { getCurrentUser } from './api/trpc/[trpc]';
 
 interface Data {
   initialQuestions: Question[];
   batchIdentifier: string;
   loadingError?: string;
-}
-
-interface CustomQuestion extends Question {
-  questionNumber: number;
 }
 
 export default function TimedTest(props: PageProps) {
@@ -36,97 +30,25 @@ export default function TimedTest(props: PageProps) {
     loadingError: FALLBACK_ERROR_MESSAGE,
   });
 
-  const { initialQuestions, batchIdentifier, loadingError } = data;
-
-  const title = 'Test';
-
   const router = useRouter();
-
-  const [questions, setQuestions] = useState<CustomQuestion[]>(
-    initialQuestions.map((initialQuestion) => ({
-      ...initialQuestion,
-      questionNumber: initialQuestions.indexOf(initialQuestion) + 1,
-    }))
-  );
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-
-  console.log(isLoading);
 
   const onTimerRunOut = useCallback(() => {
     router.push('/progress?lastBatch=lastBatch');
   }, [router]);
 
-  const mutation = trpc.useMutation('response.create', {
-    onMutate: () => {
-      setIsLoading(true);
-      setError('');
-    },
-    onError: ({ message }: { message: string }) => {
-      setError(message || '');
-    },
-    onSuccess: () => {},
-    onSettled: () => {
-      setIsLoading(false);
-    },
-  });
-
-  const question = questions.length ? questions[0] : undefined;
-
-  const processResponse = useCallback(
-    (inputQuestion: Question, selectedOption: OptionId) => {
-      mutation.mutate({
-        questionId: inputQuestion.id,
-        choice: selectedOption,
-        batchIdentifier,
-      });
-    },
-    [mutation, batchIdentifier]
-  );
-
-  const nextQuestion = useCallback(
-    (inputQuestion: Question) => {
-      if (questions.length === 1) {
-        return router.push('/progress');
-      }
-
-      setQuestions((prevState) =>
-        prevState.filter((el) => el.id !== inputQuestion.id)
-      );
-    },
-    [questions, router, setQuestions]
-  );
-
-  const back = useCallback(() => {
-    router.push('/driving-lessons-menu');
-  }, [router]);
+  const { initialQuestions, batchIdentifier, loadingError } = data;
 
   return (
-    <>
-      {loadingError && (
-        <Layout className="relative" title="Practice">
-          <Toolbar title={title} leftIcon="arrow_back" leftIconAction={back} />
-
-          <div className="flex flex-col justify-start items-stretch pt-4">
-            <ErrorAlert error={loadingError} />
-          </div>
-        </Layout>
-      )}
-      {question && (
-        <TimedQuestion
-          key={question.id}
-          title={title}
-          question={question}
-          questionNumber={question.questionNumber}
-          numQuestions={initialQuestions.length}
-          processResponse={processResponse}
-          nextQuestion={nextQuestion}
-          error={error}
-          onTimerRunOut={onTimerRunOut}
-        />
-      )}
-    </>
+    <Layout className="relative" title="Timed Test">
+      <ToolbarForTimer
+        RightElement={<TestTimer onTimerRunOut={onTimerRunOut} />}
+      />
+      <TimedTestComponent
+        initialQuestions={initialQuestions}
+        batchIdentifier={batchIdentifier}
+        loadingError={loadingError}
+      />
+    </Layout>
   );
 }
 

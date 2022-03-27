@@ -335,7 +335,10 @@ export default function Verification() {
         <div className="flex flex-col justify-center items-stretch pt-4">
           <Link passHref href="/sign-in">
             <Button variant="light" role="button" size="md">
-              Already have an account? Click to sign in!
+              <span className="flex sm:hidden">SIGN IN</span>
+              <span className="hidden sm:inline-flex">
+                Already have an account? Click to sign in!
+              </span>
             </Button>
           </Link>
         </div>
