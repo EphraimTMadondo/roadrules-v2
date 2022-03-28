@@ -1,5 +1,4 @@
 import { Card } from '@mantine/core';
-import { motion } from 'framer-motion';
 import Head from 'next/head';
 import * as React from 'react';
 import { CustomCenter } from './custom-center';
@@ -23,7 +22,7 @@ export default function Layout(props: LayoutProps) {
         <title>Road Rules - {title}</title>
       </Head>
 
-      <div className="flex flex-col justify-start items-stretch bg-slate-100">
+      <div className="flex flex-col justify-start items-stretch ">
         <div className="flex flex-row justify-center items-stretch p-4">
           <CustomCenter>
             <Card

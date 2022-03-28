@@ -4,7 +4,8 @@
 
 html, body, #__next {
   font-family: 'Montserrat', sans-serif !important;
-  background-color: rgb(241 245 249);
+  /* background-color: rgb(241 245 249); */
+  background-color: #e1e1e1;
   height: 100%;
 }
 

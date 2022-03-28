@@ -291,7 +291,7 @@ export default function Verification() {
           // size="md"
         >
           <Stepper.Step
-            label="Enter Details"
+            // label="Enter Details"
             className="h-min-full"
             // allowStepSelect={active > 0}
             allowStepSelect={!loading}
@@ -306,7 +306,7 @@ export default function Verification() {
             />
           </Stepper.Step>
           <Stepper.Step
-            label="Send Code"
+            // label="Send Code"
             // allowStepSelect={active > 1}
             allowStepSelect={!loading}
           >
@@ -318,7 +318,7 @@ export default function Verification() {
             />
           </Stepper.Step>
           <Stepper.Step
-            label="Verify Number"
+            // label="Verify Number"
             // allowStepSelect={active > 2}
             allowStepSelect={!loading}
           >

@@ -1,17 +1,19 @@
 import { Button, Modal } from '@mantine/core';
 import { Question } from '@prisma/client';
+import { OptionId } from '../lib/questions-client-logic';
 import { ResponseComponent } from './response';
 
 interface Props {
   buttonCaption: string;
   buttonOnClick: () => any;
   question: Question;
+  selectedOption: OptionId;
 }
 
 export function CorrectAnswerPopup(props: Props) {
-  const { buttonCaption, buttonOnClick, question } = props;
+  const { buttonCaption, selectedOption, buttonOnClick, question } = props;
   return (
-    <Modal opened onClose={buttonOnClick} title="Feedback">
+    <Modal opened centered onClose={buttonOnClick} title="Feedback">
       <div className="flex flex-col justify-center items-stretch">
         <span className="text-md py-2 font-bold text-center">
           {question.text}
@@ -27,7 +29,11 @@ export function CorrectAnswerPopup(props: Props) {
             check_circle
           </i>
         </div>
-        <ResponseComponent question={question} correct />
+        <ResponseComponent
+          selectedOption={selectedOption}
+          question={question}
+          correct
+        />
         <div className="flex flex-col justify-center items-stretch pt-4">
           <Button onClick={buttonOnClick} size="md">
             {buttonCaption}
