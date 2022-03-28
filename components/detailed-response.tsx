@@ -69,9 +69,20 @@ export default function DetailedResponse(props: DetailedResponseProps) {
         />
       </SelectOptionContainer>
 
-      {correct && <CorrectAnswerAlert question={question} />}
+      {correct && selectedOption && (
+        <CorrectAnswerAlert
+          selectedOption={selectedOption}
+          question={question}
+        />
+      )}
 
-      {!correct && <WrongAnswerAlert question={question} correct={false} />}
+      {!correct && selectedOption && (
+        <WrongAnswerAlert
+          selectedOption={selectedOption}
+          question={question}
+          correct={false}
+        />
+      )}
     </div>
   );
 }

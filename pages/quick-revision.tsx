@@ -1,6 +1,8 @@
-import { Alert } from '@mantine/core';
+import { Alert, Button } from '@mantine/core';
 import { Question, Response } from '@prisma/client';
 import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { useCallback } from 'react';
 import Layout from '../components/layout';
 import { ResponseComponent } from '../components/response';
 import { Toolbar } from '../components/toolbar';
@@ -10,6 +12,7 @@ import {
   getDataFromPageProps,
   PageProps,
 } from '../lib/props';
+import { OptionId } from '../lib/questions-client-logic';
 import { getBatchResponses, getLastWeekResponses } from '../lib/responses';
 import { withSessionSsr } from '../lib/with-session';
 import { getCurrentUser } from './api/trpc/[trpc]';
@@ -30,6 +33,12 @@ export default function QuickRevision(props: PageProps) {
   });
 
   const { responses, loadingError } = data;
+
+  const router = useRouter();
+
+  const back = useCallback(() => {
+    router.back();
+  }, [router]);
 
   const title = 'Quick Revision';
 
@@ -56,6 +65,7 @@ export default function QuickRevision(props: PageProps) {
               className="flex flex-col justify-start items-stretch py-3"
             >
               <ResponseComponent
+                selectedOption={response.choice as OptionId}
                 question={response.question}
                 correct={response.correct}
                 showIcon
@@ -65,6 +75,11 @@ export default function QuickRevision(props: PageProps) {
           ))}
         </div>
       )}
+      <div className="flex flex-col justify-center items-stretch pt-4">
+        <Button onClick={back} variant="light" size="md">
+          BACK
+        </Button>
+      </div>
     </Layout>
   );
 }

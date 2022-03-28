@@ -1,13 +1,15 @@
 import { Question } from '@prisma/client';
+import { OptionId } from '../lib/questions-client-logic';
 import { ResponseComponent } from './response';
 
 interface Props {
   question: Question;
   correct: boolean;
+  selectedOption: OptionId;
 }
 
 export function WrongAnswerAlert(props: Props) {
-  const { question, correct } = props;
+  const { question, selectedOption, correct } = props;
 
   return (
     <div className="flex flex-col justify-center items-center py-4">
@@ -23,7 +25,11 @@ export function WrongAnswerAlert(props: Props) {
         </i>
       </div>
       <span className="text-md pb-4 text-center">The correct answer is</span>
-      <ResponseComponent question={question} correct={correct} />
+      <ResponseComponent
+        selectedOption={selectedOption}
+        question={question}
+        correct={correct}
+      />
     </div>
   );
 }

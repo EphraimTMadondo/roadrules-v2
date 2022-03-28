@@ -105,9 +105,10 @@ export default function QuestionComponent(props: QuestionComponentProps) {
         </>
       )}
 
-      {submitted && correct && (
+      {submitted && correct && selectedOption && (
         <CorrectAnswerPopup
           question={question}
+          selectedOption={selectedOption}
           buttonCaption={
             questionNumber === numQuestions ? 'VIEW PROGRESS' : 'NEXT'
           }
@@ -115,10 +116,10 @@ export default function QuestionComponent(props: QuestionComponentProps) {
         />
       )}
 
-      {submitted && !correct && (
+      {submitted && !correct && selectedOption && (
         <WrongAnswerPopup
           question={question}
-          correct
+          selectedOption={selectedOption}
           buttonCaption={
             questionNumber === numQuestions ? 'VIEW PROGRESS' : 'NEXT'
           }
