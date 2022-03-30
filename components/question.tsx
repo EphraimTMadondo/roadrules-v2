@@ -106,7 +106,6 @@ export default function QuestionComponent(props: QuestionComponentProps) {
       {submitted && correct && selectedOption && (
         <CorrectAnswerPopup
           question={question}
-          selectedOption={selectedOption}
           buttonCaption={popupButtonCaption}
           buttonOnClick={nextAction}
         />
