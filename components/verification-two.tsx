@@ -15,14 +15,14 @@ export function VerificationTwo(props: VerificationTwoProps) {
   const { form, loading, sendCode, error } = props;
 
   return (
-    <div className="flex flex-col justify-center items-stretch pt-8">
+    <div className="flex flex-col justify-center items-stretch pt-2">
       <div className="flex flex-col justify-center items-center">
         <span className="font-bold text-lg text-center py-2">
           Send Verification Code
         </span>
       </div>
 
-      <span className="text-sm text-center py-2">
+      <span className="text-sm text-center pb-2">
         Enter your phone number,
         <br />
         we will send a verification code via SMS.

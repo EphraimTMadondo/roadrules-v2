@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import Layout from '../components/layout';
-import { ResponseComponent } from '../components/response';
+import { QuickRevisionResponse } from '../components/quick-revision-response';
 import { Toolbar } from '../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../lib/errors';
 import {
@@ -64,12 +64,10 @@ export default function QuickRevision(props: PageProps) {
               key={response.id}
               className="flex flex-col justify-start items-stretch py-3"
             >
-              <ResponseComponent
+              <QuickRevisionResponse
                 selectedOption={response.choice as OptionId}
                 question={response.question}
                 correct={response.correct}
-                showIcon
-                showQsn
               />
             </div>
           ))}

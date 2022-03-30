@@ -138,7 +138,7 @@ export default function SignInPage() {
             <Button variant="light" role="button" size="md">
               <span className="flex sm:hidden">CREATE ACCOUNT</span>
               <span className="hidden sm:inline-flex">
-                Don't have an account? Click to register!
+                Don't have an account? Click to register
               </span>
             </Button>
           </Link>

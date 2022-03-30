@@ -1,11 +1,13 @@
 import { Question } from '@prisma/client';
-import { SelectOption } from './select-option';
 import { OptionId } from '../lib/questions-client-logic';
-import { CorrectAnswerAlert } from './correct-answer-alert';
+import { AnswerExplanation } from './answer-explanation';
+import { CorrectAlert } from './correct-alert';
+import { Correction } from './correction';
 import { QuestionTitle } from './question-title';
+import { SelectOption } from './select-option';
 import { SelectOptionContainer } from './select-option-container';
 import { StandardImage } from './standard-image';
-import { WrongAnswerAlert } from './wrong-answer-alert';
+import { WrongAlert } from './wrong-alert';
 
 interface DetailedResponseProps {
   key: string;
@@ -70,18 +72,21 @@ export default function DetailedResponse(props: DetailedResponseProps) {
       </SelectOptionContainer>
 
       {correct && selectedOption && (
-        <CorrectAnswerAlert
-          selectedOption={selectedOption}
-          question={question}
-        />
+        <div className="flex flex-col justify-center items-stretch py-4">
+          <CorrectAlert />
+          <div className="flex flex-col justify-center items-stretch p-4 border border-solid rounded border-teal-600">
+            <AnswerExplanation question={question} />
+          </div>
+        </div>
       )}
 
       {!correct && selectedOption && (
-        <WrongAnswerAlert
-          selectedOption={selectedOption}
-          question={question}
-          correct={false}
-        />
+        <div className="flex flex-col justify-center items-stretch py-4">
+          <WrongAlert selectedOption={selectedOption} question={question} />
+          <div className="flex flex-col justify-center items-stretch p-4 border border-solid rounded border-teal-600">
+            <Correction question={question} />
+          </div>
+        </div>
       )}
     </div>
   );

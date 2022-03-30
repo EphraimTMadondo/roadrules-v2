@@ -1,10 +1,13 @@
 // __tests__/index.test.jsx
 
-import { render } from '@testing-library/react';
+import { capitalize } from '../lib/strings';
+
+// import { render } from '@testing-library/react';
 // import Home from '../pages/index';
 
 describe('Home', () => {
   // const { container } = render(<Home />);
+  console.log(capitalize('bach'));
 
   it('matches previous snapshot', () => {
     // render( <Home /> )
