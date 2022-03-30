@@ -1,6 +1,5 @@
 import { Button } from '@mantine/core';
 import { Question } from '@prisma/client';
-import Link from 'next/link';
 import { useCallback, useState } from 'react';
 import { OptionId } from '../lib/questions-client-logic';
 import { ErrorAlert } from './error-alert';
@@ -93,13 +92,6 @@ export default function TimedQuestion(props: TimedQuestionProps) {
           SUBMIT ANSWER
         </Button>
       </div>
-      {/* <div className="flex flex-col justify-center items-stretch pt-4">
-        <Link passHref href="/progress?lastBatch=lastBatch">
-          <Button size="md" variant="light">
-            QUIT
-          </Button>
-        </Link>
-      </div> */}
     </>
   );
 }
