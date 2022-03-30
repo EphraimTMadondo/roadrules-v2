@@ -22,12 +22,16 @@ export function VerificationOne(props: VerificationOneProps) {
   } = props;
 
   return (
-    <div className="flex flex-col justify-center items-stretch pt-8">
+    <div className="flex flex-col justify-center items-stretch pt-2">
       <div className="flex flex-col justify-center items-center">
-        <span className="font-bold text-lg text-center pt-2 pb-4">
-          Please provide the following details
+        <span className="font-bold text-lg text-center py-2">
+          Create Account
         </span>
       </div>
+
+      <span className="text-sm text-center pb-2">
+        Please provide the following details
+      </span>
 
       <div className="flex flex-col justify-center items-stretch py-2">
         <TextInput

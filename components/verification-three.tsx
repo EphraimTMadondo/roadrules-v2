@@ -15,17 +15,17 @@ export function VerificationThree(props: VerificationThreeProps) {
   const { form, loading, error, toSendCode, sendCode } = props;
 
   return (
-    <div className="flex flex-col justify-center items-stretch pt-8 relative">
+    <div className="flex flex-col justify-center items-stretch pt-2 relative">
       <LoadingOverlay visible={loading} />
 
       <div className="flex flex-col justify-center items-center">
         <span className="font-bold text-lg text-center py-2">
-          Verify your phone number
+          Verify Phone Number
         </span>
       </div>
 
-      <span className="text-sm text-center py-2">
-        Please enter the code you received to verify your credentials.
+      <span className="text-sm text-center pb-2">
+        Please enter the code you received.
       </span>
 
       {error && <ErrorAlert error={error} />}
@@ -37,15 +37,6 @@ export function VerificationThree(props: VerificationThreeProps) {
           {...form.getInputProps('code')}
           required
         />
-        {/* <NumberInput
-          hideControls
-          label="Code"
-          // inputMode="numeric"
-          // autoComplete="one-time-code"
-          // pattern="\d{6}"
-          {...form.getInputProps('code')}
-          required
-        /> */}
       </div>
 
       <div className="flex flex-col justify-center items-stretch pt-4 pb-8">

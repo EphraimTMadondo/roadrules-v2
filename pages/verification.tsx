@@ -337,7 +337,7 @@ export default function Verification() {
             <Button variant="light" role="button" size="md">
               <span className="flex sm:hidden">SIGN IN</span>
               <span className="hidden sm:inline-flex">
-                Already have an account? Click to sign in!
+                Already have an account? Click to sign in
               </span>
             </Button>
           </Link>

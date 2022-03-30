@@ -93,7 +93,7 @@ export default function DetailedRevision(props: PageProps) {
             selectedOption={response.choice as OptionId}
             correct={response.correct}
           />
-          <div className="flex flex-col justify-center items-stretch pt-4">
+          <div className="flex flex-col justify-center items-stretch pt-6">
             {response.responseNumber === initialResponses.length && (
               <Button onClick={back} variant="light" size="md">
                 BACK
