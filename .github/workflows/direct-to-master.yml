@@ -21,10 +21,10 @@ jobs:
       with:
         # node-version: ${{ matrix.node-version }}
         node-version: 12
-        cache: 'npm'
-    - run: npm ci
+        cache: 'yarn'
+    - run: yarn install --immutable --immutable-cache --check-cache
     # - run: npm ci --include=dev
-    - run: npm run build
+    - run: yarn build
       env:
         NODE_ENV: ${{ secrets.NODE_ENV }}
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -35,4 +35,3 @@ jobs:
         TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
         TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
         CI: true
-    - run: npm run prod-test
