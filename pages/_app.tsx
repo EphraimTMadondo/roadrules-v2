@@ -64,6 +64,9 @@ function MyApp(props: AppProps) {
         theme={{
           colorScheme: 'light',
           primaryColor: 'teal',
+          fontFamily: 'Montserrat, sans-serif',
+          fontFamilyMonospace: 'Montserrat, monospace',
+          headings: { fontFamily: 'Montserrat, sans-serif' },
         }}
       >
         <NotificationsProvider>
