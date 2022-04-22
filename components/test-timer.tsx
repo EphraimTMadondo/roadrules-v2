@@ -7,7 +7,7 @@ interface Props {
 }
 
 const redBorder = 'border border-solid rounded border-red-600';
-const tealBorder = 'border border-solid rounded border-teal-600';
+const greenBorder = 'border border-solid rounded border-green-600';
 
 export function TestTimer(props: Props) {
   const { onTimerRunOut } = props;
@@ -40,7 +40,7 @@ export function TestTimer(props: Props) {
 
   const [border, bgColor] = crunchTime
     ? [redBorder, 'bg-red-600']
-    : [tealBorder, 'bg-teal-600'];
+    : [greenBorder, 'bg-green-600'];
 
   return (
     <div className="flex flex-col justify-center items-stretch p-2">

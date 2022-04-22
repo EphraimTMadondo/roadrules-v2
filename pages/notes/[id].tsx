@@ -49,15 +49,13 @@ export default function EditNotePage(props: PageProps) {
           {Boolean(nextNoteId) && (
             <div className="flex flex-col justify-center items-stretch pt-4">
               <Link passHref href={`/notes/${nextNoteId}`}>
-                <Button size="md">NEXT</Button>
+                <Button>NEXT</Button>
               </Link>
             </div>
           )}
           <div className="flex flex-col justify-center items-stretch pt-4">
             <Link passHref href="/notes">
-              <Button variant="light" size="md">
-                BACK TO LIST
-              </Button>
+              <Button variant="light">BACK TO LIST</Button>
             </Link>
           </div>
         </>

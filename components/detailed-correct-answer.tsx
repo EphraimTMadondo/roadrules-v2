@@ -12,7 +12,7 @@ export function DetailedCorrectAnswer(props: Props) {
   return (
     <div className="flex flex-col justify-center items-stretch">
       <CorrectAlert />
-      <div className="flex flex-col justify-center items-stretch p-4 border border-solid rounded border-teal-600">
+      <div className="flex flex-col justify-center items-stretch p-4 border border-solid rounded border-green-600">
         <AnswerExplanation question={question} />
       </div>
     </div>

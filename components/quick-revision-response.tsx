@@ -14,9 +14,9 @@ export function QuickRevisionResponse(props: Props) {
   const { question, selectedOption, correct } = props;
 
   const redBorder = 'border border-solid rounded border-red-600';
-  const tealBorder = 'border border-solid rounded border-teal-600';
+  const greenBorder = 'border border-solid rounded border-green-600';
 
-  const border = correct ? tealBorder : redBorder;
+  const border = correct ? greenBorder : redBorder;
 
   return (
     <div className={`flex flex-col justify-center items-stretch p-4 ${border}`}>
@@ -27,12 +27,12 @@ export function QuickRevisionResponse(props: Props) {
 
         <div
           className={`flex flex-row justify-start items-center rounded-md ${
-            correct ? 'bg-teal-100/50' : 'bg-red-100/50'
+            correct ? 'bg-green-100/50' : 'bg-red-100/50'
           }`}
         >
           <div className="flex flex-col justify-center items-center p-4">
             {correct && (
-              <i className="material-icons text-teal-600">check_circle</i>
+              <i className="material-icons text-green-600">check_circle</i>
             )}
             {!correct && <i className="material-icons text-red-600">cancel</i>}
           </div>

@@ -58,7 +58,7 @@ export default function DrivingSchoolsMenu(props: PageProps) {
           <div className="flex flex-row justify-center items-center">
             <div className="relative h-56 w-10/12 overflow-hidden">
               <Image
-                src="/images/tsc_logo.png"
+                src="/images/tsc_logo_high_res.png"
                 alt="Traffic Safety Council Logo"
                 layout="fill"
                 objectFit="contain"

@@ -19,7 +19,7 @@ export function Toolbar(props: ToolbarProps) {
       {!leftIcon && !RightElement && (
         <ActionIcon
           variant="light"
-          color="teal"
+          color="green"
           size="xl"
           style={{ visibility: 'hidden' }}
         >
@@ -34,7 +34,7 @@ export function Toolbar(props: ToolbarProps) {
       {leftIcon && (
         <ActionIcon
           variant="light"
-          color="teal"
+          color="green"
           onClick={leftIconAction}
           size="xl"
         >
@@ -47,7 +47,7 @@ export function Toolbar(props: ToolbarProps) {
       {!rightIcon && !RightElement && (
         <ActionIcon
           variant="light"
-          color="teal"
+          color="green"
           size="xl"
           style={{ visibility: 'hidden' }}
         >
@@ -57,7 +57,7 @@ export function Toolbar(props: ToolbarProps) {
       {rightIcon && (
         <ActionIcon
           variant="light"
-          color="teal"
+          color="green"
           onClick={rightIconAction}
           size="xl"
         >

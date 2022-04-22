@@ -41,14 +41,18 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col justify-center items-center p-6">
-        <Image height="10rem" src="/images/tsc_logo.png" fit="contain" />
+        <Image
+          height="10rem"
+          src="/images/tsc_logo_high_res.png"
+          fit="contain"
+        />
       </div>
-      {/* <Image height="14rem" src="/images/tsc_logo.png" fit="contain" /> */}
+      {/* <Image height="14rem" src="/images/tsc_logo_high_res.png" fit="contain" /> */}
       {/* <div className="flex flex-row justify-center items-center p-6">
         <div className="relative h-56 w-10/12 overflow-hidden">
           <Image
             role={roles.tscLogo}
-            src="/images/tsc_logo.png"
+            src="/images/tsc_logo_high_res.png"
             alt="Traffic Safety Council"
             layout="fill"
             objectFit="contain"

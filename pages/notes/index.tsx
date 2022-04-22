@@ -1,10 +1,4 @@
-import {
-  Avatar,
-  Group,
-  Text,
-  UnstyledButton,
-  useMantineTheme,
-} from '@mantine/core';
+import { Avatar, Group, Text, UnstyledButton } from '@mantine/core';
 import { Note } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
@@ -32,8 +26,6 @@ export default function Notes(props: PageProps) {
   });
 
   const { notes } = data;
-
-  const theme = useMantineTheme();
 
   const title = 'Notes';
 

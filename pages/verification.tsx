@@ -134,7 +134,7 @@ export default function Verification() {
     onSuccess: () => {
       // notifications.showNotification({
       //   message: 'Code Sent!',
-      //   color: 'teal',
+      //   color: 'green',
       //   icon: <i className="material-icons">done</i>,
       // });
       toAuthCode();
@@ -155,7 +155,7 @@ export default function Verification() {
     onSuccess: () => {
       // notifications.showNotification({
       //   message: 'Registration Complete!',
-      //   color: 'teal',
+      //   color: 'green',
       //   icon: <i className="material-icons">done</i>,
       // });
       router.push('/main-menu');
@@ -177,7 +177,7 @@ export default function Verification() {
     onSuccess: () => {
       // notifications.showNotification({
       //   message: 'Code verified!',
-      //   color: 'teal',
+      //   color: 'green',
       //   icon: <i className="material-icons">done</i>,
       // });
       const createUserDetails: CreateUser = {

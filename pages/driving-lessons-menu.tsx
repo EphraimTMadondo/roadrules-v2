@@ -51,19 +51,12 @@ export default function DrivingLessonsMenu(props: PageProps) {
           </div>
 
           <div className="flex flex-col justify-center items-center p-4">
-            <Image height="12rem" src="/images/tsc_logo.png" fit="contain" />
+            <Image
+              height="12rem"
+              src="/images/tsc_logo_high_res.png"
+              fit="contain"
+            />
           </div>
-          {/* <div className="flex flex-row justify-center items-center">
-            <div className="relative h-56 w-10/12 overflow-hidden">
-              <Image
-                src="/images/tsc_logo.png"
-                alt="Traffic Safety Council Logo"
-                layout="fill"
-                objectFit="contain"
-                // objectFit="scale-down"
-              />
-            </div>
-          </div> */}
 
           <div className="grow py-2" />
 

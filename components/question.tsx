@@ -54,88 +54,87 @@ export default function QuestionComponent(props: QuestionComponentProps) {
     questionNumber === numQuestions ? 'VIEW PROGRESS' : 'NEXT';
 
   return (
-    <Layout className="relative" title={title}>
-      <Toolbar title={title} RightElement={undefined} />
+    <>
+      {Boolean(!submitted) && (
+        <Layout className="relative" title={title}>
+          <Toolbar title={title} RightElement={undefined} />
 
-      <QuestionTitle
-        questionNumber={questionNumber}
-        numQuestions={numQuestions}
-        title={question.text}
+          <QuestionTitle
+            questionNumber={questionNumber}
+            numQuestions={numQuestions}
+            title={question.text}
+          />
+
+          {question.image && (
+            <StandardImage
+              src={question.image}
+              alt="Question illustration"
+              layout="fill"
+              objectFit="contain"
+              // objectFit="scale-down"
+            />
+          )}
+
+          <SelectOptionContainer>
+            <SelectOption
+              id="A"
+              content={question.option1}
+              selected={selectedOption === 'option1'}
+              onClick={() => optionOnClick('option1')}
+              wrong={submitted && !correct && selectedOption === 'option1'}
+            />
+          </SelectOptionContainer>
+
+          <SelectOptionContainer>
+            <SelectOption
+              id="B"
+              content={question.option2}
+              selected={selectedOption === 'option2'}
+              onClick={() => optionOnClick('option2')}
+              wrong={submitted && !correct && selectedOption === 'option2'}
+            />
+          </SelectOptionContainer>
+
+          <SelectOptionContainer>
+            <SelectOption
+              id="C"
+              content={question.option3}
+              selected={selectedOption === 'option3'}
+              onClick={() => optionOnClick('option3')}
+              wrong={submitted && !correct && selectedOption === 'option3'}
+            />
+          </SelectOptionContainer>
+
+          {error && <ErrorAlert error={error} />}
+
+          {!submitted && (
+            <div className="flex flex-col justify-center items-stretch pt-8">
+              <Button onClick={submitAnswer}>SUBMIT ANSWER</Button>
+            </div>
+          )}
+          {submitted && (
+            <div className="flex flex-col justify-center items-stretch pt-8">
+              <Button onClick={nextAction}>{popupButtonCaption}</Button>
+            </div>
+          )}
+        </Layout>
+      )}
+      <CorrectAnswerPopup
+        opened={Boolean(submitted && correct && selectedOption)}
+        question={question}
+        buttonCaption={popupButtonCaption}
+        buttonOnClick={nextAction}
       />
 
-      {question.image && (
-        <StandardImage
-          src={question.image}
-          alt="Question illustration"
-          layout="fill"
-          objectFit="contain"
-          // objectFit="scale-down"
-        />
-      )}
-
-      <SelectOptionContainer>
-        <SelectOption
-          id="A"
-          content={question.option1}
-          selected={selectedOption === 'option1'}
-          onClick={() => optionOnClick('option1')}
-          wrong={submitted && !correct && selectedOption === 'option1'}
-        />
-      </SelectOptionContainer>
-
-      <SelectOptionContainer>
-        <SelectOption
-          id="B"
-          content={question.option2}
-          selected={selectedOption === 'option2'}
-          onClick={() => optionOnClick('option2')}
-          wrong={submitted && !correct && selectedOption === 'option2'}
-        />
-      </SelectOptionContainer>
-
-      <SelectOptionContainer>
-        <SelectOption
-          id="C"
-          content={question.option3}
-          selected={selectedOption === 'option3'}
-          onClick={() => optionOnClick('option3')}
-          wrong={submitted && !correct && selectedOption === 'option3'}
-        />
-      </SelectOptionContainer>
-
-      {submitted && correct && selectedOption && (
-        <CorrectAnswerPopup
-          question={question}
-          buttonCaption={popupButtonCaption}
-          buttonOnClick={nextAction}
-        />
-      )}
-
-      {submitted && !correct && selectedOption && (
+      {selectedOption && (
         <WrongAnswerPopup
+          opened={Boolean(submitted && !correct && selectedOption)}
           question={question}
           selectedOption={selectedOption}
           buttonCaption={popupButtonCaption}
           buttonOnClick={nextAction}
         />
       )}
-
-      {error && <ErrorAlert error={error} />}
-
-      {!submitted && (
-        <div className="flex flex-col justify-center items-stretch pt-4">
-          <Button onClick={submitAnswer} size="md">
-            SUBMIT ANSWER
-          </Button>
-        </div>
-      )}
-      {submitted && (
-        <div className="flex flex-col justify-center items-stretch pt-4">
-          <Button onClick={nextAction} size="md">
-            {popupButtonCaption}
-          </Button>
-        </div>
-      )}
-    </Layout>
+    </>
   );
 }

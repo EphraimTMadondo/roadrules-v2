@@ -74,7 +74,7 @@ export default function DetailedResponse(props: DetailedResponseProps) {
       {correct && selectedOption && (
         <div className="flex flex-col justify-center items-stretch py-4">
           <CorrectAlert />
-          <div className="flex flex-col justify-center items-stretch p-4 border border-solid rounded border-teal-600">
+          <div className="flex flex-col justify-center items-stretch p-4 border border-solid rounded border-green-600">
             <AnswerExplanation question={question} />
           </div>
         </div>
@@ -83,7 +83,7 @@ export default function DetailedResponse(props: DetailedResponseProps) {
       {!correct && selectedOption && (
         <div className="flex flex-col justify-center items-stretch py-4">
           <WrongAlert selectedOption={selectedOption} question={question} />
-          <div className="flex flex-col justify-center items-stretch p-4 border border-solid rounded border-teal-600">
+          <div className="flex flex-col justify-center items-stretch p-4 border border-solid rounded border-green-600">
             <Correction question={question} />
           </div>
         </div>

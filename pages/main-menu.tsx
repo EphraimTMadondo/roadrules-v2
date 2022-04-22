@@ -56,7 +56,11 @@ export default function MainMenu(props: PageProps) {
           </div>
 
           <div className="flex flex-col justify-center items-center p-4">
-            <Image height="12rem" src="/images/tsc_logo.png" fit="contain" />
+            <Image
+              height="12rem"
+              src="/images/tsc_logo_high_res.png"
+              fit="contain"
+            />
           </div>
 
           <div className="grow py-2" />

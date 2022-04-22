@@ -13,11 +13,11 @@
     ".next/cache"
   ],
   "dependencies": {
-    "@mantine/core": "^3.6.14",
-    "@mantine/hooks": "^3.6.14",
-    "@mantine/next": "^3.6.8",
-    "@mantine/notifications": "^3.6.11",
-    "@mantine/rte": "^3.6.14",
+    "@mantine/core": "^4.1.4",
+    "@mantine/hooks": "^4.1.4",
+    "@mantine/modals": "^4.1.4",
+    "@mantine/next": "^4.1.4",
+    "@mantine/notifications": "^4.1.4",
     "@nivo/core": "^0.79.0",
     "@nivo/pie": "^0.79.1",
     "@prisma/client": "^3.9.2",

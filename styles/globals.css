@@ -13,8 +13,8 @@ html, body, #__next {
   .grey-border {
     @apply border border-solid rounded border-slate-300;
   }
-  .teal-border {
-    @apply border border-solid rounded border-teal-300;
+  .green-border {
+    @apply border border-solid rounded border-green-300;
   }
   .red-border {
     @apply border border-solid rounded border-red-300;

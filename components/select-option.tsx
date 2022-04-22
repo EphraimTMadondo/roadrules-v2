@@ -14,7 +14,7 @@ export function SelectOption(props: SelectOptionProps) {
   const { onClick, disabled, wrong } = props;
 
   const border = (() => {
-    if (selected && !wrong) return 'teal-border';
+    if (selected && !wrong) return 'green-border';
 
     if (wrong) return 'red-border';
 
