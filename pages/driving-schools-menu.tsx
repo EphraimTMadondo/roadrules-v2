@@ -70,19 +70,19 @@ export default function DrivingSchoolsMenu(props: PageProps) {
           <div className="grow py-2" />
 
           <div className="flex flex-col justify-center items-stretch py-4">
-            <ButtonHIGHWAY CODE</Button>
+            <Button>HIGHWAY CODE</Button>
           </div>
 
           <div className="flex flex-col justify-center items-stretch py-4">
-            <ButtonDEFENSIVE DRIVING</Button>
+            <Button>DEFENSIVE DRIVING</Button>
           </div>
 
           <div className="flex flex-col justify-center items-stretch py-4">
-            <ButtonINSTRUCTOR COURSE</Button>
+            <Button>INSTRUCTOR COURSE</Button>
           </div>
 
           <div className="flex flex-col justify-center items-stretch pt-4">
-            <ButtonSCHOOL REGISTRATION</Button>
+            <Button>SCHOOL REGISTRATION</Button>
           </div>
         </>
       )}
