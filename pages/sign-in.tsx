@@ -122,12 +122,7 @@ export default function SignInPage() {
         {error && <ErrorAlert error={error} />}
 
         <div className="flex flex-col justify-center items-stretch pt-8">
-          <Button
-            type="submit"
-            size="md"
-            disabled={isLoading}
-            loading={isLoading}
-          >
+          <Button type="submit" disabled={isLoading} loading={isLoading}>
             {!isLoading && 'SIGN IN'}
             {isLoading && 'PROCESSING...'}
           </Button>
@@ -135,7 +130,7 @@ export default function SignInPage() {
 
         <div className="flex flex-col justify-center items-stretch pt-4">
           <Link passHref href="/terms-and-conditions">
-            <Button variant="light" role="button" size="md">
+            <Button variant="subtle" role="button">
               <span className="flex sm:hidden">CREATE ACCOUNT</span>
               <span className="hidden sm:inline-flex">
                 Don't have an account? Click to register

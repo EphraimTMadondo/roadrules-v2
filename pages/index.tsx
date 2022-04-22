@@ -1,5 +1,6 @@
-import { Button } from '@mantine/core';
-import Image from 'next/image';
+import { Image, Button } from '@mantine/core';
+
+// import Image from 'next/image';
 import Link from 'next/link';
 import Layout from '../components/layout';
 
@@ -13,7 +14,11 @@ export default function Home() {
     <Layout title="Welcome to Road Rules">
       <div className="grow" />
 
-      <div className="flex flex-row justify-center items-center py-2">
+      <div className="flex flex-col justify-center items-center p-4">
+        <Image height="16rem" src="/images/road_rules_logo.png" fit="contain" />
+      </div>
+      {/* <Image height="18rem" src="/images/road_rules_logo.png" fit="contain" /> */}
+      {/* <div className="flex flex-row justify-center items-center py-2">
         <div className="relative h-72 w-10/12 overflow-hidden">
           <Image
             role={roles.rrLogo}
@@ -24,7 +29,7 @@ export default function Home() {
             // objectFit="scale-down"
           />
         </div>
-      </div>
+      </div> */}
 
       <div className="grow" />
 
@@ -35,7 +40,11 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="flex flex-row justify-center items-center p-4">
+      <div className="flex flex-col justify-center items-center p-4">
+        <Image height="12rem" src="/images/tsc_logo.png" fit="contain" />
+      </div>
+      {/* <Image height="14rem" src="/images/tsc_logo.png" fit="contain" /> */}
+      {/* <div className="flex flex-row justify-center items-center p-4">
         <div className="relative h-56 w-10/12 overflow-hidden">
           <Image
             role={roles.tscLogo}
@@ -46,15 +55,13 @@ export default function Home() {
             // objectFit="scale-down"
           />
         </div>
-      </div>
+      </div> */}
 
       <div className="grow" />
 
       <div className="flex flex-col justify-center items-stretch pt-4">
         <Link passHref href="/sign-in">
-          <Button role="button" size="md">
-            NEXT
-          </Button>
+          <Button role="button">NEXT</Button>
         </Link>
       </div>
     </Layout>

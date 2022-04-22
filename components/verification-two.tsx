@@ -72,12 +72,7 @@ export function VerificationTwo(props: VerificationTwoProps) {
       {error && <ErrorAlert error={error} />}
 
       <div className="flex flex-col justify-center items-stretch pt-8">
-        <Button
-          onClick={sendCode}
-          size="md"
-          disabled={loading}
-          loading={loading}
-        >
+        <Button onClick={sendCode} disabled={loading} loading={loading}>
           {!loading && 'SEND CODE'}
           {loading && 'PROCESSING...'}
         </Button>

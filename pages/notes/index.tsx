@@ -1,4 +1,10 @@
-import { Text, UnstyledButton, useMantineTheme } from '@mantine/core';
+import {
+  Avatar,
+  Group,
+  Text,
+  UnstyledButton,
+  useMantineTheme,
+} from '@mantine/core';
 import { Note } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
@@ -39,21 +45,29 @@ export default function Notes(props: PageProps) {
         {notes.map((note) => (
           <div
             key={note.id}
-            className="flex flex-col justify-start items-stretch py-6"
+            className="flex flex-col justify-start items-stretch py-4"
           >
             <Link passHref href={`/notes/${note.id}`}>
-              <UnstyledButton
-                className="rounded-md"
-                style={{ backgroundColor: theme.colors.teal[0] }}
-              >
-                <div className="flex flex-row justify-center items-center p-4">
-                  <Text
-                    className="text-center font-bold"
-                    style={{ color: theme.colors.teal[9] }}
-                  >
-                    {note.title}
-                  </Text>
-                </div>
+              <UnstyledButton className="rounded-md border border-slate-200 border-solid shadow-sm">
+                <Group className="flex items-start p-4" noWrap>
+                  <div className="py-2">
+                    <Avatar size={40} color="green">
+                      {note.refNumber}
+                    </Avatar>
+                  </div>
+                  <div>
+                    <div className="py-2">
+                      <Text size="lg" weight="semibold" lineClamp={1}>
+                        {note.title}
+                      </Text>
+                    </div>
+                    <Text size="xs" color="gray">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                      sed do eiusmod tempor incididunt ut labore et dolore magna
+                      aliqua...
+                    </Text>
+                  </div>
+                </Group>
               </UnstyledButton>
             </Link>
           </div>

@@ -40,15 +40,12 @@ export function VerificationThree(props: VerificationThreeProps) {
       </div>
 
       <div className="flex flex-col justify-center items-stretch pt-4 pb-8">
-        <Button type="submit" size="md">
-          VERIFY
-        </Button>
+        <Button type="submit">VERIFY</Button>
       </div>
 
       <div className="flex flex-col justify-center items-stretch py-4">
         <Button
           variant="light"
-          size="md"
           leftIcon={<i className="material-icons">mail</i>}
           onClick={sendCode}
         >
@@ -59,7 +56,6 @@ export function VerificationThree(props: VerificationThreeProps) {
       <div className="flex flex-col justify-center items-stretch py-4">
         <Button
           variant="light"
-          size="md"
           leftIcon={<i className="material-icons">edit</i>}
           onClick={toSendCode}
         >
@@ -70,7 +66,6 @@ export function VerificationThree(props: VerificationThreeProps) {
       <div className="flex flex-col justify-center items-stretch py-4">
         <Button
           variant="light"
-          size="md"
           leftIcon={<i className="material-icons">help</i>}
         >
           Help

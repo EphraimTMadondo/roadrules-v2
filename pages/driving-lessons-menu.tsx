@@ -1,6 +1,5 @@
-import { Alert, Button } from '@mantine/core';
+import { Alert, Button, Image } from '@mantine/core';
 import { GetServerSideProps } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import Layout from '../components/layout';
 import { Toolbar } from '../components/toolbar';
@@ -51,7 +50,10 @@ export default function DrivingLessonsMenu(props: PageProps) {
             </p>
           </div>
 
-          <div className="flex flex-row justify-center items-center">
+          <div className="flex flex-col justify-center items-center p-4">
+            <Image height="12rem" src="/images/tsc_logo.png" fit="contain" />
+          </div>
+          {/* <div className="flex flex-row justify-center items-center">
             <div className="relative h-56 w-10/12 overflow-hidden">
               <Image
                 src="/images/tsc_logo.png"
@@ -61,31 +63,31 @@ export default function DrivingLessonsMenu(props: PageProps) {
                 // objectFit="scale-down"
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="grow py-2" />
 
           <div className="flex flex-col justify-center items-stretch py-4">
             <Link passHref href="/notes">
-              <Button size="md">NOTES</Button>
+              <Button>NOTES</Button>
             </Link>
           </div>
 
           <div className="flex flex-col justify-center items-stretch py-4">
             <Link passHref href="/questions">
-              <Button size="md">PRACTICE</Button>
+              <Button>PRACTICE</Button>
             </Link>
           </div>
 
           <div className="flex flex-col justify-center items-stretch py-4">
             <Link passHref href="/timed-test">
-              <Button size="md">MOCK TEST</Button>
+              <Button>MOCK TEST</Button>
             </Link>
           </div>
 
           <div className="flex flex-col justify-center items-stretch pt-4">
             <Link passHref href="/progress">
-              <Button size="md">PROGRESS</Button>
+              <Button>PROGRESS</Button>
             </Link>
           </div>
         </>

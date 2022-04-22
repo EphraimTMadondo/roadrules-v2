@@ -22,13 +22,13 @@ export default function Layout(props: LayoutProps) {
         <title>Road Rules - {title}</title>
       </Head>
 
-      <div className="flex flex-col justify-start items-stretch ">
+      <div className="flex flex-col justify-start items-stretch">
         <div className="flex flex-row justify-center items-stretch p-4">
           <CustomCenter>
             <Card
               shadow="xl"
               padding="xl"
-              className="w-full flex flex-col justify-start items-stretch"
+              className="w-full flex flex-col justify-start items-stretch max-h-full"
             >
               <Card.Section className="flex flex-col justify-start items-stretch p-6">
                 {children}

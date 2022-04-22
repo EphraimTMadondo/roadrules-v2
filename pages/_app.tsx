@@ -56,7 +56,7 @@ function MyApp(props: AppProps) {
         withNormalizeCSS
         theme={{
           colorScheme: 'light',
-          primaryColor: 'teal',
+          primaryColor: 'green',
           fontFamily: 'Montserrat, sans-serif',
           fontFamilyMonospace: 'Montserrat, monospace',
           headings: { fontFamily: 'Montserrat, sans-serif' },

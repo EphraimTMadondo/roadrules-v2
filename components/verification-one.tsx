@@ -86,9 +86,7 @@ export function VerificationOne(props: VerificationOneProps) {
       <div className="grow" />
 
       <div className="flex flex-col justify-center items-stretch pt-12">
-        <Button onClick={toNextStep} size="md">
-          PROCEED
-        </Button>
+        <Button onClick={toNextStep}>PROCEED</Button>
       </div>
     </div>
   );
