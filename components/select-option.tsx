@@ -14,7 +14,8 @@ export function SelectOption(props: SelectOptionProps) {
   const { onClick, disabled, wrong } = props;
 
   const border = (() => {
-    if (selected && !wrong) return 'green-border';
+    if (selected && !wrong) return 'dark-border';
+    // if (selected && !wrong) return 'green-border';
 
     if (wrong) return 'red-border';
 
@@ -35,7 +36,7 @@ export function SelectOption(props: SelectOptionProps) {
         {id}. {content}
       </span>
       <span className="grow" />
-      <Checkbox checked={selected} disabled={disabled} readOnly />
+      <Checkbox color="dark" checked={selected} disabled={disabled} readOnly />
     </div>
   );
 }

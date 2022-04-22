@@ -2,7 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, #__next {
+html,
+body,
+#__next {
   font-family: 'Montserrat', sans-serif !important;
   /* background-color: rgb(241 245 249); */
   background-color: #e1e1e1;
@@ -10,12 +12,18 @@ html, body, #__next {
 }
 
 @layer components {
+  .dark-border {
+    @apply border border-solid rounded border-black;
+  }
+
   .grey-border {
     @apply border border-solid rounded border-slate-300;
   }
+
   .green-border {
     @apply border border-solid rounded border-green-300;
   }
+
   .red-border {
     @apply border border-solid rounded border-red-300;
   }
