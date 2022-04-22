@@ -27,7 +27,7 @@ export default function Layout(props: LayoutProps) {
           <CustomCenter>
             <Card
               shadow="xl"
-              padding="xl"
+              p="xl"
               className="w-full flex flex-col justify-start items-stretch max-h-full"
             >
               <Card.Section className="flex flex-col justify-start items-stretch p-6">
