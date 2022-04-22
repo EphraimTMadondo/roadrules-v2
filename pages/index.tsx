@@ -14,8 +14,8 @@ export default function Home() {
     <Layout title="Welcome to Road Rules">
       <div className="grow" />
 
-      <div className="flex flex-col justify-center items-center p-4">
-        <Image height="16rem" src="/images/road_rules_logo.png" fit="contain" />
+      <div className="flex flex-col justify-center items-center p-8">
+        <Image height="12rem" src="/images/road_rules_logo.png" fit="contain" />
       </div>
       {/* <Image height="18rem" src="/images/road_rules_logo.png" fit="contain" /> */}
       {/* <div className="flex flex-row justify-center items-center py-2">
@@ -40,11 +40,11 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="flex flex-col justify-center items-center p-4">
-        <Image height="12rem" src="/images/tsc_logo.png" fit="contain" />
+      <div className="flex flex-col justify-center items-center p-8">
+        <Image height="10rem" src="/images/tsc_logo.png" fit="contain" />
       </div>
       {/* <Image height="14rem" src="/images/tsc_logo.png" fit="contain" /> */}
-      {/* <div className="flex flex-row justify-center items-center p-4">
+      {/* <div className="flex flex-row justify-center items-center p-8">
         <div className="relative h-56 w-10/12 overflow-hidden">
           <Image
             role={roles.tscLogo}
