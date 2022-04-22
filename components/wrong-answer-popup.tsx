@@ -18,9 +18,10 @@ export function WrongAnswerPopup(props: Props) {
   return (
     <Modal
       opened={opened}
-      centered
+      // centered
       onClose={buttonOnClick}
       withCloseButton={false}
+      overlayOpacity={0}
     >
       <div className="flex flex-col justify-center items-stretch">
         <span className="text-md py-2 font-bold text-center">

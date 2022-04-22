@@ -40,7 +40,7 @@ export default function Notes(props: PageProps) {
             className="flex flex-col justify-start items-stretch py-4"
           >
             <Link passHref href={`/notes/${note.id}`}>
-              <UnstyledButton className="rounded-md border border-slate-200 border-solid shadow-sm">
+              <UnstyledButton className="rounded-md border border-slate-200 border-solid shadow-sm hover:bg-slate-50/50">
                 <Group className="flex items-start p-4" noWrap>
                   <div className="py-2">
                     <Avatar size={40} color="green">
