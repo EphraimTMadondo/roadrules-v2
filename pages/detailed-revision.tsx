@@ -95,14 +95,12 @@ export default function DetailedRevision(props: PageProps) {
           />
           <div className="flex flex-col justify-center items-stretch pt-6">
             {response.responseNumber === initialResponses.length && (
-              <Button onClick={back} variant="light" size="md">
+              <Button onClick={back} variant="light">
                 BACK
               </Button>
             )}
             {response.responseNumber !== initialResponses.length && (
-              <Button onClick={nextOnClick} size="md">
-                NEXT
-              </Button>
+              <Button onClick={nextOnClick}>NEXT</Button>
             )}
           </div>
         </>

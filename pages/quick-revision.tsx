@@ -74,7 +74,7 @@ export default function QuickRevision(props: PageProps) {
         </div>
       )}
       <div className="flex flex-col justify-center items-stretch pt-4">
-        <Button onClick={back} variant="light" size="md">
+        <Button onClick={back} variant="light">
           BACK
         </Button>
       </div>

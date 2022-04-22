@@ -116,7 +116,7 @@ export default function Progress(props: PageProps) {
                   : 'quick-revision'
               }
             >
-              <Button size="md">QUICK REVISION</Button>
+              <Button>QUICK REVISION</Button>
             </Link>
           </div>
 
@@ -129,7 +129,7 @@ export default function Progress(props: PageProps) {
                   : '/detailed-revision'
               }
             >
-              <Button size="md">DETAILED REVISION</Button>
+              <Button>DETAILED REVISION</Button>
             </Link>
           </div>
         </>

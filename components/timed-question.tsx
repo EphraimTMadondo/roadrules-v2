@@ -88,9 +88,7 @@ export default function TimedQuestion(props: TimedQuestionProps) {
       {error && <ErrorAlert error={error} />}
 
       <div className="flex flex-col justify-center items-stretch pt-4">
-        <Button onClick={submitAnswer} size="md">
-          SUBMIT ANSWER
-        </Button>
+        <Button onClick={submitAnswer}>SUBMIT ANSWER</Button>
       </div>
     </>
   );
