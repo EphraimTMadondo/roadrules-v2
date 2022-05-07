@@ -110,7 +110,12 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
       })();
 
       return createSSRPageProps<Data>({
-        responses,
+        responses: responses.sort((x, y) => {
+          if (x.correct === y.correct) {
+            return 0;
+          }
+          return x.correct ? -1 : 1;
+        }),
       });
     } catch (reason: any) {
       return createSSRPageProps<Data>({
