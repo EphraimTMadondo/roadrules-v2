@@ -43,7 +43,7 @@ export default function Progress(props: PageProps) {
 
   const theme = useMantineTheme();
 
-  const title = 'Progress';
+  const title = batchIdentifier ? 'Practice Result' : 'Overall Progress';
 
   const total = numCorrect + numWrong;
 
@@ -99,8 +99,8 @@ export default function Progress(props: PageProps) {
           {percentageCorrect < 88 && (
             <div className="flex flex-col justify-center items-stretch">
               <p className="text-center font-semibold text-red-500">
-                Your {batchIdentifier ? '' : 'weekly '}average score is below
-                the required pass mark of 88%, keep practising.
+                Your {batchIdentifier ? 'last test' : 'weekly average'} score is
+                below the required pass mark of 88%, keep practising.
               </p>
             </div>
           )}
