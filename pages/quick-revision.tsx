@@ -114,7 +114,7 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
           if (x.correct === y.correct) {
             return 0;
           }
-          return x.correct ? -1 : 1;
+          return y.correct ? -1 : 1;
         }),
       });
     } catch (reason: any) {
