@@ -2,6 +2,7 @@ import { Avatar, Group, Text, UnstyledButton } from '@mantine/core';
 import { Note } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
+import { useCallback } from 'react';
 import Layout from '../../components/layout';
 import { Toolbar } from '../../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../../lib/errors';
@@ -29,6 +30,13 @@ export default function Notes(props: PageProps) {
 
   const title = 'Notes';
 
+  const getShortenedDescription = useCallback((description: string) => {
+    if (description?.trim()) {
+      return `${description.substring(0, 200)}...`;
+    }
+    return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...';
+  }, []);
+
   return (
     <Layout title={title}>
       <Toolbar title={title} />
@@ -54,9 +62,7 @@ export default function Notes(props: PageProps) {
                       </Text>
                     </div>
                     <Text size="xs" color="gray">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua...
+                      {getShortenedDescription(note.description)}
                     </Text>
                   </div>
                 </Group>
