@@ -120,6 +120,7 @@ model User {
   gender      String     @db.VarChar(10)
   phoneNumber String     @db.VarChar(25)
   provinceId  Int
+  paid        Boolean    @default(false)
   createdAt   BigInt
   updatedAt   BigInt
   province    Province   @relation(fields: [provinceId], references: [id])
