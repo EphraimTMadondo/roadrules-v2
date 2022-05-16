@@ -123,6 +123,7 @@ model User {
   paid        Boolean    @default(false)
   createdAt   BigInt
   updatedAt   BigInt
+  paid        Boolean    @default(false)
   province    Province   @relation(fields: [provinceId], references: [id])
   responses   Response[]
 
