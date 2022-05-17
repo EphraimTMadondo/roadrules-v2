@@ -147,20 +147,17 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
         };
       }
 
-      const [user, questions] = await Promise.all([
-        prisma.user.findFirst({ where: { id: currentUser.id } }),
-        getQuestions(LIMIT),
-      ]);
+      const user = await prisma.user.findFirst({
+        where: { id: currentUser.id },
+      });
 
       if (!user) {
         throw new Error('User record not found');
       }
 
-      const sortedQuestions = questions.sort((a, b) => a.id - b.id);
+      const questions = await getQuestions(LIMIT, user.paid);
 
-      const filteredQuestions = user.paid
-        ? sortedQuestions
-        : sortedQuestions.slice(0, 10);
+      const filteredQuestions = user.paid ? questions : questions.slice(0, 10);
 
       return createSSRPageProps<Data>({
         initialQuestions: filteredQuestions,
