@@ -109,8 +109,10 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
         );
       })();
 
+      const last25 = responses.slice(0, 25);
+
       return createSSRPageProps<Data>({
-        responses: responses.sort((x, y) => {
+        responses: last25.sort((x, y) => {
           if (x.correct === y.correct) {
             return 0;
           }
