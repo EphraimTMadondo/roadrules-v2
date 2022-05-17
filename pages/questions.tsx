@@ -8,6 +8,7 @@ import QuestionComponent from '../components/question';
 import { Toolbar } from '../components/toolbar';
 import { FALLBACK_ERROR_MESSAGE } from '../lib/errors';
 import { createKey } from '../lib/keys';
+import { prisma } from '../lib/db';
 import {
   createSSRPageProps,
   getDataFromPageProps,
@@ -22,6 +23,7 @@ import { getCurrentUser } from './api/trpc/[trpc]';
 interface Data {
   initialQuestions: Question[];
   batchIdentifier: string;
+  paid: boolean;
   loadingError?: string;
 }
 
@@ -33,10 +35,11 @@ export default function Questions(props: PageProps) {
   const data: Data = getDataFromPageProps(props, {
     initialQuestions: [],
     batchIdentifier: '',
+    paid: false,
     loadingError: FALLBACK_ERROR_MESSAGE,
   });
 
-  const { initialQuestions, batchIdentifier, loadingError } = data;
+  const { initialQuestions, batchIdentifier, loadingError, paid } = data;
 
   const router = useRouter();
 
@@ -121,6 +124,7 @@ export default function Questions(props: PageProps) {
           processResponse={processResponse}
           nextQuestion={nextQuestion}
           error={error}
+          paid={paid}
         />
       )}
     </>
@@ -143,16 +147,25 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
         };
       }
 
-      const questions = await getQuestions(LIMIT);
+      const [user, questions] = await Promise.all([
+        prisma.user.findFirst({ where: { id: currentUser.id } }),
+        getQuestions(LIMIT),
+      ]);
+
+      if (!user) {
+        throw new Error('User record not found');
+      }
 
       return createSSRPageProps<Data>({
         initialQuestions: questions,
         batchIdentifier: createKey(),
+        paid: user.paid,
       });
     } catch (error: any) {
       return createSSRPageProps<Data>({
         initialQuestions: [],
         batchIdentifier: '',
+        paid: false,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         loadingError: (error?.message as string) || FALLBACK_ERROR_MESSAGE,
       });
