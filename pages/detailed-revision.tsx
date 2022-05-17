@@ -136,8 +136,10 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
         );
       })();
 
+      const last25 = responses.slice(0, 25);
+
       return createSSRPageProps<Data>({
-        responses,
+        responses: last25,
       });
     } catch (error: any) {
       return createSSRPageProps<Data>({
