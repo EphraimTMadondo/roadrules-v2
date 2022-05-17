@@ -156,8 +156,14 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
         throw new Error('User record not found');
       }
 
+      const sortedQuestions = questions.sort((a, b) => a.id - b.id);
+
+      const filteredQuestions = user.paid
+        ? sortedQuestions
+        : sortedQuestions.slice(0, 10);
+
       return createSSRPageProps<Data>({
-        initialQuestions: questions,
+        initialQuestions: filteredQuestions,
         batchIdentifier: createKey(),
         paid: user.paid,
       });
