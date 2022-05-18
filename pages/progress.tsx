@@ -2,8 +2,10 @@ import { Alert, Button, useMantineTheme } from '@mantine/core';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { prisma } from '../lib/db';
 import Layout from '../components/layout';
 import { Toolbar } from '../components/toolbar';
+import { UpgradeBar } from '../components/upgrade-bar';
 import { FALLBACK_ERROR_MESSAGE } from '../lib/errors';
 import { perc } from '../lib/numbers';
 import {
@@ -28,6 +30,7 @@ const ProgressPieChart = dynamic(
 interface Data {
   numCorrect: number;
   numWrong: number;
+  paid: boolean;
   batchIdentifier?: string;
   loadingError?: string;
 }
@@ -36,10 +39,11 @@ export default function Progress(props: PageProps) {
   const data = getDataFromPageProps<Data>(props, {
     numCorrect: 0,
     numWrong: 0,
+    paid: false,
     loadingError: FALLBACK_ERROR_MESSAGE,
   });
 
-  const { numCorrect, numWrong, batchIdentifier, loadingError } = data;
+  const { numCorrect, numWrong, batchIdentifier, loadingError, paid } = data;
 
   const theme = useMantineTheme();
 
@@ -54,7 +58,8 @@ export default function Progress(props: PageProps) {
 
   return (
     <Layout title={title}>
-      <Toolbar title={title} />
+      {/* <Toolbar title={title} /> */}
+      <Toolbar title={title} RightElement={paid ? undefined : UpgradeBar} />
 
       {loadingError && (
         <div className="flex flex-col justify-start items-stretch pt-4">
@@ -154,6 +159,14 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
 
       const { lastBatch } = query;
 
+      const user = await prisma.user.findFirst({
+        where: { id: currentUser.id },
+      });
+
+      if (!user) {
+        throw new Error('User record not found');
+      }
+
       const {
         numCorrect,
         numWrong,
@@ -174,11 +187,14 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
         numCorrect,
         numWrong,
         batchIdentifier,
+        paid: user.paid,
       });
     } catch (error: any) {
       return createSSRPageProps<Data>({
         numCorrect: 0,
         numWrong: 0,
+        batchIdentifier: '',
+        paid: false,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         loadingError: (error?.message as string) || FALLBACK_ERROR_MESSAGE,
       });
