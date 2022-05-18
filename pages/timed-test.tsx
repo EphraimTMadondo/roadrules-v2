@@ -41,11 +41,13 @@ export default function TimedTest(props: PageProps) {
 
   const { initialQuestions, batchIdentifier, loadingError, paid } = data;
 
+  console.log(paid);
+
   return (
     <Layout className="relative" title="Timed Test">
       <ToolbarForTimer
         RightElement={<TestTimer onTimerRunOut={onTimerRunOut} />}
-        paid={paid}
+        paid
       />
       <TimedTestComponent
         initialQuestions={initialQuestions}
