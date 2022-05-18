@@ -10,7 +10,7 @@ import { SelectOption } from './select-option';
 import { SelectOptionContainer } from './select-option-container';
 import { StandardImage } from './standard-image';
 import { Toolbar } from './toolbar';
-import { UpgradeBar } from './upgrade-bar';
+// import { UpgradeBar } from './upgrade-bar';
 import { WrongAnswerPopup } from './wrong-answer-popup';
 
 interface QuestionComponentProps {
@@ -28,6 +28,8 @@ export default function QuestionComponent(props: QuestionComponentProps) {
   const { title, question, questionNumber, numQuestions } = props;
   const { processResponse, nextQuestion } = props;
   const { error, paid } = props;
+
+  console.log(paid);
 
   const [selectedOption, setSelectedOption] = useState<OptionId | undefined>(
     undefined
@@ -59,7 +61,8 @@ export default function QuestionComponent(props: QuestionComponentProps) {
     <>
       {Boolean(!submitted) && (
         <Layout className="relative" title={title}>
-          <Toolbar title={title} RightElement={paid ? undefined : UpgradeBar} />
+          {/* <Toolbar title={title} RightElement={paid ? undefined : UpgradeBar} /> */}
+          <Toolbar title={title} RightElement={undefined} />
 
           <QuestionTitle
             questionNumber={questionNumber}
