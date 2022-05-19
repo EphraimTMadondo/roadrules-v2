@@ -2,10 +2,9 @@ import { Alert, Button, useMantineTheme } from '@mantine/core';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { prisma } from '../lib/db';
 import Layout from '../components/layout';
 import { Toolbar } from '../components/toolbar';
-import { UpgradeBar } from '../components/upgrade-bar';
+import { prisma } from '../lib/db';
 import { FALLBACK_ERROR_MESSAGE } from '../lib/errors';
 import { perc } from '../lib/numbers';
 import {
