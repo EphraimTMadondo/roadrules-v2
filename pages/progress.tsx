@@ -58,8 +58,7 @@ export default function Progress(props: PageProps) {
 
   return (
     <Layout title={title}>
-      {/* <Toolbar title={title} /> */}
-      <Toolbar title={title} RightElement={paid ? undefined : UpgradeBar} />
+      <Toolbar title={title} RightElement={undefined} />
 
       {loadingError && (
         <div className="flex flex-col justify-start items-stretch pt-4">
@@ -109,6 +108,8 @@ export default function Progress(props: PageProps) {
               </p>
             </div>
           )}
+
+          {!paid && <Button color="blue">UPGRADE</Button>}
 
           <div className="grow py-2" />
 
