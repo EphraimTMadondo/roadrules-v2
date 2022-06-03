@@ -13,6 +13,6 @@ steps:
   - 'RECAPTCHA_SITE_KEY=${_RECAPTCHA_SITE_KEY}'
   - 'TWILIO_ACCOUNT_SID=${_TWILIO_ACCOUNT_SID}'
   - 'TWILIO_AUTH_TOKEN=${_TWILIO_AUTH_TOKEN}'
-  - name: "gcr.io/cloud-builders/gcloud"
+- name: "gcr.io/cloud-builders/gcloud"
   args: ["app", "deploy"]
 timeout: "1600s"
