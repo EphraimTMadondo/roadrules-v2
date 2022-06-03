@@ -5,7 +5,7 @@
     "build": "next build",
     "test": "jest --watch",
     "prod-test": "jest",
-    "start": "next start",
+    "start": "next start -p 8080",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
