@@ -43,7 +43,7 @@ CREATE TABLE `provinces` (
 
 -- CreateTable
 CREATE TABLE `countries` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id` INTEGER NOT NULL AUTO_INCREMENT DEFAULT 0,
     `country` VARCHAR(100) NOT NULL,
     `createdAt` BIGINT NOT NULL,
     `updatedAt` BIGINT NOT NULL,

@@ -12,6 +12,10 @@ export type Gender = z.infer<typeof GenderSchema>;
 export const SendCodeSchema = z.object({
   phoneNumber: PhoneNumberSchema,
 });
+
+export const GetQuestionsSchema = z.object({
+  limit: z.number().int(),
+});
 export type SendCode = z.infer<typeof SendCodeSchema>;
 
 export const AuthCodeSchema = z.object({

@@ -65,7 +65,7 @@ export default function QuestionComponent(props: QuestionComponentProps) {
             title={question.text}
           />
 
-          {question.image && (
+          {/* {question.image && (
             <StandardImage
               src={question.image}
               alt="Question illustration"
@@ -73,7 +73,7 @@ export default function QuestionComponent(props: QuestionComponentProps) {
               objectFit="contain"
               // objectFit="scale-down"
             />
-          )}
+          )} */}
 
           <SelectOptionContainer>
             <SelectOption
