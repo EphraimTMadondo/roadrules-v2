@@ -22,7 +22,7 @@ export const responseRoutes = createProtectedRouter().mutation('create', {
       throw new Error('please sign in first');
     }
 
-    if (!question) throw new Error('question not found');
+    if (!question) throw new Error('question not found!');
 
     await prisma.response.create({
       data: {
