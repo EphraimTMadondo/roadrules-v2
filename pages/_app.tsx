@@ -28,7 +28,7 @@ function MyApp(props: AppProps) {
         />
         <meta name="keywords" content="Keywords" />
 
-        <title>Road Rules</title>
+        <title>Road Rules V2</title>
 
         <link
           rel="stylesheet"
