@@ -109,8 +109,15 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr<PageProps>(
         );
       })();
 
+      const last25 = responses.slice(0, 25);
+
       return createSSRPageProps<Data>({
-        responses,
+        responses: last25.sort((x, y) => {
+          if (x.correct === y.correct) {
+            return 0;
+          }
+          return y.correct ? -1 : 1;
+        }),
       });
     } catch (reason: any) {
       return createSSRPageProps<Data>({

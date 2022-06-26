@@ -8,4 +8,12 @@ module.exports = withPWA({
     runtimeCaching,
     disable: process.env.NODE_ENV === "development"
   },
+  redirects: async () => [
+    {
+      source: '/:path*',
+      has: [{ type: 'host', value: 'www.roadrules.co.zw' }],
+      destination: 'https://roadrules.co.zw/:path*',
+      permanent: true
+    }
+  ]
 })

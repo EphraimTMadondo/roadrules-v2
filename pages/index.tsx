@@ -15,7 +15,11 @@ export default function Home() {
       <div className="grow" />
 
       <div className="flex flex-col justify-center items-center p-6">
-        <Image height="12rem" src="/images/road_rules_logo.png" fit="contain" />
+        <Image
+          height="12rem"
+          src="/images/road_rules_logo_high_res.png"
+          fit="contain"
+        />
       </div>
       {/* <Image height="18rem" src="/images/road_rules_logo.png" fit="contain" /> */}
       {/* <div className="flex flex-row justify-center items-center py-2">

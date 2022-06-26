@@ -1,0 +1,33 @@
+steps:
+- name: node:14.17.1
+  entrypoint: yarn
+  args: ["install"]
+- name: node:14.17.1
+  entrypoint: yarn
+  args: ["build"]
+  env:
+  - 'NODE_ENV=${_NODE_ENV}'
+  - 'COOKIE_NAME=${_COOKIE_NAME}'
+  - 'SESSION_PASSWORD=${_SESSION_PASSWORD}'
+  - 'DATABASE_URL=${_DATABASE_URL}'
+  - 'SERVER_URL=${_SERVER_URL}'
+  - 'NEXT_PUBLIC_SERVER_URL=${_NEXT_PUBLIC_SERVER_URL}'
+  - 'RECAPTCHA_SITE_KEY=${_RECAPTCHA_SITE_KEY}'
+  - 'TWILIO_ACCOUNT_SID=${_TWILIO_ACCOUNT_SID}'
+  - 'TWILIO_AUTH_TOKEN=${_TWILIO_AUTH_TOKEN}'
+- name: node:14.17.1
+  entrypoint: yarn
+  args: ["run", "create-env"]
+  env:
+  - 'NODE_ENV=${_NODE_ENV}'
+  - 'COOKIE_NAME=${_COOKIE_NAME}'
+  - 'SESSION_PASSWORD=${_SESSION_PASSWORD}'
+  - 'DATABASE_URL=${_DATABASE_URL}'
+  - 'SERVER_URL=${_SERVER_URL}'
+  - 'NEXT_PUBLIC_SERVER_URL=${_NEXT_PUBLIC_SERVER_URL}'
+  - 'RECAPTCHA_SITE_KEY=${_RECAPTCHA_SITE_KEY}'
+  - 'TWILIO_ACCOUNT_SID=${_TWILIO_ACCOUNT_SID}'
+  - 'TWILIO_AUTH_TOKEN=${_TWILIO_AUTH_TOKEN}'
+- name: "gcr.io/cloud-builders/gcloud"
+  args: ["app", "deploy"]
+timeout: "1600s"

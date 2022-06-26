@@ -1,11 +1,16 @@
 import { prisma } from './db';
-import questions from '../data-model/questions2.json';
 
-export async function getQuestions(limit: number) {
-  // const questions = await prisma.question.findMany();
+export async function getQuestions(limit: number, paid: boolean) {
+  const questions = await prisma.question.findMany();
 
   const randomQuestions = questions
-    .sort(() => Math.random() - 0.5)
+    .sort((a, b) => {
+      if (paid) {
+        return Math.random() - 0.5;
+      }
+
+      return a.id - b.id;
+    })
     .splice(0, limit);
 
   return randomQuestions;

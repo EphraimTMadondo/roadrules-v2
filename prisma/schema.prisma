@@ -16,7 +16,7 @@ model DrivingSchool {
   city      String  @db.VarChar(50)
   latitude  Decimal @db.Decimal(10, 8)
   longitude Decimal @db.Decimal(11, 8)
-  cost      Int
+  cost      Decimal @db.Decimal(19, 2)
   phone     String  @db.VarChar(20)
   whatsapp  String  @db.VarChar(20)
   messenger String  @db.VarChar(50)
@@ -27,108 +27,105 @@ model DrivingSchool {
 }
 
 model Note {
-  id        Int    @id @default(autoincrement())
-  refNumber Int
-  title     String @db.VarChar(300)
-  html      String @db.Text
-  createdAt BigInt
-  updatedAt BigInt
+  id          Int    @id @default(autoincrement())
+  refNumber   Int
+  title       String @db.VarChar(300)
+  html        String @db.Text
+  createdAt   BigInt
+  updatedAt   BigInt
+  description String @default("") @db.VarChar(800)
 
   @@map("notes")
 }
 
 model Province {
-  id       Int    @id @default(autoincrement())
-  province String @db.VarChar(100)
-
-  country   Country @relation(fields: [countryId], references: [id])
+  id        Int     @id @default(autoincrement())
+  province  String  @db.VarChar(100)
   countryId Int
-
   createdAt BigInt
   updatedAt BigInt
+  country   Country @relation(fields: [countryId], references: [id])
+  users     User[]
 
-  users User[]
+  @@index([countryId], map: "provinces_countryId_fkey")
   @@map("provinces")
 }
 
 model Country {
-  id        Int    @id @default(autoincrement())
-  country   String @db.VarChar(100)
+  id        Int        @id @default(autoincrement())
+  country   String     @db.VarChar(100)
   createdAt BigInt
   updatedAt BigInt
-
   provinces Province[]
+
   @@map("countries")
 }
 
 model Question {
-  id                  Int    @id @default(autoincrement())
+  id                  Int          @id @default(autoincrement())
   refNumber           Int
-  text                String @db.Text
-  image               String @db.Text
-  option1             String @db.Text
-  option2             String @db.Text
-  option3             String @db.Text
-  correctOption       String @db.VarChar(20)
+  text                String       @db.Text
+  image               String       @db.Text
+  option1             String       @db.Text
+  option2             String       @db.Text
+  option3             String       @db.Text
+  correctOption       String       @db.VarChar(20)
   correctlyAnswered   Int
   incorrectlyAnswered Int
+  questionTypeId      Int
+  explanation         String       @db.Text
+  createdAt           BigInt
+  updatedAt           BigInt
+  questionType        QuestionType @relation(fields: [questionTypeId], references: [id])
+  responses           Response[]
 
-  questionType   QuestionType @relation(fields: [questionTypeId], references: [id])
-  questionTypeId Int
-
-  explanation String @db.Text
-  createdAt   BigInt
-  updatedAt   BigInt
-
-  responses Response[]
+  @@index([questionTypeId], map: "questions_questionTypeId_fkey")
   @@map("questions")
 }
 
 model QuestionType {
-  id           Int    @id @default(autoincrement())
-  questionType String @db.VarChar(20)
+  id           Int        @id @default(autoincrement())
+  questionType String     @db.VarChar(20)
   createdAt    BigInt
   updatedAt    BigInt
+  questions    Question[]
 
-  questions Question[]
   @@map("questiontypes")
 }
 
 model Response {
-  id Int @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
+  batchIdentifier String?  @db.VarChar(200)
+  questionId      Int
+  userId          Int
+  choice          String   @db.VarChar(10)
+  correct         Boolean
+  createdAt       BigInt
+  updatedAt       BigInt
+  question        Question @relation(fields: [questionId], references: [id])
+  user            User     @relation(fields: [userId], references: [id])
 
-  batchIdentifier String? @db.VarChar(200)
-
-  question   Question @relation(fields: [questionId], references: [id])
-  questionId Int
-
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
-
-  choice    String  @db.VarChar(10)
-  correct   Boolean
-  createdAt BigInt
-  updatedAt BigInt
-
+  @@index([questionId], map: "responses_questionId_fkey")
+  @@index([userId], map: "responses_userId_fkey")
   @@map("responses")
 }
 
 model User {
-  id          Int    @id @default(autoincrement())
-  username    String @db.VarChar(20)
-  pin         String @db.Text
-  kind        String @db.VarChar(10)
-  firstName   String @db.VarChar(50)
-  lastName    String @db.VarChar(50)
-  gender      String @db.VarChar(10)
-  phoneNumber String @db.VarChar(25)
+  id          Int        @id @default(autoincrement())
+  username    String     @db.VarChar(20)
+  pin         String     @db.Text
+  kind        String     @db.VarChar(10)
+  firstName   String     @db.VarChar(50)
+  lastName    String     @db.VarChar(50)
+  gender      String     @db.VarChar(10)
+  phoneNumber String     @db.VarChar(25)
+  provinceId  Int
+  createdAt   BigInt
+  updatedAt   BigInt
+  paid        Boolean    @default(false)
+  province    Province   @relation(fields: [provinceId], references: [id])
+  responses   Response[]
 
-  province   Province @relation(fields: [provinceId], references: [id])
-  provinceId Int
-
-  createdAt BigInt
-  updatedAt BigInt
-
-  responses Response[]
+  @@index([provinceId], map: "users_provinceId_fkey")
   @@map("users")
 }
